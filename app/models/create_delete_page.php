@@ -266,7 +266,6 @@ class Create_delete_page extends Adm
         } else {
             if ($table === 'pages') {
                 $pagename = $this->db->db->select($table, ["page_alias", "page_title", "page_templates", "page_img"]);
-                print_r($pagename);
                 foreach ($pagename as $page) {
                     if ($page['page_alias'] != 'home') {
                         $this->data['pagename'][] = $page;
