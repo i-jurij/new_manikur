@@ -1,0 +1,32 @@
+<IfModule mod_rewrite.c>
+Options All -ExecCGI -Indexes -Includes +FollowSymLinks
+RewriteBase /oswc
+RewriteEngine on
+#RewriteRule ^.*$ first.oswc [L]
+# ----- 1 var -------------------
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule ^.*$ index.php [L]
+# ----------------------------
+# ------ 2 var ----------------
+RewriteRule !.(js|css|ico|gif|jpg|png|woff|woff2|ttf)$ index.php [L]
+# -----------------------------
+</IfModule>
+
+<IfModule mod_setenvif.c>
+	SetEnv TZ Europe/Simferopol
+</IfModule>
+
+<ifModule mod_php.c>
+   php_flag display_errors 1
+   php_value	upload_max_filesize	2M
+   php_value	post_max_size		10M
+   php_value	default_charset utf-8
+ #  php_value	max_execution_time 200
+  </ifModule>
+
+ErrorDocument 404 app/lib/server_error_msg.php
+ErrorDocument 500 app/lib/server_error_msg.php
+ErrorDocument 400 app/lib/server_error_msg.php
+ErrorDocument 401 app/lib/server_error_msg.php
+ErrorDocument 403 app/lib/server_error_msg.php
