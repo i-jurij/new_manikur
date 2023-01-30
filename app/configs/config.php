@@ -5,12 +5,12 @@ define('DBINITNAME', 'Db_init_sqlite');
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'oswc');
+define('DB_NAME', 'new_manikur');
 define('DS', DIRECTORY_SEPARATOR);
 define('APPROOT', dirname(dirname(__FILE__)));
 define('PUBLICROOT', dirname(dirname(dirname(__FILE__))).DS.'public');
 //site name
-define('SITENAME', 'oswc');
+define('SITENAME', 'new_manikur');
 define('URLROOT', 'http://localhost/'.SITENAME);
 //define('URLROOT', 'http'.((isset($_SERVER['HTTPS']) and $_SERVER['HTTPS']=='on') ? 's': '').'://'.SITENAME.'.net'); 
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';

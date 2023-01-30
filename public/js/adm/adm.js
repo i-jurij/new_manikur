@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
        /*
-    * event listener for div delete templates in adm/create_delete_page.php
+    * event listener for div delete templates in adm/create_delete_page
     */
        const TDEL = document.querySelector('#del_template');
        if (TDEL) {

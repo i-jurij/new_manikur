@@ -69,7 +69,7 @@ print '</pre>';
 							Нажмите "Нет", чтобы вернуться обратно.\
 						</div>\
 						<div class="margintb1" style="max-width:35rem;">\
-							<a href="<?php echo URLROOT; ?>/adm" class="buttons display_inline_block" style="width:40%;">Да</a>\
+							<a href="adm" class="buttons display_inline_block" style="width:40%;">Да</a>\
 							<a href="" class="buttons display_inline_block" style="width:40%;">Нет</a>\
 						</div>\
 						</div>';
