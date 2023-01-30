@@ -28,7 +28,7 @@ function menu($data)
     $res = array_column($data['page_list'], 'page_alias', 'page_h1');//get pages array: 'page_h1' => 'page_alias'
   }
   //url path from rout and controller
-  if(!empty($data['nav'])){
+  if(!empty($data['nav']) && isset($res)){
     if (is_array($data['nav'])) {
       foreach ($data['nav'] as $value) {
         $ress[$value] = array_search($value, $res);//get array 'nav = page_alias' => 'page_h1'
