@@ -28,25 +28,25 @@ class Home
 		if ($this->db->db->has($this->table, ["page_alias" => $this->page])) {
 		$this->data['page_db_data'] = $this->db->db->select($this->table, "*", ["page_alias" => $this->page]);
 		}
-		\App\Lib\Registry::set('page_db_data', $this->data['page_db_data']);
+		Registry::set('page_db_data', $this->data['page_db_data']);
 	}
 
 	public function get_data($path)
 	{	
 		$this->data['nav'] = Registry::get('nav');
 
-		if ( null !== \App\Lib\Registry::get('page_db_data') ) {
-			$this->data['page_db_data'] = \App\Lib\Registry::get('page_db_data');
+		if ( null !== Registry::get('page_db_data') ) {
+			$this->data['page_db_data'] = Registry::get('page_db_data');
 		} else {
 			$this->db_query();
 		}
 
 		//get page list from db
-		if (null !== \App\Lib\Registry::get('page_list')) {
-			$this->data['page_list'] = \App\Lib\Registry::get('page_list');
+		if (null !== Registry::get('page_list')) {
+			$this->data['page_list'] = Registry::get('page_list');
 		} else {
 			$this->data['page_list'] = $this->db->db->select($this->table, "*");
-			\App\Lib\Registry::set('page_list', $this->data['page_list']);
+			Registry::set('page_list', $this->data['page_list']);
 		}
 		
 		//add css for head in template

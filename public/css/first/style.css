@@ -956,16 +956,19 @@ float: right;
 	-moz-transition: opacity 500ms ease-in;
 	transition: opacity 500ms ease-in;
 	justify-content: center;
+	/*
 	position: fixed;
 	top: 0;
 	bottom: 0;
 	right: 0;
 	left: 0;
+	*/
 	background-color: var(--bgcolor);
+	/*
 	overflow: hidden;
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
-	z-index: 33;
+	 z-index: 33; */
 }
 
 .form_radio_btn {

@@ -6,21 +6,21 @@ declare(strict_types=1);
  *
  * The Lightweight PHP Database Framework to Accelerate Development.
  *
- * @version 2.1.7
+ * @version 2.1.8
  * @author Angel Lai
  * @package Medoo
- * @copyright Copyright 2022 Medoo Project, Angel Lai.
+ * @copyright Copyright 2023 Medoo Project, Angel Lai.
  * @license https://opensource.org/licenses/MIT
  * @link https://medoo.in
  */
 
 namespace App\Lib;
 
-use \PDO;
-use \Exception;
-use \PDOException;
-use \PDOStatement;
-use \InvalidArgumentException;
+use PDO;
+use Exception;
+use PDOException;
+use PDOStatement;
+use InvalidArgumentException;
 
 /**
  * The Medoo raw object.
@@ -867,7 +867,7 @@ class Medoo
             $operator = $match['operator'] ?? null;
 
             if ($isIndex && isset($match[4]) && in_array($operator, ['>', '>=', '<', '<=', '=', '!='])) {
-                $stack[] = "${column} ${operator} " . $this->columnQuote($match[4]);
+                $stack[] = "{$column} {$operator} " . $this->columnQuote($match[4]);
                 continue;
             }
 
@@ -1318,7 +1318,7 @@ class Medoo
                 $tableName .= ' AS ' . $this->tableQuote($match['alias']);
             }
 
-            $tableJoin[] = $type[$match['join']] . " JOIN ${tableName} ${relation}";
+            $tableJoin[] = $type[$match['join']] . " JOIN {$tableName} {$relation}";
         }
 
         return implode(' ', $tableJoin);

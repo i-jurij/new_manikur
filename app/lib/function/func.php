@@ -28,7 +28,7 @@ function menu($data)
     $res = array_column($data['page_list'], 'page_alias', 'page_h1');//get pages array: 'page_h1' => 'page_alias'
   }
   //url path from rout and controller
-  if(!empty($data['nav']) && isset($res)){
+  if(!empty($data['nav'])){
     if (is_array($data['nav'])) {
       foreach ($data['nav'] as $value) {
         $ress[$value] = array_search($value, $res);//get array 'nav = page_alias' => 'page_h1'
@@ -105,5 +105,46 @@ function mb_ucfirst($string, $encoding)
     $then = mb_substr($string, 1, null, $encoding);
     return mb_strtoupper($firstChar, $encoding) . $then;
 }
+
+function test_input($data)
+{
+  //obrezka do 300 znakov na vsak slu4aj
+  $data = substr($data, 0, 300);
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+
+function phone_number_to_db($sPhone){
+  $sPhone = preg_replace('![^0-9]+!','',$sPhone);
+  return($sPhone);
+}
+
+
+  function phone_number_view($sPhone){
+    $sPhone = preg_replace('![^0-9]+!','',$sPhone);
+    //if(strlen($sPhone) != 11) return(False);
+    if ( strlen($sPhone) > 10 && strlen($sPhone) < 12 ) {    
+      $sArea = mb_substr($sPhone, 0,1);
+      $sPrefix = mb_substr($sPhone,1,3);
+      $sNumber1 = mb_substr($sPhone,4,3);
+      $sNumber2 = mb_substr($sPhone,7,2);
+      $sNumber3 = mb_substr($sPhone,9,2);
+      $sPhone = "+".$sArea." (".$sPrefix.") ".$sNumber1." ".$sNumber2." ".$sNumber3;
+      return($sPhone);
+    } else {
+      return($sPhone);
+    }
+  }
+
+  function translit_to_lat($textcyr) {
+      $cyr = ['Ц','ц', 'а','б','в','ў','г','ґ','д','е','є','ё','ж','з','и','ï','й','к','л','м','н','о','п', 'р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я', 'А','Б','В','Ў','Г','Ґ','Д','Е','Є','Ё','Ж','З','И','Ї','Й','К','Л','М','Н','О','П', 'Р','С','Т','У','Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ы','Ь','Э','Ю','Я'
+      ];
+      $lat = ['C','c', 'a','b','v','w','g','g','d','e','ye','io','zh','z','i','yi','y','k','l','m','n','o','p', 'r','s','t','u','f','h','ts','ch','sh','sht','a','i','y','e','yu','ya', 'A','B','V','W','G','G','D','E','Ye','Io','Zh','Z','I','Yi','Y','K','L','M','N','O','P', 'R','S','T','U','F','H','Ts','Ch','Sh','Sht','A','I','Y','e','Yu','Ya'
+      ];
+      $textlat = str_replace($cyr, $lat, $textcyr);
+      return $textlat;
+  }
 
 ?>
