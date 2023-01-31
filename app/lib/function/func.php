@@ -147,4 +147,27 @@ function phone_number_to_db($sPhone){
       return $textlat;
   }
 
+  function find_by_filename($path, $filename) {
+    if (is_readable($path)) {
+      $files = scandir($path);
+      if (!empty($files)) {
+        foreach ($files as $k => $v) {
+          $fname = pathinfo($v, PATHINFO_FILENAME);
+          $only_name[$k] = $fname;
+        }
+        $name_key_name = array_search ($filename, $only_name);
+        if (!empty($name_key_name)) {
+            //return $path.DS.$files[$name_key_name];
+            return $files[$name_key_name];
+        } else {
+            return false;
+        }
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
 ?>

@@ -66,7 +66,7 @@ if (!empty($data['res'])) {
 
             <div class="form-recall-main-section">
                 <button class="buttons form-recall-submit" type="submit" id="upload" form="form_recall">Добавить</button>
-                <button class="buttons form-recall-reset" type="reset" onclick="Reset()">Очистить</button>
+                <button class="buttons form-recall-reset" type="reset" onclick="Reset()" form="form_recall">>Очистить</button>
             </div>
             <br class="clear" />
 
@@ -78,14 +78,45 @@ if (!empty($data['res'])) {
     <div class="content">
         <p>
         <?php
-        /*
-        print '<pre>';
-        var_dump($data);
-        print '</pre>';
-        */
         print $data['delete_form'];
         ?>
         </p>
+    </div>
+    <?php
+} elseif (!empty($data['uv_mastera'])) {
+    ?>
+    <div class="content">
+        <form action="" method="post"  enctype="multipart/form-data" class="" id="uv_mastera">
+            <p>
+            <?php
+            foreach ($data['uv_mastera'] as $uv_master)
+            {
+                $path = PUBLICROOT.DS.'imgs'.DS.'masters'.DS;
+                $filename = translit_to_lat(sanitize($uv_master['master_fam'])) . '_' . $uv_master['id'];
+                if (find_by_filename($path, $filename) === false) {
+                    $img = URLROOT.DS.'public'.DS.'imgs'.DS.'ddd.jpg';
+                } else {
+                    $img = URLROOT.DS.'public'.DS.'imgs'.DS.'masters'.DS.find_by_filename($path, $filename);
+                }
+                echo '
+                <article class="main_section_article ">
+                    <div class="main_section_article_imgdiv" style="background-color: var(--bgcolor-content);">
+                    <img src="' . $img . '" alt="Фото ' . $uv_master['master_fam'] . '" class="main_section_article_imgdiv_img" />
+                    </div>
+
+                    <div class="main_section_article_content">
+                        <h3>' . $uv_master['master_name'] . ' ' . $uv_master['sec_name'] . ' ' . $uv_master['master_fam'] . '</h3>
+                        <p>' . $uv_master['master_phone_number'] . '</p>
+                        <p>' . $uv_master['spec'] . '</p>
+                        <p>Добавлен: <br />' . $uv_master['data_priema'] . '</p>
+                        <p>Уволен: <br />' . $uv_master['data_uvoln'] . '</p>
+                        <button type="submit" name="recover" class="buttons" value="' . $uv_master['id'] . '" >Вернуть в коллектив</button>
+                    </div>
+                </article>';
+            }
+            ?>
+            </p>
+        </form>
     </div>
     <?php
 } else {

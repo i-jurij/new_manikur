@@ -228,6 +228,21 @@ class Masters extends Home
 	{			
         //name point for menu navigation
         $this->data['name'] = 'Уволенные';
+		if (!empty($_POST['recover'])) {
+			//del datu uvolnenija, add to data priema novoe znachenie - vosstanavlivajem na rabote
+			$date = date('Y-m-d', strtotime(date('now')));
+			$id = test_input($_POST['recover']);
+			$res = $this->db->db->update("masters", ["data_uvoln" => null, "data_priema" => $date], ["id" => $id]);
+			if ($res->rowCount()) {
+				$this->data['res'] = 'Дата увольнения удалена из таблицы. Сегодняшняя дата внесена как дата приема.';
+			} else {
+				$this->data['res'] = 'Внимание! Изменения не внесены в таблицу "masters".';
+			}
+		} else {
+			// out form with list of dismissed masters
+			$this->data['uv_mastera'] = $this->get_data_uvoleny_masters();
+		}
+		
 		return $this->data;
 	}
 }
