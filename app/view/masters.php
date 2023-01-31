@@ -31,6 +31,7 @@
 
 </div>
 <?php
+//end
 if (!empty($data['res'])) {
 ?>
 <div class="content">
@@ -89,15 +90,10 @@ if (!empty($data['res'])) {
         <form action="" method="post"  enctype="multipart/form-data" class="" id="uv_mastera">
             <p>
             <?php
-            foreach ($data['uv_mastera'] as $uv_master)
+            if (is_array($data['uv_mastera'])) {
+                foreach ($data['uv_mastera'] as $uv_master)
             {
-                $path = PUBLICROOT.DS.'imgs'.DS.'masters'.DS;
-                $filename = translit_to_lat(sanitize($uv_master['master_fam'])) . '_' . $uv_master['id'];
-                if (find_by_filename($path, $filename) === false) {
-                    $img = URLROOT.DS.'public'.DS.'imgs'.DS.'ddd.jpg';
-                } else {
-                    $img = URLROOT.DS.'public'.DS.'imgs'.DS.'masters'.DS.find_by_filename($path, $filename);
-                }
+                $img = get_master_photo($uv_master['master_fam'], $uv_master['id']);
                 echo '
                 <article class="main_section_article ">
                     <div class="main_section_article_imgdiv" style="background-color: var(--bgcolor-content);">
@@ -110,16 +106,68 @@ if (!empty($data['res'])) {
                         <p>' . $uv_master['spec'] . '</p>
                         <p>Добавлен: <br />' . $uv_master['data_priema'] . '</p>
                         <p>Уволен: <br />' . $uv_master['data_uvoln'] . '</p>
-                        <button type="submit" name="recover" class="buttons" value="' . $uv_master['id'] . '" >Вернуть в коллектив</button>
+                        <button type="submit" name="recover" class="buttons" value="' . $uv_master['id'] . '" form="uv_mastera">Вернуть в коллектив</button>
                     </div>
                 </article>';
+            }
+            } elseif (is_string($data['uv_mastera'])) {
+                print $data['uv_mastera'];
             }
             ?>
             </p>
         </form>
     </div>
     <?php
-} else {
+} 
+// step 1 change photo master - form for choose master with input name = "change_photo_form"
+elseif (!empty($data['choose_master'])) { 
+    ?>
+    <div class="content">
+        <p>Выберите мастера</p>
+        <p> 
+        <?php
+        echo '<form action="" id="fotom" method="post" class="">';
+        foreach ($data['choose_master'] as $master)
+        {
+            $img = get_master_photo($master['master_fam'], $master['id']);
+            $postdata = $master['master_name'] . '_' . $master['sec_name'] . '_' .$master['master_fam'] . '_' . $master['id'];
+            echo '<button type="submit" class="buttons" name="master" value="'.$postdata.'" form="fotom" >
+                    <img src="'.$img.'" alt="Фото '.$master['master_fam'].'" width="128px"/>
+                    <p>' . $master['master_name'] . ' ' . $master['sec_name'] . ' ' . $master['master_fam'] . '<br />'.$master['master_phone_number'].'</p>
+                  </button>
+                ';
+        }
+        echo '</form>';
+        ?>
+        </p>
+    </div>
+    <?php
+} 
+// step 2 change photo master - form for change photo with input name = "change_photo"
+elseif (!empty($data['change_photo'])) { 
+    list($name, $sec_name, $master_fam, $id) = explode('_', $data['change_photo']);
+    ?>
+    <div class="content">
+        <p>
+            <form action="" method="post"  enctype="multipart/form-data" class="" id="mcfoto">
+                <p><?php echo $name . ' ' . $sec_name . ' ' . $master_fam; ?></p>
+                <div>
+                    <p>Выберите фото мастера</p>
+                    <input type="hidden" name="MAX_FILE_SIZE" value="1024000" />
+                    <input type="file" name="photom" id="mfoto" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />
+                </div>
+                <div class="mar pad">
+                    <input type="hidden" value="<?php echo $master_fam . '_' . $id; ?>" name="change_photo" id="namemas" />
+                    <button class="buttons" type="submit" form="mcfoto">Загрузить</button>
+                    <button class="buttons" type="reset" onclick="Reset();">Очистить</button>
+                </div>
+            </form>
+        </p>
+    </div>
+    <?php
+} 
+// start
+else {
     ?>
     <div id="mas_form" class="mas_form  margin_bottom_1rem">
       <a href="<?php echo URLROOT; ?>/masters/add_form" class="buttons">Добавить мастера</a>

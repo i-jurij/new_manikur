@@ -1,5 +1,8 @@
 <?php
 namespace App\Models;
+
+use \App\Lib\Upload;
+
 class Masters extends Home
 {
     public function get_data_masters()
@@ -219,8 +222,50 @@ class Masters extends Home
 
     public function change_photo($path)
 	{			
+		$this->data['name'] = 'Изменить фото';
         //name point for menu navigation
-        $this->data['name'] = 'Изменить фото';
+		if (!empty($_POST['change_photo'])) {
+			$this->data['res'] = '';
+			list($master_fam, $id) = explode('_',  test_input($_POST['change_photo']));
+			$photoname = translit_to_lat(sanitize($master_fam).'_'.$id);
+			//PROCESSING $_FILES
+			$load = new Upload;
+			if ($load->isset_data()) {
+				foreach ($load->files as $input => $input_array) {					
+					foreach ($input_array as $key => $file) {
+						// SET the vars for class
+						if ($input === 'photom') {
+							$load->dest_dir = PUBLICROOT.DS.'imgs'.DS.'masters';
+							$load->create_dir = true;
+							$load->tmp_dir = PUBLICROOT.DS.'tmp';
+							$load->file_size = 1*1000*1024; //1MB
+							$load->file_mimetype = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/webp'];
+							$load->file_ext = ['.jpg', '.jpeg', '.png', '.webp'];
+							$load->new_file_name = $photoname;
+							$load->processing = ['resizeToBestFit' => ['640', '480']];
+							$load->replace_old_file = true;
+						}
+						// PROCESSING DATA
+						if ($load->execute($input_array, $key, $file)) { 
+							if (!empty($load->message)) { $this->data['res'] .= $load->message; }
+						} else { 
+							if (!empty($load->error)) { $this->data['res'] .= $load->error; } 
+							continue; 
+						}
+						//CLEAR TMP FOLDER
+						if (!$load->del_files_in_dir($load->tmp_dir)) { 
+							if (!empty($load->error)) { $this->data['res'] .= $load->error; } 
+						}
+					}
+				}
+			}
+		} elseif (!empty($_POST['master'])) { 
+			//step 2 - form for change photo with input name = "change_photo"
+			$this->data['change_photo'] = test_input($_POST['master']);
+		} else {
+			//step 1 - data for form for choose master with input name = "change_photo_form"
+			$this->data['choose_master'] = $this->get_data_masters();
+		}
 		return $this->data;
 	}
 
@@ -234,13 +279,18 @@ class Masters extends Home
 			$id = test_input($_POST['recover']);
 			$res = $this->db->db->update("masters", ["data_uvoln" => null, "data_priema" => $date], ["id" => $id]);
 			if ($res->rowCount()) {
-				$this->data['res'] = 'Дата увольнения удалена из таблицы. Сегодняшняя дата внесена как дата приема.';
+				$this->data['res'] = '<p>Мастер снова работает (по крайней мере на сайте).</p> Сегодняшняя дата внесена как дата приема.';
 			} else {
 				$this->data['res'] = 'Внимание! Изменения не внесены в таблицу "masters".';
 			}
 		} else {
 			// out form with list of dismissed masters
-			$this->data['uv_mastera'] = $this->get_data_uvoleny_masters();
+			$data = $this->get_data_uvoleny_masters();
+			if (empty($data)) {
+				$this->data['uv_mastera'] = "Данных об уволенных мастерах нет.";
+			} else {
+				$this->data['uv_mastera'] = $data;
+			}
 		}
 		
 		return $this->data;

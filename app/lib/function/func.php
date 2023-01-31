@@ -170,4 +170,14 @@ function phone_number_to_db($sPhone){
     }
   }
 
+  function get_master_photo($master_fam, $master_id) {
+    $path = PUBLICROOT.DS.'imgs'.DS.'masters'.DS;
+      $filename = translit_to_lat(sanitize($master_fam)) . '_' . $master_id;
+      if (find_by_filename($path, $filename) === false) {
+        $img = URLROOT.DS.'public'.DS.'imgs'.DS.'ddd.jpg';
+      } else {
+        $img = URLROOT.DS.'public'.DS.'imgs'.DS.'masters'.DS.find_by_filename($path, $filename);
+      }
+      return $img;
+  }
 ?>
