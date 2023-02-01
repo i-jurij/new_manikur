@@ -252,8 +252,11 @@ class Upload
                     return false;
                 }
             }
-            $imageresize->save($this->dest_dir.DIRECTORY_SEPARATOR.$this->new_file_name);
-            chmod($this->dest_dir.DIRECTORY_SEPARATOR.$this->new_file_name , $this->file_permissions);
+            //$imageresize->save($this->dest_dir.DIRECTORY_SEPARATOR.$this->new_file_name);
+            $imageresize->save($this->dest_dir.DIRECTORY_SEPARATOR.$this->name.'.jpg', IMAGETYPE_JPEG);
+            //chmod($this->dest_dir.DIRECTORY_SEPARATOR.$this->new_file_name , $this->file_permissions);
+            chmod($this->dest_dir.DIRECTORY_SEPARATOR.$this->name.'.jpg', $this->file_permissions);
+            
             $this->message .= 'SUCCESS!<br />File has been processed and copied to <br />"'.$this->dest_dir.DIRECTORY_SEPARATOR.$this->new_file_name.'".<br />';
             return true;
         } catch (\App\Lib\Imageresizeexception $e) {
@@ -323,7 +326,14 @@ class Upload
      */
     protected function check_new_file_name($input_array, $key, $file) {
         if ($this->new_name($input_array, $key, $file)) {
-            $new_name = $this->name.$this->get_point_ext($file['name']);
+            // wrap aroung jpeg -> jpg
+            if ($this->get_point_ext($file['name']) === '.jpeg') {
+                $ext = '.jpg';
+            } else {
+                $ext = $this->get_point_ext($file['name']);
+            }            
+            $new_name = $this->name.$ext;
+            //$new_name = $this->name.$this->get_point_ext($file['name']);
             if (file_exists($this->dest_dir.DIRECTORY_SEPARATOR.$new_name)) {
                 if ($this->replace_old_file) {
                     $this->new_file_name = $new_name; 
@@ -533,7 +543,7 @@ class Upload
     public function get_extension($filename) {
 		//$ext = strtolower(mb_substr(strrchr($filename, '.'), 1));
         $path_info = pathinfo($filename);
-        $ext = strtolower($path_info['extension']);
+        $ext = mb_strtolower($path_info['extension']);
 		return $ext;
 	}
     /**
@@ -541,7 +551,7 @@ class Upload
     * @return string file extension with a dot at the beginning
     */
     public function get_point_ext($filename) {
-		$ext = strtolower(strrchr($filename, '.'));
+		$ext = mb_strtolower(mb_strrchr($filename, '.'));
 		return $ext;
 	}
     /**

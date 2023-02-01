@@ -32,10 +32,10 @@ trait Delete_files
   public static function del_file(string $path2file) {
     $mes = '';
     if (is_string($path2file)) {
-      $real = realpath($path2file);
-      if (file_exists($real)) {
-        if (is_writable($real)) {
-          if (!unlink($real)) {
+      //$path2file = realpath($path2file);
+      if (file_exists($path2file)) {
+        if (is_writable($path2file)) {
+          if (!unlink($path2file)) {
             $mes .= 'ERROR! Not unlink "'.$path2file.'".';
             return $mes;
           } else {

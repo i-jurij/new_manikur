@@ -1,35 +1,3 @@
-<div class="">
-
-    <?php /*
-    //подключение к бд, создание если ее нет, создание таблицы masters, если ее нет
-    include_once server_doc_root().'admin/mastera-sql-connect.php'; ++
-    
-    include_once server_doc_root().'admin/mastera-add-master.php'; 
-        //добавление мастера второй шаг, если есть пост - запись в бд
-    if ( isset($_POST['master_fam']) and $_POST['master_fam'] != '' and isset($_POST['master_phone_number']) and $_POST['master_phone_number'] != '' )
-    {
-        include_once 'admin/mastera-add-master-sql.php';
-        echo $flash ;
-    echo'<a href="mastera" ><button class="buttons" type="button">В меню</button></a>';
-    }
-    //первый шаг добавления мастера - вывести форму
-    else
-    {
-    include_once server_doc_root().'admin/mastera-add-master-form.php';
-    include_once server_doc_root().'pages/files/js_back_refresh.html';
-    } 
-    */
-
-    /*
-    include_once server_doc_root().'admin/mastera-spisok.php';
-    include_once server_doc_root().'admin/mastera-change-master.php';
-    include_once server_doc_root().'admin/mastera-change-master-photo.php';
-    include_once server_doc_root().'admin/mastera-uvoleny.php';
-    include_once server_doc_root().'admin/mastera-del-master.php';
-*/
-    ?>
-
-</div>
 <?php
 //end
 if (!empty($data['res'])) {
@@ -37,11 +5,6 @@ if (!empty($data['res'])) {
 <div class="content">
     <p>
     <?php
-    /*
-    print '<pre>';
-    var_dump($data);
-    print '</pre>';
-    */
     print $data['res'];
     ?>
     </p>
@@ -49,7 +12,7 @@ if (!empty($data['res'])) {
 <?php
 } elseif (!empty($data['add_form'])) {
     ?>
-	<form action="<?php echo URLROOT.'/masters/add'; ?>" method="post"  enctype="multipart/form-data" class="form-recall" id="form_recall">
+	<form action="<?php echo URLROOT.'/masters/add'; ?>" method="post"  enctype="multipart/form-data" class=" content" id="form_recall">
         <div class="form-recall-main">
             <div class="pers">Добавить данные мастера:</div>
                 <div class="form-recall-main-section">
@@ -67,7 +30,7 @@ if (!empty($data['res'])) {
 
             <div class="form-recall-main-section">
                 <button class="buttons form-recall-submit" type="submit" id="upload" form="form_recall">Добавить</button>
-                <button class="buttons form-recall-reset" type="reset" onclick="Reset()" form="form_recall">>Очистить</button>
+                <button class="buttons form-recall-reset" type="reset" onclick="Reset()" form="form_recall">Очистить</button>
             </div>
             <br class="clear" />
 
@@ -93,7 +56,7 @@ if (!empty($data['res'])) {
             if (is_array($data['uv_mastera'])) {
                 foreach ($data['uv_mastera'] as $uv_master)
             {
-                $img = get_master_photo($uv_master['master_fam'], $uv_master['id']);
+                $img = get_master_photo($uv_master['id']);
                 echo '
                 <article class="main_section_article ">
                     <div class="main_section_article_imgdiv" style="background-color: var(--bgcolor-content);">
@@ -129,7 +92,7 @@ elseif (!empty($data['choose_master'])) {
         echo '<form action="" id="fotom" method="post" class="">';
         foreach ($data['choose_master'] as $master)
         {
-            $img = get_master_photo($master['master_fam'], $master['id']);
+            $img = get_master_photo($master['id']);
             $postdata = $master['master_name'] . '_' . $master['sec_name'] . '_' .$master['master_fam'] . '_' . $master['id'];
             echo '<button type="submit" class="buttons" name="master" value="'.$postdata.'" form="fotom" >
                     <img src="'.$img.'" alt="Фото '.$master['master_fam'].'" width="128px"/>
@@ -165,7 +128,68 @@ elseif (!empty($data['change_photo'])) {
         </p>
     </div>
     <?php
-} 
+} elseif (!empty($data['master'])) {
+    ?>
+    <div class="content">
+        <p> <form action="" id="changem" method="post" class="">
+            <p><b>Список работающих мастеров</b></p>
+            <?php
+            foreach ($data['master'] as $master)
+            {
+                echo '<button type="submit" class="buttons" name="master" value="'.$master['id'].'" form="changem" >
+                        <p>' . $master['master_name'] . ' ' . $master['sec_name'] . ' ' . $master['master_fam'] . '<br />'.$master['master_phone_number'].'</p>
+                    </button>
+                    ';
+            }
+            ?>
+            <p><b>Список уволенных мастеров</b><p>
+            <?php
+            foreach ($data['uv_master'] as $uv_master)
+            {
+                echo '<button type="submit" class="buttons" name="master" value="'.$uv_master['id'].'" form="changem" >
+                        <p>' . $uv_master['master_name'] . ' ' . $uv_master['sec_name'] . ' ' . $uv_master['master_fam'] . '<br />'.$uv_master['master_phone_number'].'</p>
+                    </button>
+                    ';
+            }
+            ?>
+        </form></p>
+    </div>
+    <?php
+} elseif (!empty($data['change'])) {
+    ?>
+    <div class="content">
+        <p>        
+        <form action="" method="post" class="" id="master_change_form">
+              <div class="form-recall-main">
+                <div class="pers"><?php echo $data['change']['master_name'] . ' ' . $data['change']['sec_name'] . ' ' . $data['change']['master_fam']; ?></div>
+
+                <div class="form-recall-main-section">
+                  <div class=" flex">
+                    <input type="text" placeholder="Фамилия: <?php echo $data['change']['master_fam']; ?>" name="master_f" id="master_f" maxlength="30"></input>
+                    <input type="tel" name="master_pn"  id="master_pn" class="number" title="Формат: +7 999 999 99 99" placeholder="+7 ___ ___ __ __" pattern="(\+?7|8)?\s?[\(]{0,1}?\d{3}[\)]{0,1}\s?[-]{0,1}?\d{1}\s?[-]{0,1}?\d{1}\s?[-]{0,1}?\d{1}\s?[-]{0,1}?\d{1}\s?[-]{0,1}?\d{1}\s?[-]{0,1}?\d{1}\s?[-]{0,1}?\d{1}\s?[-]{0,1}?" ></input>
+                    <div id="error"><small></small></div>
+                    <input type="text" placeholder="Специальность: <?php echo $data['change']['spec']; ?>" name="master_spec" id="master_spec" maxlength="50"></input>
+                    <input type="hidden" value="<?php echo $data['change']['id']; ?>" name="m_id" id="m_id" />
+                 </div>
+
+                 <div class="">
+                  <p>Дата увольнения:</p>
+                  <input type="text" placeholder="10.09.2020" name="data_uvoln" id="data_uvoln" maxlength="30"></input>
+                </div>
+              </div>
+
+                <div class="form-recall-main-section">
+                  <button class="buttons form-recall-submit" type="submit" form="master_change_form">Записать</button>
+                  <button class="buttons form-recall-reset" type="reset" onclick="Reset()">Очистить</button>
+                </div>
+                <br class="clear" />
+
+              </div>
+            </form>
+        </p>
+    </div>
+    <?php
+}
 // start
 else {
     ?>

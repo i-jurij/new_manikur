@@ -5,6 +5,8 @@ use \App\Lib\Upload;
 
 class Masters extends Home
 {
+	use \App\Lib\Traits\Delete_files ;
+
     public function get_data_masters()
 	{	
 		$masters = $this->db->db->select("masters", "*", [ "OR" => [ "data_uvoln" => "",  "data_uvoln[=]" => null ] ]);
@@ -15,6 +17,12 @@ class Masters extends Home
 	{	
 		$masters = $this->db->db->select("masters", "*", \App\Lib\Medoo::raw('WHERE LENGTH(<data_uvoln>) > 1'));
 		return $masters;
+	}
+
+	public function set_name($prefix, $id)
+	{	
+		$name = $prefix.'_' . $id;
+		return $name;
 	}
 
     public function add_form($path)
@@ -90,7 +98,7 @@ class Masters extends Home
 					//узнаем id мастера в таблице masters
 					$master_data = $this->db->db->get("masters", ["id", "master_fam"], ["master_phone_number" => $master_phone_number]);
 					//создаем таблицу в бд на каждого мастера с занятыми датой временем и данные на клиента (имя, тлф)
-					$tablename = 'appto_' . translit_to_lat(sanitize($master_data['master_fam'])) . '_' . $master_data['id'];
+					$tablename = $this->set_name('app_to', $master_data['id']);
 					//$date = date('Y-m-d', strtotime(date('now')));
 					$this->db->db->create($tablename, [
 						"ID" => [
@@ -187,11 +195,23 @@ class Masters extends Home
 			$this->data['res'] = '';
 			$del = array_map('base64_decode', $_POST['mastk']);
 			$delmas = array_map('unserialize', $del);
-			//delete photo
-
-			//del from masters
+			
 			foreach ($delmas as $master) {
 				$this->data['res'] .= '<p>Мастер <b>'.$master['master_name'].' '.$master['master_fam'].'</b>:</p>';
+				//delete photo
+				$name = $this->set_name('master_photo', $master['id']);
+				$path = IMGDIR.DS.'masters'.DS;
+				$basename = find_by_filename($path, $name);
+				if ($basename === false) {
+					$this->data['res'] .= 'Фото мастера не найдено для удаления.<br />';
+				} else {
+					if ($this->del_file($path.$basename) === true) {
+						$this->data['res'] .= 'Фото мастера удалено.<br />';
+					} else {
+						$this->data['res'] .= $this->del_file($path.$basename).'<br />';
+					}
+				}
+				//del from table masters in db
 				$del = $this->db->db->delete("masters", ["id" => $master['id']]);
 				if ($del->rowCount() > 0) {
 					$this->data['res'] .= 'Данные из таблицы "masters" удалены.<br />';
@@ -199,7 +219,7 @@ class Masters extends Home
 					$this->data['res'] = 'Внимание! Данные из таблицы "masters" не удалены.<br />';
 				}
 				//del appointment table "appto_nametlf"
-				$table = 'appto_' . translit_to_lat(sanitize($master['master_fam'])).'_'.$master['id']; 
+				$table = $this->set_name('app_to', $master['id']); 
 				//print $table; print '<br />';
 				$drop = $this->db->db->drop($table);
 				if ($drop->rowCount()) {
@@ -216,7 +236,64 @@ class Masters extends Home
 	{			
         //name point for menu navigation
         $this->data['name'] = 'Изменить данные';
-		$this->data['masters'] = $this->db->db->select("masters", "*");
+		if (!empty($_POST['master'])) {
+			// change form
+			$id = test_input($_POST['master']);
+			$this->data['change'] = $this->db->db->get("masters", "*", ["id" => $id]);
+		} elseif (!empty($_POST['master_f']) or !empty($_POST['master_pn']) or !empty($_POST['master_spec']) or !empty($_POST['data_uvoln'])) {
+			$this->data['res'] = '';
+			//запись в бд и вывод инфо о внесении изменений
+			//меняем фамилию, если изменилась
+			if (isset($_POST['master_f']) and $_POST['master_f'] != '') {
+				//echo "Обновлено строк: $affectedRowsNumber";
+				$mf = test_input($_POST['master_f']);
+				$id = test_input($_POST['m_id']);
+				$res = $this->db->db->update("masters", ["master_fam" => $mf], ["id" => $id]);
+				if ($res->rowCount() > 0) {
+					$this->data['res'] .= '<p>Фамилия изменена на' . '<br /> ' . $mf. '</p>';
+				} else {
+					$this->data['res'] .= '<p>'.$this->db->db->error.'.</p>';
+				}
+			}
+			
+			//меняем номер, если изменился
+			if (isset($_POST['master_pn']) and $_POST['master_pn'] != '') {
+				$mpn = test_input($_POST['master_pn']);
+				$id = test_input($_POST['m_id']);
+				$res = $this->db->db->update("masters", ["master_phone_number" => $mpn], ["id" => $id]);
+				if ($res->rowCount() > 0) {
+					$this->data['res'] .= '<p>Номер изменен на' . '<br /> ' . $mpn. '</p>';
+				} else {
+					$this->data['res'] .= '<p>'.$this->db->db->error.'.</p>';
+				}
+			}
+			//меняем специальность, если изменилась
+			if (isset($_POST['master_spec']) and $_POST['master_spec'] != '') {
+				$spec = test_input($_POST['master_spec']);
+				$id = test_input($_POST['m_id']);
+				$res = $this->db->db->update("masters", ["spec" => $spec], ["id" => $id]);
+				if ($res->rowCount() > 0) {
+					$this->data['res'] .= '<p>Специальность изменена на' . '<br /> ' . $spec. '</p>';
+				} else {
+					$this->data['res'] .= '<p>'.$this->db->db->error.'.</p>';
+				}
+			}
+			//добавляем дату увольнения
+			if (isset($_POST['data_uvoln']) and $_POST['data_uvoln'] != '') {
+				$du = test_input($_POST['data_uvoln']);
+				$id = test_input($_POST['m_id']);
+				$res = $this->db->db->update("masters", ["data_uvoln" => $du], ["id" => $id]);
+				if ($res->rowCount() > 0) {
+					$this->data['res'] .= '<p>Дата увольнения: ' . '<br /> ' . $du. '</p>';
+				} else {
+					$this->data['res'] .= '<p>'.$this->db->db->error.'.</p>';
+				}
+			}
+		} else {
+			//$this->data['master'] = $this->db->db->select("masters", "*");
+			$this->data['master'] = $this->get_data_masters();
+			$this->data['uv_master'] = $this->get_data_uvoleny_masters();
+		}
 		return $this->data;
 	}
 
@@ -227,7 +304,7 @@ class Masters extends Home
 		if (!empty($_POST['change_photo'])) {
 			$this->data['res'] = '';
 			list($master_fam, $id) = explode('_',  test_input($_POST['change_photo']));
-			$photoname = translit_to_lat(sanitize($master_fam).'_'.$id);
+			$photoname = $this->set_name('master_photo', $id);
 			//PROCESSING $_FILES
 			$load = new Upload;
 			if ($load->isset_data()) {
@@ -235,7 +312,7 @@ class Masters extends Home
 					foreach ($input_array as $key => $file) {
 						// SET the vars for class
 						if ($input === 'photom') {
-							$load->dest_dir = PUBLICROOT.DS.'imgs'.DS.'masters';
+							$load->dest_dir = IMGDIR.DS.'masters';
 							$load->create_dir = true;
 							$load->tmp_dir = PUBLICROOT.DS.'tmp';
 							$load->file_size = 1*1000*1024; //1MB
