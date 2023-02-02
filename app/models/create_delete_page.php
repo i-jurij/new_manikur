@@ -25,7 +25,6 @@ class Create_delete_page extends Adm
         $this->data['name'] = 'Создать';
         if (filter_has_var(INPUT_POST, 'page_alias') && !empty($_POST['page_alias'])) {
             $this->data['res'] = null;
-            $table = (!empty($_POST['page_access'])) ? 'adm_pages' : 'pages';
 
             foreach ($_POST as $key => $value) {
                 if ( $key === 'page_alias') {
@@ -33,7 +32,7 @@ class Create_delete_page extends Adm
                         $this->data['res'] .= 'ERROR!<br />Page_alias "'.$value.'" не соответствует шаблону.<br />';
                         $end = true;
                     }
-                    $aliases = $this->db->db->select($table, "page_alias");
+                    $aliases = $this->db->db->select($this->table, "page_alias");
                     if (in_array($value, $aliases)) {
                         $this->data['res'] .= 'ERROR!<br />Page_alias "'.$value.'" уже существует. Придумайте другой.<br />';
                         $end = true;
@@ -57,7 +56,7 @@ class Create_delete_page extends Adm
             
             if ( isset($post) ) {
                 //INSERT DATA INTO SQL TABLE
-                $res = $this->db->db->insert($table, $post);
+                $res = $this->db->db->insert($this->table, $post);
                 if ($res->rowCount()) {
                     $this->data['res'] .= 'Page data has been inserted to db.<br />';
                 } else {
@@ -73,7 +72,7 @@ class Create_delete_page extends Adm
 
                 $models = [ '<?php'.PHP_EOL, 'namespace App\Models;'.PHP_EOL, 'class '.$classname.' extends Home'.PHP_EOL, '{'.PHP_EOL, '}'.PHP_EOL ];
                 $view = [ '<div class="content">'.PHP_EOL, $filename.PHP_EOL, '</div>'.PHP_EOL ];
-                if ($table === 'adm_pages') {
+                if (!empty($post['page_admin']) && $post['page_admin'] == 1 ) {
                     $controllers = [ '<?php'.PHP_EOL, 'namespace App\Controllers;'.PHP_EOL, 'class '.$classname.' extends Adm'.PHP_EOL, '{'.PHP_EOL, '}'.PHP_EOL ];
                 } else {
                     $controllers = [ '<?php'.PHP_EOL, 'namespace App\Controllers;'.PHP_EOL, 'class '.$classname.' extends Home'.PHP_EOL, '{'.PHP_EOL, '}'.PHP_EOL ];
@@ -166,19 +165,11 @@ class Create_delete_page extends Adm
             if (strpos($this->data['res'], 'RROR') or strpos($this->data['res'], 'rror')) {
                 $this->data['res'] .= 'ATTENTION!<br /> If there are errors, delete page and enter all page data again<br />';
             } 
-            unset($post,$table, $aliases, $value, $key, $end, $res, $filename, $model, $controller, $view );
+            unset($post, $aliases, $value, $key, $end, $res, $filename, $model, $controller, $view );
         } else {
-            //print_r($_GET);
-            $q = $_SERVER['QUERY_STRING'];
-            if (is_string($q) && strlen(htmlentities(trim($q))) === 1 ) {
-                if ($q === 'a') { $table = 'adm_pages'; $this->data['name'] .= '&nbsp;в adm_pages';}
-                elseif ($q === 'b') { $table = 'pages'; $this->data['name'] .= '&nbsp;в pages';}
-                if (!empty($table)) {
-                    $colnames = (new Sql_col_names($this->db, $table))->res;
-                    $this->data['colname'] = $colnames;
-                }
-            }
-            unset($q,$table, $colnames );
+            $colnames = (new Sql_col_names($this->db, $this->table))->res;
+            $this->data['colname'] = $colnames;
+            unset($q, $colnames );
         }
         return $this->data;
 	}
@@ -187,11 +178,6 @@ class Create_delete_page extends Adm
 	{	
         $this->data['name'] = 'Удалить';
         $this->data['res'] = null;
-        $q = $_SERVER['QUERY_STRING'];
-        if (is_string($q) && strlen(htmlentities(trim($q))) === 1 ) {
-            if ($q === 'a') { $table = 'adm_pages'; $this->data['name'] .= '&nbsp;в adm_pages';}
-            elseif ($q === 'b') { $table = 'pages'; $this->data['name'] .= '&nbsp;в pages';}
-        }
         if (filter_has_var(INPUT_POST, 'delete_page')) {
             if (is_array($_POST['delete_page'])) {
                 foreach ($_POST['delete_page'] as $value) {
@@ -201,7 +187,7 @@ class Create_delete_page extends Adm
                 }
                 if (!empty($postdel)) {
                     //delete data from db
-                    $res = $this->db->db->delete($table, ["page_alias" => $postdel]);
+                    $res = $this->db->db->delete($this->table, ["page_alias" => $postdel]);
                     if ($res->rowCount() > 0) {
                         $this->data['res'] .= 'Pages data has been deleted from db table.<br />';
                     } else {
@@ -264,15 +250,12 @@ class Create_delete_page extends Adm
             }
             unset($value, $val, $va, $res, $path, $files, $k, $v);
         } else {
-            if ($table === 'pages') {
-                $pagename = $this->db->db->select($table, ["page_alias", "page_title", "page_templates", "page_img"]);
-                foreach ($pagename as $page) {
-                    if ($page['page_alias'] != 'home') {
-                        $this->data['pagename'][] = $page;
-                    }
+            $pagename = $this->db->db->select($this->table, ["page_alias", "page_title", "page_templates", "page_img"]);
+            //print_r($pagename);
+            foreach ($pagename as $page) {
+                if ($page['page_alias'] != 'home') {
+                    $this->data['pagename'][] = $page;
                 }
-            } else {
-                $this->data['pagename'] = $this->db->db->select($table, ["page_alias", "page_title", "page_templates"]);
             }
             //list of files in templates dir
             $this->data['templates_list'] = files_in_dir(PUBLICROOT.DS.'templates', 'php');

@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 class Adm extends Home
 {
-	protected $table = "adm_pages";
+	//protected $table = "adm_pages";
 	protected string $template = TEMPLATEROOT.DS.'adm_templ.php';
 	protected $auth;
 	protected $login;

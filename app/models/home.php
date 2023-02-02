@@ -28,7 +28,9 @@ class Home
 		if ($this->db->db->has($this->table, ["page_alias" => $this->page])) {
 		$this->data['page_db_data'] = $this->db->db->select($this->table, "*", ["page_alias" => $this->page]);
 		}
-		Registry::set('page_db_data', $this->data['page_db_data']);
+		if (!empty($this->data['page_db_data'])) {
+			Registry::set('page_db_data', $this->data['page_db_data']);
+		}
 	}
 
 	public function get_data($path)

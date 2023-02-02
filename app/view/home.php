@@ -1,7 +1,7 @@
 <?php
 	if (!empty($data['page_list']) && is_array($data['page_list'])) {
 		foreach ($data['page_list'] as $page) {
-			if ($page['page_alias'] !== "home") {
+			if ($page['page_alias'] !== "home" && empty($page['page_admin'])) {
 				$tit = (!empty($page['page_title'])) ? $page['page_title'] : 'Title';
 				$desc = (!empty($page['page_meta_description'])) ? $page['page_meta_description'] : 'Description';
 				print '<article class="main_section_article ">

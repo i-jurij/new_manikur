@@ -2,7 +2,7 @@
 <?php
 //del adm from page menu
   foreach ($data['page_list'] as $key => $file) {
-    if ($file['page_alias'] !== "adm") {
+    if ($file['page_alias'] !== "adm" && !empty($file['page_admin'])) {
       $pages[] = $file;
     }
   }

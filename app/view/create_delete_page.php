@@ -14,6 +14,7 @@
     * page_img - путь к изображению страницы в меню на главной странице без public/imgs/pages, например "about/about.jpg", вес - до 1МБ, формат - jpg, png, webp;<br /> 
     page_content - html|php содержимое страницы;<br />
     * page_access - уровень доступа к странице: admin, moder, user.<br />
+    * page_admin - 1 для страницы из админки, пусто для обычной.<br />
     <small>* - обязательно для заполнения.</small><br /><br />
     Удаление страниц:<br />
     Выберите шаблон страницы для удаления (если его название без расширения не совпадает с "page_alias", например после ручного добавления)<br />
@@ -30,12 +31,8 @@
 if (empty($data['colname']) && empty($data['pagename']) && empty($data['res'])) {
     print '<div class="margin_bottom_1rem ">
                 <div class="display_inline_block">
-                    <a href="'.URLROOT.'/create_delete_page/create?a" class="buttons display_inline_block mar">Создать в adm_pages</a>
-                    <a href="'.URLROOT.'/create_delete_page/create?b" class="buttons display_inline_block mar">Создать в pages</a>
-                </div>
-                <div class="display_inline_block">
-                    <a href="'.URLROOT.'/create_delete_page/delete?a" class="buttons display_inline_block mar">Удалить в adm_pages</a>
-                    <a href="'.URLROOT.'/create_delete_page/delete?b" class="buttons display_inline_block mar">Удалить в pages</a>
+                <a href="'.URLROOT.'/create_delete_page/create?b" class="buttons display_inline_block mar">Создать</a>
+                <a href="'.URLROOT.'/create_delete_page/delete?b" class="buttons display_inline_block mar">Удалить</a>
                 </div>
             </div>
             ';
@@ -59,8 +56,9 @@ if (empty($data['colname']) && empty($data['pagename']) && empty($data['res'])) 
                     <div class="margin_bottom_1rem back shad rad pad mar">
                         <p class="margin_rlb1">Введите данные (alias обязателен)</p>';
                         foreach ($data['colname'] as $key => $val) {
+                            $required = ( $key === "page_alias" ) ? 'required' : '';
+                            $value = '';
                             if ($val != 'INTEGER' && $val != 'CHAR') {
-
                                 if (strpos($val, 'ARCHAR')) {
                                     $arr = explode('(', $val);
                                     if (!empty($arr[1])) {
@@ -68,24 +66,21 @@ if (empty($data['colname']) && empty($data['pagename']) && empty($data['res'])) 
                                     } else {
                                         $length = 255;
                                     }
-                                    $type = "text";
                                 }
-
                                 if ($val === 'TEXT') {
                                     $length = 65535;
-                                    $type = "text";
                                 }
-                                $required = ( $key === "page_alias" ) ? 'required' : '';
-                                $value = ( $key === "page_robots" && strpos($data['name'], 'adm_pages') ) ? 'NOINDEX, NOFOLLOW' : 
-                                            ( ( $key === "page_templates" && strpos($data['name'], 'adm_pages') ) ? 'adm_templ.php' : 
-                                            ( ( $key === "page_access" && strpos($data['name'], 'adm_pages') ) ? 'admin' :
-                                            ( ( $key === "page_img" && strpos($data['name'], 'в pages') ) ? 'ddd.jpg' : 
-                                            ( ( $key === "page_robots" && strpos($data['name'], 'в pages') ) ? 'INDEX, FOLLOW' : '') ) ) );
+                                $value = (  ( $key === "page_img" ) ? URLROOT.DS.'public'.DS.'imgs'.DS.'ddd.jpg' : 
+                                            ( ( ( $key === "page_robots" ) ? 'INDEX, FOLLOW' : '') ) );
+                            }
+                            $length = (isset($length)) ? $length : 1;
 
+                            if ($key != "page_id") {
                                 print ' <label class="display_inline_block margin_bottom_1rem">'.$key.' ('.$length.')<br /> 
-                                            <input type="'.$type.'" name="'.$key.'" maxlength="'.$length.'" value="'.$value.'" '.$required.' />
+                                            <input type="text" name="'.$key.'" maxlength="'.$length.'" value="'.$value.'" '.$required.' />
                                         </label>'.PHP_EOL;
                             }
+                            unset($value, $length, $type);
                         }
     print '         </div>
                     <div class="margin_bottom_1rem">
