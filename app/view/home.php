@@ -7,7 +7,7 @@
 				print '<article class="main_section_article ">
 				<a class="main_section_article_content_a" href="' . $page['page_alias'] . '" >
 				<div class="main_section_article_imgdiv">
-				<img src="' . URLROOT.DS.'public'.DS.'imgs'.DS.'pages'.DS.$page['page_img'] . '" alt="Фото ' . $page['page_title'] . '" class="main_section_article_imgdiv_img" />
+				<img src="' . URLROOT.DS.'public'.DS.'imgs'.DS.'pages'.DS.$page['page_alias'].'.jpg" alt="Фото ' . $page['page_title'] . '" class="main_section_article_imgdiv_img" />
 				</div>
 
 				<div class="main_section_article_content">
