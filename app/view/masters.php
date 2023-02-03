@@ -65,10 +65,10 @@ if (!empty($data['res'])) {
 
                     <div class="main_section_article_content">
                         <h3>' . $uv_master['master_name'] . ' ' . $uv_master['sec_name'] . ' ' . $uv_master['master_fam'] . '</h3>
-                        <p>' . $uv_master['master_phone_number'] . '</p>
-                        <p>' . $uv_master['spec'] . '</p>
-                        <p>Добавлен: <br />' . $uv_master['data_priema'] . '</p>
-                        <p>Уволен: <br />' . $uv_master['data_uvoln'] . '</p>
+                        ' . $uv_master['master_phone_number'] . '<br /r>
+                        ' . $uv_master['spec'] . '<br />
+                        Добавлен: <br />' . $uv_master['data_priema'] . '<br />
+                        Уволен: <br />' . $uv_master['data_uvoln'] . '<br />
                         <button type="submit" name="recover" class="buttons" value="' . $uv_master['id'] . '" form="uv_mastera">Вернуть в коллектив</button>
                     </div>
                 </article>';

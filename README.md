@@ -96,6 +96,7 @@ appp/lib/view.php - single View class,
 $content_view - from app/view (ready-to-output code),
 $data - data array for model from controller (from rout),
 $template_view - default template declare in method, you can specify your own,
+but there is to replace value from controller of page.
 or declare it in your controllers class:
 protected string $template = TEMPLATEROOT.DS.'first/templ.php';
 or rewrite it inside a controllers class method when calling the method generate from View class:
@@ -137,7 +138,6 @@ Create or del page:
 add controller, model, view;
 create and add to adm_pages table or pages table vars for template:
 * page_alias(100) - short name of the page preferably in Latin, and unique, and only letters or digits up to 100 letters;
-page_templates - path to the template, excluding public/templates, if necessary, eg "first/templ.php";
 * page_title - short name of the page in your language, letters, numbers, hyphens, underscores up to 100 pieces;
 page_meta_description - description of the site page in the search results, and for SEO,
 page_meta_keywords - a list of keywords corresponding to the content of the site page,

@@ -249,12 +249,18 @@ class Create_delete_page extends Adm
                 $this->data['res'] .= 'ERROR! Data is not array.<br />';
             }
             unset($value, $val, $va, $res, $path, $files, $k, $v);
-        } else {
-            $pagename = $this->db->db->select($this->table, ["page_alias", "page_title", "page_templates", "page_img"]);
+        } 
+        //step 1 - list of pages and templates
+        else {
+            $pagename = $this->db->db->select($this->table, ["page_alias", "page_title", "page_admin"]);
             //print_r($pagename);
             foreach ($pagename as $page) {
-                if ($page['page_alias'] != 'home') {
-                    $this->data['pagename'][] = $page;
+                if ($page['page_alias'] != 'home' && $page['page_alias'] != 'adm' ) {
+                    if (!empty($page['page_admin'])) {
+                        $this->data['adm_pagename'][] = $page;
+                    } else {
+                        $this->data['pagename'][] = $page;
+                    }
                 }
             }
             //list of files in templates dir

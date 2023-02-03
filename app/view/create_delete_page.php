@@ -28,15 +28,7 @@
 
 <div class=" ">
 <?php
-if (empty($data['colname']) && empty($data['pagename']) && empty($data['res'])) {
-    print '<div class="margin_bottom_1rem ">
-                <div class="display_inline_block">
-                <a href="'.URLROOT.'/create_delete_page/create?b" class="buttons display_inline_block mar">Создать</a>
-                <a href="'.URLROOT.'/create_delete_page/delete?b" class="buttons display_inline_block mar">Удалить</a>
-                </div>
-            </div>
-            ';
-} elseif (!empty($data['colname'])) {
+if (!empty($data['colname'])) {
     print ' <div class="margin_bottom_1rem" style="max-width:55rem;">
                 <form action="" method="post" enctype="multipart/form-data" name="create_page" id="create_page" >
                     <div class="back shad rad pad margin_rlb1">
@@ -46,12 +38,10 @@ if (empty($data['colname']) && empty($data['pagename']) && empty($data['res'])) 
                             <input type="file" name="template" accept=".php, .html, text/html, text/php, text/x-php, text/plain">
                         </label>';
 
-    if (strpos($data['name'], 'в pages')) {
-        print '         <label class="display_inline_block margin_bottom_1rem">Файл изображения страницы (jpg, png, webp, < 1MB):<br /> 
+    print '             <label class="display_inline_block margin_bottom_1rem">Файл изображения страницы (jpg, png, webp, < 1MB):<br /> 
                             <input type="hidden" name="MAX_FILE_SIZE" value="1024000" />
                             <input type="file" name="picture" accept="image/jpeg, image/pjpeg, image/png, image/webp">
                         </label>';
-    }
     print '         </div>
                     <div class="margin_bottom_1rem back shad rad pad mar">
                         <p class="margin_rlb1">Введите данные (alias обязателен)</p>';
@@ -70,12 +60,11 @@ if (empty($data['colname']) && empty($data['pagename']) && empty($data['res'])) 
                                 if ($val === 'TEXT') {
                                     $length = 65535;
                                 }
-                                $value = (  ( $key === "page_img" ) ? URLROOT.DS.'public'.DS.'imgs'.DS.'ddd.jpg' : 
-                                            ( ( ( $key === "page_robots" ) ? 'INDEX, FOLLOW' : '') ) );
+                                $value = ( $key === "page_robots" ) ? 'INDEX, FOLLOW' : '';
                             }
                             $length = (isset($length)) ? $length : 1;
 
-                            if ($key != "page_id") {
+                            if ($key != "page_id" && $key != "page_img") {
                                 print ' <label class="display_inline_block margin_bottom_1rem">'.$key.' ('.$length.')<br /> 
                                             <input type="text" name="'.$key.'" maxlength="'.$length.'" value="'.$value.'" '.$required.' />
                                         </label>'.PHP_EOL;
@@ -91,7 +80,7 @@ if (empty($data['colname']) && empty($data['pagename']) && empty($data['res'])) 
             </div>               
             ';
     unset($required, $type, $length, $value, $key, $val );
-} elseif (!empty($data['pagename'])) { 
+} elseif (!empty($data['templates_list'])) { 
     print ' <div class="">
                 <form action="" method="post" name="del_page" id="del_page">
                     <div class="">';
@@ -110,8 +99,10 @@ if (empty($data['colname']) && empty($data['pagename']) && empty($data['res'])) 
                         </div>';
     }
     print '             <div class="back shad rad pad margin_rlb1">
-                            <p class="margin_rlb1 ">Выберите страницу для удаления</p>';
-    if (is_array($data['pagename'])) {
+                            <p class="margin_rlb1 ">Выберите страницу для удаления</p>
+                            <p><b>Обычные страницы:</b></p>';
+
+    if (!empty($data['pagename']) && is_array($data['pagename'])) {
         foreach ($data['pagename'] as $value) {
                 $titl = (!empty($value['page_title'])) ? $value['page_title'] : $value['page_alias'];
                 print '     <div class="display_inline_block">
@@ -121,9 +112,23 @@ if (empty($data['colname']) && empty($data['pagename']) && empty($data['res'])) 
                                 </label>
                             </div>'.PHP_EOL;
         }
+    } else {
+        print "Список страниц пуст.";
+    }
+    print '                 <p><b>Cтраницы админ раздела:</b></p>';
+    if (!empty($data['adm_pagename']) && is_array($data['adm_pagename'])) {
+        foreach ($data['adm_pagename'] as $val) {
+                $tit = (!empty($val['page_title'])) ? $val['page_title'] : $val['page_alias'];
+                print '     <div class="display_inline_block">
+                                <label class="display_inline_block shad rad pad05 margint0b1rl05" style="height:100%;">
+                                    <input type="checkbox" name="delete_page[]" value="'.$val['page_alias'].'" />
+                                    '. $tit .'
+                                </label>
+                            </div>'.PHP_EOL;
+        }
         print '          </div>';
     } else {
-        $data['res'] = "Array of pages name not exists or empty.";
+        print "Список административных страниц пуст.";
     }
 
     print '         </div>
@@ -134,12 +139,17 @@ if (empty($data['colname']) && empty($data['pagename']) && empty($data['res'])) 
                 </form>
             </div>               
             ';
-    unset($titl, $data['res'], $data['pagename'], $value['page_title'], $value['page_alias'], $value['page_img'], $key, $val );
-} else {
-    if (!empty($data['res'])) 
-    {
+    unset($titl, $tit, $data, $value, $key, $val );
+} elseif (!empty($data['res'])) {
         print '<div class="back shad rad pad margin_rlb1">'.$data['res'].'</div>';
-    }
+} else {
+    print '<div class="margin_bottom_1rem ">
+                <div class="display_inline_block">
+                <a href="'.URLROOT.'/create_delete_page/create?b" class="buttons display_inline_block mar">Создать</a>
+                <a href="'.URLROOT.'/create_delete_page/delete?b" class="buttons display_inline_block mar">Удалить</a>
+                </div>
+            </div>
+            ';
 }
 ?>
 </div>

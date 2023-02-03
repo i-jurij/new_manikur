@@ -33,9 +33,6 @@ class Db_init_mysql
                 "VARCHAR(100)",
                 "UNIQUE"
             ],
-            "page_templates" => [
-                "VARCHAR(100)"
-            ],
             "page_title" => [
                 "VARCHAR(100)"
             ],
