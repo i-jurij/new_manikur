@@ -22,6 +22,7 @@ use App\Lib\Registry;
   <link rel="stylesheet" type="text/css" href="<?php echo URLROOT.DS.'public'.DS.'css'.DS.'first'.DS.'normalize.css'; ?>" />
   <link rel="stylesheet" type="text/css" href="<?php echo URLROOT.DS.'public'.DS.'css'.DS.'first'.DS.'style.css'; ?>" />
   <link rel="icon" href="<?php echo URLROOT.DS; ?>public/imgs/key.png" />
+  <script type="text/javascript" src="<?php echo URLROOT.DS.'public'.DS.'js'.DS.'core'.DS.'jquery-3.6.0.min.js'; ?>"></script>
 </head>
 <body>
   <div class="wrapper">
@@ -48,7 +49,6 @@ use App\Lib\Registry;
       </section>
     </div>
   </div>
-
   <script type="text/javascript" src="<?php echo URLROOT.DS.'public'.DS.'js'.DS.'adm'.DS.'adm.js'; ?>"></script>
   <!-- <script type="text/jsx" src="public/js/fancybox.umd.js"></script> -->
   </body>

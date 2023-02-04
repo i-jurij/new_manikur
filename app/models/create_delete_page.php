@@ -138,7 +138,7 @@ class Create_delete_page extends Adm
                                 $load->default_vars();
                                 $load->dest_dir = PUBLICROOT.DS.'imgs/pages';
                                 $load->tmp_dir = PUBLICROOT.DS.'tmp';
-                                $load->file_size = 1*1000*1024; //1MB
+                                $load->file_size = 3*1024*1024; //3MB
                                 $load->file_mimetype = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/webp'];
                                 $load->file_ext = ['.jpg', '.jpeg', '.png', '.webp'];
                                 $load->new_file_name = $post['page_alias'];

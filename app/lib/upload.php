@@ -82,7 +82,7 @@ class Upload
     public int $file_size;
     public $file_mimetype;
     public $file_ext;
-    public string $new_file_name;
+    public $new_file_name; //string 'filename' or array ['filename', 'noindex'] - where noindex for input with multiple uploads (but you must get different name for file)
     public bool $replace_old_file;
     public string $tmp_dir;
     public array $processing;
@@ -375,14 +375,21 @@ class Upload
                 return true;
         } else {
             if (count($input_array) > 1) {
-                $this->name = pathinfo($key.'_'.$this->sanitize_string($this->translit_ostslav_to_lat($this->new_file_name)), PATHINFO_FILENAME);
-                return true;
+                if (is_array($this->new_file_name)) {
+                    $prename = (!empty($this->new_file_name[0])) ? (string) $this->new_file_name[0] : $path_parts['filename'];
+                    if ($this->new_file_name[1] === 'noindex' or $this->new_file_name[1] === false) {
+                        $name = $prename;
+                    } elseif ($this->new_file_name[1] === 'index' or $this->new_file_name[1] === true) {
+                        $name = $key.'_'.$prename;
+                    }
+                } else {
+                    $name = $key.'_'. (string) $this->new_file_name;
+                }
             } else {
-                $name = $this->sanitize_string($this->translit_ostslav_to_lat($this->new_file_name));
-                //del path and ext from name, if user set them by mistake
-                $this->name = pathinfo($name, PATHINFO_FILENAME);
-                return true;
+                $name = (string) $this->new_file_name;
             }
+            $this->name = pathinfo($this->sanitize_string($this->translit_ostslav_to_lat($name)), PATHINFO_FILENAME);
+            return true;
         }
     }
     /**

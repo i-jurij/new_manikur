@@ -321,7 +321,7 @@ class Masters extends Home
 							$load->dest_dir = IMGDIR.DS.'masters';
 							$load->create_dir = true;
 							$load->tmp_dir = PUBLICROOT.DS.'tmp';
-							$load->file_size = 1*1000*1024; //1MB
+							$load->file_size = 3*1024*1024; //3MB
 							$load->file_mimetype = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/webp'];
 							$load->file_ext = ['.jpg', '.jpeg', '.png', '.webp'];
 							$load->new_file_name = $photoname;

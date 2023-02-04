@@ -38,8 +38,8 @@ if (!empty($data['colname'])) {
                             <input type="file" name="template" accept=".php, .html, text/html, text/php, text/x-php, text/plain">
                         </label>';
 
-    print '             <label class="display_inline_block margin_bottom_1rem">Файл изображения страницы (jpg, png, webp, < 1MB):<br /> 
-                            <input type="hidden" name="MAX_FILE_SIZE" value="1024000" />
+    print '             <label class="display_inline_block margin_bottom_1rem">Файл изображения страницы (jpg, png, webp, < 3MB):<br /> 
+                            <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
                             <input type="file" name="picture" accept="image/jpeg, image/pjpeg, image/png, image/webp">
                         </label>';
     print '         </div>
@@ -60,11 +60,11 @@ if (!empty($data['colname'])) {
                                 if ($val === 'TEXT') {
                                     $length = 65535;
                                 }
-                                $value = ( $key === "page_robots" ) ? 'INDEX, FOLLOW' : '';
+                                //$value = ( $key === "page_robots" ) ? 'INDEX, FOLLOW' : '';
                             }
                             $length = (isset($length)) ? $length : 1;
 
-                            if ($key != "page_id" && $key != "page_img") {
+                            if ($key != "page_id" && $key != "page_img" && $key != "page_robots") {
                                 print ' <label class="display_inline_block margin_bottom_1rem">'.$key.' ('.$length.')<br /> 
                                             <input type="text" name="'.$key.'" maxlength="'.$length.'" value="'.$value.'" '.$required.' />
                                         </label>'.PHP_EOL;

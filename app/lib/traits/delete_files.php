@@ -27,7 +27,7 @@ trait Delete_files
   * delete a file or files
   * 
   * @param string $path2file
-  * @return string or @return true
+  * @return true or string (check if $this === true)
   */
   public static function del_file(string $path2file) {
     $mes = '';

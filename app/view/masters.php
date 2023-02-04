@@ -119,8 +119,8 @@ elseif (!empty($data['change_photo'])) {
             <form action="" method="post"  enctype="multipart/form-data" class="" id="mcfoto">
                 <p><?php echo $name . ' ' . $sec_name . ' ' . $master_fam; ?></p>
                 <div>
-                    <p>Выберите фото мастера</p>
-                    <input type="hidden" name="MAX_FILE_SIZE" value="1024000" />
+                    <p>Выберите фото мастера весом  до 3МБ</p>
+                    <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
                     <input type="file" name="photom" id="mfoto" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />
                 </div>
                 <div class="mar pad">
