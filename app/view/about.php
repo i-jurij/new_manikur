@@ -1,4 +1,4 @@
-<div class="">
+<div class="flex">
 <?php
 if (!empty($data['res'])) {
         foreach ($data['res'] as $value) {
@@ -36,5 +36,8 @@ if (!empty($data['masters'])) {
 } else {
 print '...';
 }
+
+include_once APPROOT.DS."view".DS."back_home.html";
 ?>
 </div>
+

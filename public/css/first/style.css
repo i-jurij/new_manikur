@@ -534,21 +534,21 @@ a.gallery_a:hover img{
   vertical-align: top;
   height: 5rem;
   width: 100%;
-	background-image: url(../imgs/send.png);
+	background-image: url(../../imgs/send.png);
 	background-position: 0.5rem 0.5rem;
 	background-repeat: no-repeat;
 	text-indent: 2.5rem;
 }
 
 .form-recall-main input#name {
-	background-image: url(../imgs/name.png);
+	background-image: url(../../imgs/name.png);
 	background-position: 0.5rem 0.5rem;
   background-repeat: no-repeat;
   text-indent: 2rem;
 }
 
 .form-recall-main input#number {
-	background-image: url(../imgs/tlf.png), url(../imgs/required.png);
+	background-image: url(../../imgs/tlf.png), url(../../imgs/required.png);
 	background-position: 0.5rem 0.5rem, 99% 50% ;
   background-repeat: no-repeat, no-repeat;
   text-indent: 2rem;
@@ -665,7 +665,7 @@ float: right;
 	left: 1rem;
 	height: 4rem;
 	font-size: var(--big-fontsize);
-	background-color: var(--bgcolor-button-active);
+	/* background-color: var(--bgcolor-button-active); */
 	z-index: 21;
 }
 
@@ -1577,7 +1577,7 @@ overflow: hidden;
 
   .main_section_article {
     max-width: calc((100%/2) - 4rem);
-		padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+	/*	padding: 0.5rem 0.5rem 0.5rem 0.5rem; */
   }
 
 	.content {

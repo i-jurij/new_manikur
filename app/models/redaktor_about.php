@@ -22,9 +22,7 @@ class Redaktor_about extends Home
         //name point for menu navigation
         $this->data['name'] = 'Данные обработаны';
         $this->data['res'] = '';
-        if (!empty($_POST['change_image'])) {
-            $this->data['res'] .= 'Обработать POST';
-        } elseif (!empty($_POST['about_title']) and !empty($_FILES['about_img']) and !empty($_POST['about_text'])) {
+        if (!empty($_POST['about_title']) and !empty($_FILES['about_img']) and !empty($_POST['about_text'])) {
             $title = [];
             $content = [];
             if (!empty($_POST['about_title']))
@@ -100,16 +98,15 @@ class Redaktor_about extends Home
                 $path = str_replace('slashslash', '/', str_replace('punktpunkt', '.', $pathbefore));
                 //print $path.'<br />';
                 // del image
-                if ( $this->del_file(IMGDIR.DS.'about'.DS.pathinfo($path, PATHINFO_BASENAME)) === true ) {
+                if ( self::del_file(IMGDIR.DS.'about'.DS.pathinfo($path, PATHINFO_BASENAME)) === true ) {
                     $this->data['res'] .= 'Фото '.pathinfo($path, PATHINFO_BASENAME).' удалено.<br />';
                 }
                 else {
-                    if ( $this->del_file(find_by_filename(IMGDIR.DS.'about'.DS, pathinfo($path, PATHINFO_FILENAME))) === true ) {
+                    if ( self::del_file(find_by_filename(IMGDIR.DS.'about'.DS, pathinfo($path, PATHINFO_FILENAME))) === true ) {
                         $this->data['res'] .= 'Фото '.pathinfo($path, PATHINFO_BASENAME).' удалено.<br />';
                     } else {
-                        $this->data['res'] .= $this->del_file(find_by_filename(IMGDIR.DS.'about'.DS, pathinfo($path, PATHINFO_FILENAME))).'<br />';
+                        $this->data['res'] .= self::del_file(find_by_filename(IMGDIR.DS.'about'.DS, pathinfo($path, PATHINFO_FILENAME))).'<br />';
                     }
-                    
                 }
                 $ids[] = $id;
             }

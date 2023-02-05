@@ -10,8 +10,8 @@ if (!empty($data['res'])) {
     ?>
       <div class="">
         <div class="margin_bottom_1rem choice">
-        <button type="button" class="buttons" id="aboutadd" >Добавить</button>
-        <button type="button" class="buttons" id="aboutdel" >Удалить</button>
+        <button type="button" class="buttons" id="aboutadd" >Добавить записи</button>
+        <button type="button" class="buttons" id="aboutdel" >Удалить записи</button>
         </div>
 
         <form action="<?php echo URLROOT.DS.'redaktor_about'.DS.'change'; ?>" method="post" name="about_edit" id="about_edit" class="display_none" enctype="multipart/form-data">
