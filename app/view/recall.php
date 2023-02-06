@@ -47,7 +47,7 @@ if (!empty($data['res'])) {
              <p class="pers">\
                Отправляя данную форму, вы даете согласие на\
                <br>\
-               <a href="persinfo">\
+               <a href="<?php echo URLROOT; ?>/persinfo/">\
                  обработку персональных данных\
                </a>\
              </p>\
@@ -107,34 +107,21 @@ if (!empty($data['res'])) {
           alert('Вы забыли ввести номер телефона :)');
         }
       });
-    /*
+
       $("form#recall_one").on("submit", function(event){
         event.preventDefault();
-        $('form#recall_one').remove();
-        var dataar = $(this).serialize();
+        var dataar = $("form#recall_one").serialize();
         $.ajax({
-          url: 'pages/files/01-perezvonite-post-form.php',
+          url: '<?php echo URLROOT.DS.'app'.DS.'lib'.DS.'mail_send.php'; ?>',
           method: 'post',
           dataType: 'html',
           data: dataar,
           success: function(data){
-            $(".flex_top").append(data);
-            //console.log(data);
-          }
-        });
-    
-        $.ajax({
-          url: 'pages/files/mail-txt-send.php',
-          method: 'post',
-          dataType: 'html',
-          data: dataar,
-          success: function(data){
-            $(".flex_top").append(data);
+            //$(".flex_top").append(data);
             //console.log(data);
           }
         });
       });
-      */
     });
     
     </script>

@@ -13,6 +13,8 @@ namespace App\Lib;
 */
 class Rout
 {
+    use \App\Lib\Traits\Mb_ucfirst;
+
     protected $controller;
     protected $method = 'index';
     protected $param = [];
@@ -25,7 +27,7 @@ class Rout
         $url_arr = $this->url_to_arr($siterootpath);
         Registry::remove('nav');
         //if (empty($url_arr) or !file_exists(APPROOT.DS.'controllers'.DS.$url_arr[0].'.php')) 
-        if (empty($url_arr) or !class_exists("\App\\Controllers\\".ucwords($url_arr[0]))) 
+        if (empty($url_arr) or !class_exists("\App\\Controllers\\".$this->my_mb_ucfirst($url_arr[0]))) 
         {
             $contr = '\App\Controllers\Home';
             $this->controller = new $contr;
@@ -34,7 +36,7 @@ class Rout
         }
         else 
         {
-            $contr = "\App\\Controllers\\".ucwords($url_arr[0]);
+            $contr = "\App\\Controllers\\".$this->my_mb_ucfirst($url_arr[0]);
             $this->controller = new $contr;
             //unset($url_arr[0]);
             $nav[] = array_shift($url_arr);

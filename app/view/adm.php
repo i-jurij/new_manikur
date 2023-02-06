@@ -15,8 +15,10 @@ $session = new \App\Lib\Session;
 // !!! DON`T REMOVE THIS START !!! //////////
 if ( password_verify("admin", $session->get("status")) ) {
   //default button for create controller, model, view and insert data of page to db
-  echo '<a href="' . URLROOT . '/create_delete_page" class="buttons">Страницы</a> ';
-  echo '<a href="' . URLROOT . '/change_pass" class="buttons">Пользователи</a> ';
+  echo '<p class="margin_bottom_1rem">
+          <a href="' . URLROOT . '/create_delete_page/" class="buttons">Страницы</a> 
+          <a href="' . URLROOT . '/change_pass/" class="buttons">Пользователи</a> 
+        </p>';
 }
 // !!! DON`T REMOVE THIS END !!! ///////////
 
@@ -53,7 +55,7 @@ if ( password_verify("user", $session->get("status")) ) {
 //or you can rebuild page array again
 	if (!empty($pages) && is_array($pages)) {
 		foreach ($pages as $page) {
-      if ($page['page_alias'] == 'recall' or $page['page_alias'] == 'recall_yes' or $page['page_alias'] == 'master_app' or $page['page_alias'] == 'date_app')
+      if ($page['page_alias'] == 'recall_no' or $page['page_alias'] == 'recall_yes' or $page['page_alias'] == 'master_app' or $page['page_alias'] == 'date_app')
       {
         $zvonki_zapisi[] = $page['page_alias'] . '#' . $page['page_title'];
       }
@@ -76,7 +78,7 @@ if ( password_verify("user", $session->get("status")) ) {
             foreach ($$value as $value11)
             {
                 list($alias, $title) = explode('#', $value11);
-                echo '<a href="' . URLROOT . '/' . $alias . '" class="buttons">' . $title . '</a> ';
+                echo '<a href="' . URLROOT . '/' . $alias . '/" class="buttons">' . $title . '</a> ';
             }
             echo "</div>";
         }

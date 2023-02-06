@@ -99,6 +99,7 @@
             .home_p a img {
               vertical-align: middle;
               margin: 0 1rem 0 0;
+              max-width: 48px;
             }
 
             .form-element {

@@ -6,7 +6,7 @@
 				$desc = (!empty($page['page_meta_description'])) ? $page['page_meta_description'] : 'Description';
 
 				print '<article class="main_section_article ">
-				<a class="main_section_article_content_a" href="' . $page['page_alias'] . '" >
+				<a class="main_section_article_content_a" href="' . $page['page_alias'] . '/" >
 				<div class="main_section_article_imgdiv">
 				<img src="' . get_page_image($page['page_alias']).'" alt="Фото ' . $page['page_title'] . '" class="main_section_article_imgdiv_img" />
 				</div>

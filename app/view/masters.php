@@ -207,11 +207,11 @@ elseif (!empty($data['change_photo'])) {
 else {
     ?>
     <div id="mas_form" class="mas_form  margin_bottom_1rem">
-      <a href="<?php echo URLROOT; ?>/masters/add_form" class="buttons">Добавить мастера</a>
-      <a href="<?php echo URLROOT; ?>/masters/change_photo" class="buttons">Добавить или изменить фото</a>
-      <a href="<?php echo URLROOT; ?>/masters/change" class="buttons">Изменить данные</a>
-      <a href="<?php echo URLROOT; ?>/masters/uv_mastera" class="buttons" >Уволенные мастера</a>
-      <a href="<?php echo URLROOT; ?>/masters/delete_form" class="buttons" >Удалить мастера</a>
+      <a href="<?php echo URLROOT; ?>/masters/add_form/" class="buttons">Добавить мастера</a>
+      <a href="<?php echo URLROOT; ?>/masters/change_photo/" class="buttons">Добавить или изменить фото</a>
+      <a href="<?php echo URLROOT; ?>/masters/change/" class="buttons">Изменить данные</a>
+      <a href="<?php echo URLROOT; ?>/masters/uv_mastera/" class="buttons" >Уволенные мастера</a>
+      <a href="<?php echo URLROOT; ?>/masters/delete_form/" class="buttons" >Удалить мастера</a>
     </div>
     <?php
 }

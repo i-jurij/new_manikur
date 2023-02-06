@@ -42,14 +42,18 @@ class Recall extends Home
                     */
                     
                     //дальше сравним номер из ПОСТ с полученными номерами из бд, если совпадений нет - записываем
-                    foreach( $vib_date_time as $b ){
-                        if($b == $phone_number) {
-                            $this->data['res'] = '<div class="zapis_usluga back shad rad pad margin_rlb1">Ваша заявка принята. <br />Ожидайте звонка...</div>';
-                            $z = false;
-                            break;
-                        } else {
-                            $z = true;
+                    if (!empty($vib_date_time)) {
+                        foreach( $vib_date_time as $b ){
+                            if($b == $phone_number) {
+                                $this->data['res'] = '<div class="zapis_usluga back shad rad pad margin_rlb1">Ваша заявка принята. <br />Ожидайте звонка...</div>';
+                                $z = false;
+                                break;
+                            } else {
+                                $z = true;
+                            }
                         }
+                    } else {
+                        $z = true;
                     }
                     if ($z) {
                         /*
@@ -86,24 +90,25 @@ class Recall extends Home
                                                                     '</span>
                                                                 </div>
                                                             </div>
-                                                            <a href="/dasha" ><button class="buttons" type="button" autofocus>На главную</button></a>
+                                                            <a href="'.URLROOT.'" ><button class="buttons" type="button" autofocus>На главную</button></a>
                                                         </div>
                                                     ' ;
                         } else {
                             $this->data['res'] = 'Извините, возникла ошибка, ваши данные не занесены в базу.<br />
                                                     Пожалуйста, отправьте заявку еще раз.<br />';
                         }
-                        
+                        //MAIL SEND
+                        //include_once APPROOT.DS."lib".DS."mail_send_for_include.php";
                     }                    
                     // записываем логи в файл (если файла нет, то он будет создан автоматически)
-                    //file_put_contents(server_doc_root()."tmp/recall_sql.log", "\n{$today}\n{$logText}\n", FILE_APPEND);
-                    //chmod("tmp/recall_sql.log", 0600);
+                    //file_put_contents(server_doc_root()."log/recall_sql.log", "\n{$today}\n{$logText}\n", FILE_APPEND);
+                    //chmod("log/recall_sql.log", 0600);
+                   
                 }
                 else // если в поле с сообщением были признаки сайтов - записываем логи
                 {
-                //file_put_contents("tmp/spam.log", "\n{$today}\nIP:{$ipAddr}\n{$logText}\n", FILE_APPEND); chmod("tmp/spam.log", 0600);
-                file_put_contents(PUBLICROOT.DS."tmp'.DS.'spam.log", "\n{$today}\nIP:{$ipAddr}\n{$logText}\n", FILE_APPEND);
-                chmod("tmp/spam.log", 0600);
+                file_put_contents(ROOT.DS."log'.DS.'spam.log", "\n{$today}\nIP:{$ipAddr}\n{$logText}\n", FILE_APPEND);
+                chmod(ROOT.DS."log'.DS.'spam.log", 0600);
                 $this->data['res'] .= ' <div class="zapis_usluga back shad rad pad margin_rlb1">
                                             В полях для ввода нельзя размещать ссылки на интернет сайты.<br />
                                             Пожалуйста, свяжитесь с нами по телефону.

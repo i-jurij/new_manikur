@@ -17,9 +17,9 @@
             if ( !isset($data['res']) && !isset($data['users_del']) && !isset($data['users_change']) ) 
             {
                 print ' <div class="margintb1 ">
-                            <a href="'.URLROOT.'/change_pass/add" class="buttons display_inline_block mar add">Добавить</a>
-                            <a href="'.URLROOT.'/change_pass/delete" class="buttons display_inline_block mar del">Удалить</a>
-                            <a href="'.URLROOT.'/change_pass/change" class="buttons display_inline_block mar change">Изменить</a>
+                            <a href="'.URLROOT.'/change_pass/add/" class="buttons display_inline_block mar add">Добавить</a>
+                            <a href="'.URLROOT.'/change_pass/delete/" class="buttons display_inline_block mar del">Удалить</a>
+                            <a href="'.URLROOT.'/change_pass/change/" class="buttons display_inline_block mar change">Изменить</a>
                         </div>';
             }
             //we change the data for the form depending on the received data array

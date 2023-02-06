@@ -145,8 +145,8 @@ if (!empty($data['colname'])) {
 } else {
     print '<div class="margin_bottom_1rem ">
                 <div class="display_inline_block">
-                <a href="'.URLROOT.'/create_delete_page/create?b" class="buttons display_inline_block mar">Создать</a>
-                <a href="'.URLROOT.'/create_delete_page/delete?b" class="buttons display_inline_block mar">Удалить</a>
+                <a href="'.URLROOT.'/create_delete_page/create/" class="buttons display_inline_block mar">Создать</a>
+                <a href="'.URLROOT.'/create_delete_page/delete/" class="buttons display_inline_block mar">Удалить</a>
                 </div>
             </div>
             ';

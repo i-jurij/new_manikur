@@ -7,6 +7,7 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'new_manikur');
 define('DS', DIRECTORY_SEPARATOR);
+define('ROOT', dirname(dirname(dirname(__FILE__))));
 define('APPROOT', dirname(dirname(__FILE__)));
 define('PUBLICROOT', dirname(dirname(dirname(__FILE__))).DS.'public');
 //site name

@@ -52,13 +52,13 @@ function menu($data)
         $value = (!empty($data['name'])) ? $data['name'] : $key;
       }
       if (!empty($prevk)) {
-        $nav .= ' / <a href="'.URLROOT.$prevk.DS.$key.'">'.$value.'</a>';
+        $nav .= ' / <a href="'.URLROOT.$prevk.'/'.$key.'/">'.$value.'</a>';
         $prevk .= DS.$key;
       } else {
         if (empty($nav)) {
-          $nav = '<a href="'.URLROOT.DS.$key.'">'.$value.'</a>';
+          $nav = '<a href="'.URLROOT.'/'.$key.'/">'.$value.'</a>';
         } else {
-          $nav .= ' / <a href="'.URLROOT.DS.$key.'">'.$value.'</a>';
+          $nav .= ' / <a href="'.URLROOT.'/'.$key.'/">'.$value.'</a>';
         }
         $prevk .= DS.$key;
       }
@@ -99,6 +99,11 @@ function sanitize($filename) {
   return $filename;
 }
 
+function my_mb_ucfirst($str) {
+  $fc = mb_strtoupper(mb_substr($str, 0, 1));
+  return $fc.mb_substr($str, 1);
+}
+
 function mb_ucfirst($string, $encoding)
 {
     $firstChar = mb_substr($string, 0, 1, $encoding);
@@ -109,7 +114,7 @@ function mb_ucfirst($string, $encoding)
 function test_input($data)
 {
   //obrezka do 300 znakov na vsak slu4aj
-  $data = substr($data, 0, 300);
+  $data = mb_substr($data, 0, 300);
   $data = trim($data);
   $data = stripslashes($data);
   $data = htmlspecialchars($data);

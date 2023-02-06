@@ -2,7 +2,15 @@
 Options All -ExecCGI -Indexes -Includes +FollowSymLinks
 RewriteBase /new_manikur
 RewriteEngine on
-RewriteRule !.(js|css|ico|gif|jpg|png|woff|woff2|ttf)$ index.php [L]
+
+#RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f [NC,OR]
+RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2})
+RewriteRule ^.*$ index.php [L]
+
+#RewriteRule !.(js|css|ico|gif|jpg|png|webp|svg|woff|woff2|ttf)$ index.php [L]
+
 # -----------------------------
 </IfModule>
 
