@@ -47,7 +47,15 @@ class Home
 		if (null !== Registry::get('page_list')) {
 			$this->data['page_list'] = Registry::get('page_list');
 		} else {
-			$this->data['page_list'] = $this->db->db->select($this->table, "*");
+			$this->data['page_list'] = $this->db->db->select($this->table, [
+				"page_id", 
+				"page_alias", 
+				"page_title", 
+				"page_meta_description",
+				"page_h1",
+				"page_access",
+				"page_admin"
+			]);
 			Registry::set('page_list', $this->data['page_list']);
 		}
 		
