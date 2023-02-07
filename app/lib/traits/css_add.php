@@ -53,24 +53,27 @@ trait Css_add
     */
 
     //scandir
-    public function css_add($path_to_css = DS.'public'.DS.'css'.DS.'first') 
+    public function css_add($abs_path_to_css = PUBLICROOT.DS.'css'.DS.'first') 
     {
+        $x = explode('/', URLROOT);
+        $x = array_pop($x);
+        $np = explode($x, $abs_path_to_css);
+        $np = array_pop($np);
+
         $css_files = array();
-        if (file_exists($path_to_css)) {
-            $f = scandir($path_to_css);
+        if (file_exists($abs_path_to_css)) {
+            $f = scandir($abs_path_to_css);
             foreach ($f as $file){
-                if(preg_match('/\.(css)/', $file)){
-                    if (strpos($file, 'normalize')) {
-                        if (!empty($css_files[0])) {
-                            $css_files[] = $css_files[0];
-                            $css_files[0] = $path_to_css.DS.$file;
-                        } else {
-                            $css_files[0] = $path_to_css.DS.$file;
-                        }   
-                    } else {
-                        $css_files[] = $path_to_css.DS.$file;
-                    }
+                //if(preg_match('/\.(css)/', $file)){
+                if (pathinfo($file, PATHINFO_EXTENSION) === 'css') {
+                    $norm[] = pathinfo($file, PATHINFO_FILENAME); 
+                    $css_files[] = URLROOT.DS.$np.DS.pathinfo($file, PATHINFO_BASENAME);
                 }
+            }
+            if (array_search('normalize', $norm) !== false) {
+                $k = array_search('normalize', $norm);
+                unset($css_files[$k]) ;
+                array_unshift($css_files, "normalize.css");
             }
         }
         return $css_files;

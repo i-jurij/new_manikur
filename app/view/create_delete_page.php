@@ -1,28 +1,28 @@
 <div class="content">
     <p style="margin:0; padding:1rem;" id="p_pro">Показать/скрыть справку</p>
     <p class="margin_rlb1 text_left display_none" id="pro">
-    Создание страниц:<br />
-    Данные для шаблона страницы:<br />
-    * page_alias(100) - короткое имя для страницы для URL, желательно латиницей, должен иметь уникальное значение, 
-    те не может быть страниц с одинаковым alias, состоит только из букв, цифр, дефисов, подчеркиваний количеством до 100, обязателен;<br /> 
-    page_templates(100) - путь к шаблону без public/templates, если шаблон отличается от основного, например "first/templ.php", вес файла до 100КБ ;<br /> 
-    * page_title(100) - название страницы;<br /> 
-    page_meta_description(255) - описание страницы сайта для отображения в результатах поиска и для SEO;<br /> 
-    page_meta_keywords - набор ключевых фраз для страницы;<br />
-    page_robots - правила для поисковых роботов (https://yandex.ru/support/webmaster/controlling-robot/meta-robots.html);<br /> 
-    * page_h1 - заголовок страницы, обычно такой же как title;<br /> 
-    * page_img - путь к изображению страницы в меню на главной странице без public/imgs/pages, например "about/about.jpg", вес - до 1МБ, формат - jpg, png, webp;<br /> 
-    page_content - html|php содержимое страницы;<br />
-    * page_access - уровень доступа к странице: admin, moder, user.<br />
-    * page_admin - 1 для страницы из админки, пусто для обычной.<br />
-    <small>* - обязательно для заполнения.</small><br /><br />
-    Удаление страниц:<br />
-    Выберите шаблон страницы для удаления (если его название без расширения не совпадает с "page_alias", например после ручного добавления)<br />
-    Если имя шаблона совпадает с "page_alias", он будет удален автоматически.<br />
-    НЕ УДАЛЯЙТЕ шаблоны adm_templ.php и templ.php, пока не подготовите их замену.<br />
-    Выберите нужную страницу или несколько страниц.<br />
-    Нажмите на кнопку "Delete".<br />
-    Будут удалены записи из базы данных, контроллер, модель, вид, изображение и шаблон.
+        Создание страниц:<br />
+        Данные для шаблона страницы:<br />
+        * page_alias(100) - короткое имя для страницы для URL, желательно латиницей, должен иметь уникальное значение, 
+        те не может быть страниц с одинаковым alias, состоит только из букв, цифр, дефисов, подчеркиваний количеством до 100, обязателен;<br /> 
+        page_templates(100) - путь к шаблону без public/templates, если шаблон отличается от основного, например "first/templ.php", вес файла до 100КБ ;<br /> 
+        * page_title(100) - название страницы;<br /> 
+        page_meta_description(255) - описание страницы сайта для отображения в результатах поиска и для SEO;<br /> 
+        page_meta_keywords - набор ключевых фраз для страницы;<br />
+        page_robots - правила для поисковых роботов (https://yandex.ru/support/webmaster/controlling-robot/meta-robots.html);<br /> 
+        * page_h1 - заголовок страницы, обычно такой же как title;<br /> 
+        * page_img - путь к изображению страницы в меню на главной странице без public/imgs/pages, например "about/about.jpg", вес - до 1МБ, формат - jpg, png, webp;<br /> 
+        page_content - html|php содержимое страницы;<br />
+        * page_access - уровень доступа к странице: admin, moder, user.<br />
+        * page_admin - 1 для страницы из админки, пусто для обычной.<br />
+        <small>* - обязательно для заполнения.</small><br /><br />
+        Удаление страниц:<br />
+        Выберите шаблон страницы для удаления (если его название без расширения не совпадает с "page_alias", например после ручного добавления)<br />
+        Если имя шаблона совпадает с "page_alias", он будет удален автоматически.<br />
+        НЕ УДАЛЯЙТЕ шаблоны adm_templ.php и templ.php, пока не подготовите их замену.<br />
+        Выберите нужную страницу или несколько страниц.<br />
+        Нажмите на кнопку "Delete".<br />
+        Будут удалены записи из базы данных, контроллер, модель, вид, изображение и шаблон.
     </p>
 </div>
 
@@ -99,38 +99,38 @@ if (!empty($data['colname'])) {
                         </div>';
     }
     print '             <div class="back shad rad pad margin_rlb1">
-                            <p class="margin_rlb1 ">Выберите страницу для удаления</p>
-                            <p><b>Обычные страницы:</b></p>';
+                            <p class="margin_rl1" id="del_page_p">Показать страницы для удаления</p>
+                                <p><b>Обычные страницы:</b></p>';
 
-    if (!empty($data['pagename']) && is_array($data['pagename'])) {
-        foreach ($data['pagename'] as $value) {
-                $titl = (!empty($value['page_title'])) ? $value['page_title'] : $value['page_alias'];
-                print '     <div class="display_inline_block">
-                                <label class="display_inline_block shad rad pad05 margint0b1rl05" style="height:100%;">
-                                    <input type="checkbox" name="delete_page[]" value="'.$value['page_alias'].'" />
-                                    '. $titl .'
-                                </label>
-                            </div>'.PHP_EOL;
+        if (!empty($data['pagename']) && is_array($data['pagename'])) {
+            foreach ($data['pagename'] as $value) {
+                    $titl = (!empty($value['page_title'])) ? $value['page_title'] : $value['page_alias'];
+                    print '     <div class="display_inline_block">
+                                    <label class="display_inline_block shad rad pad05 margint0b1rl05" style="height:100%;">
+                                        <input type="checkbox" name="delete_page[]" value="'.$value['page_alias'].'" />
+                                        '. $titl .'
+                                    </label>
+                                </div>'.PHP_EOL;
+            }
+
+        } else {
+            print               "Список страниц пуст.";
         }
-    } else {
-        print "Список страниц пуст.";
-    }
-    print '                 <p><b>Cтраницы админ раздела:</b></p>';
-    if (!empty($data['adm_pagename']) && is_array($data['adm_pagename'])) {
-        foreach ($data['adm_pagename'] as $val) {
-                $tit = (!empty($val['page_title'])) ? $val['page_title'] : $val['page_alias'];
-                print '     <div class="display_inline_block">
-                                <label class="display_inline_block shad rad pad05 margint0b1rl05" style="height:100%;">
-                                    <input type="checkbox" name="delete_page[]" value="'.$val['page_alias'].'" />
-                                    '. $tit .'
-                                </label>
-                            </div>'.PHP_EOL;
+        print '                 <p><b>Cтраницы админ раздела:</b></p>';
+        if (!empty($data['adm_pagename']) && is_array($data['adm_pagename'])) {
+            foreach ($data['adm_pagename'] as $val) {
+                    $tit = (!empty($val['page_title'])) ? $val['page_title'] : $val['page_alias'];
+                    print '     <div class="display_inline_block">
+                                    <label class="display_inline_block shad rad pad05 margint0b1rl05" style="height:100%;">
+                                        <input type="checkbox" name="delete_page[]" value="'.$val['page_alias'].'" />
+                                        '. $tit .'
+                                    </label>
+                                </div>'.PHP_EOL;
+            }
+        } else {
+            print               "Список административных страниц пуст.";
         }
         print '          </div>';
-    } else {
-        print "Список административных страниц пуст.";
-    }
-
     print '         </div>
                     <div class="margin_bottom_1rem">
                         <button type="submit" form="del_page" class="buttons" id="del_page_sub">Delete</button>

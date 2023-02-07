@@ -35,11 +35,11 @@ trait Delete_files
       //$path2file = realpath($path2file);
       if (file_exists($path2file)) {
         if (is_writable($path2file)) {
-          if (!unlink($path2file)) {
+          if (unlink($path2file)) {
+            return true;
+          } else {
             $mes .= 'ERROR! Not unlink "'.$path2file.'".';
             return $mes;
-          } else {
-            return true;
           }
         } else {
           $mes .= 'ERROR! File "'.$path2file.'" is not writable.';

@@ -72,17 +72,16 @@ class Create_delete_page extends Adm
 
                 $models = [ '<?php'.PHP_EOL, 'namespace App\Models;'.PHP_EOL, 'class '.$classname.' extends Home'.PHP_EOL, '{'.PHP_EOL, '}'.PHP_EOL ];
                 $view_adm = [ '<div class="content">'.PHP_EOL, $filename.PHP_EOL, '</div>'.PHP_EOL ];
-                $view_user = ['<div class="content">
-                            <?php
-                            if (!empty($data[\'res\'])) {
-                            } else {
-                                print \'res\';
-                                include_once APPROOT.DS."view".DS."js_back.html";
-                            } else {
-                                print \'start\';
-                                include_once APPROOT.DS."view".DS."back_home.html";
-                            }?>
-                        </div>'];
+                $view_user = ['<div class="content">'.PHP_EOL
+                                .'<?php'.PHP_EOL
+                                .'if (!empty($data[\'res\']))'.PHP_EOL
+                                    .'print \'res\';'.PHP_EOL
+                                    .'include_once APPROOT.DS."view".DS."js_back.html";'.PHP_EOL
+                                .'} else {'.PHP_EOL
+                                    .'print \'start\';'.PHP_EOL
+                                    .'include_once APPROOT.DS."view".DS."back_home.html";'.PHP_EOL
+                                .'}?>'.PHP_EOL
+                            .'</div>'.PHP_EOL];
                 if (!empty($post['page_admin']) && $post['page_admin'] == 1 ) {
                     $controllers = [ '<?php'.PHP_EOL, 'namespace App\Controllers;'.PHP_EOL, 'class '.$classname.' extends Adm'.PHP_EOL, '{'.PHP_EOL, '}'.PHP_EOL ];
                     $view = $view_adm;
@@ -277,7 +276,7 @@ class Create_delete_page extends Adm
                 }
             }
             //list of files in templates dir
-            $this->data['templates_list'] = files_in_dir(PUBLICROOT.DS.'templates', 'php');
+            $this->data['templates_list'] = files_in_dir(PUBLICROOT.DS.'templates', 'php, html');
         }
         return $this->data;
 	}

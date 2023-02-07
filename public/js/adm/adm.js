@@ -150,18 +150,34 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
-       /*
+    /*
     * event listener for div delete templates in adm/create_delete_page
     */
-       const TDEL = document.querySelector('#del_template');
-       if (TDEL) {
+    const TDEL = document.querySelector('#del_template');
+    if (TDEL) {
         TDEL.addEventListener('click', function(e) {
-               document.querySelector('#del_template_div').classList.toggle('display_none');
-               if (TDEL.textContent.includes('Показать') ) {
-                    TDEL.innerText = 'Выбрать шаблоны для удаления';
-               } else {
-                    TDEL.innerText = 'Показать шаблоны для удаления';
-               }
-           });
-       }
+            document.querySelector('#del_template_div').classList.toggle('display_none');
+            if (TDEL.textContent.includes('Показать') ) {
+                TDEL.innerText = 'Выбрать шаблоны для удаления';
+            } else {
+                TDEL.innerText = 'Показать шаблоны для удаления';
+            }
+        });
+    }
+    /*
+    * event listener for div delete page in adm/create_delete_page
+    */
+   /*
+    const PD = document.querySelector('#del_page_p');
+    if (PD) {
+        PD.addEventListener('click', function(e) {
+            document.querySelector('#del_page_div').classList.toggle('display_none');
+            if (PD.textContent.includes('Показать') ) {
+                PD.innerText = 'Выбрать страницы для удаления';
+            } else {
+                PD.innerText = 'Показать страницы для удаления';
+            }
+        });
+    }
+    */
 });

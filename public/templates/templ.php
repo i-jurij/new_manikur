@@ -20,10 +20,10 @@
   if (!empty($data['css'])) {
     if (is_array($data['css'])) {
       foreach ($data['css'] as $css) {
-        echo '<link rel="stylesheet" type="text/css" href="'.URLROOT.DS.htmlspecialchars($css).'" />'; 
+        echo '<link rel="stylesheet" type="text/css" href="'.$css.'" />'; 
       }
     } elseif (is_string($data['css'])) {
-      echo '<link rel="stylesheet" type="text/css" href="'.URLROOT.DS.htmlspecialchars($data['css']).'" />'; 
+      echo '<link rel="stylesheet" type="text/css" href="'.$data['css'].'" />'; 
     }
   }
   ?>
