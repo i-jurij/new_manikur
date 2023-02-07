@@ -26,13 +26,15 @@
     <div class="he_adres">
         <?php
             if (!empty($data['adres'])) {
+                /*
                 if (!empty($data['map'])) {
                     print '<a class="he_adres_a" href="'.$data['map'].'">'.$data['adres'].'</a>';
                 }
                 else {
                     print '<span class="he_adres_a">'.$data['adres'].'</span>';
                 }
-                
+                */
+                print '<a class="he_adres_a" href="'.URLROOT.'/map/">'.$data['adres'].'</a>';
             }
         ?>        
     </div>

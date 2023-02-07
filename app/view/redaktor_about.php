@@ -14,7 +14,7 @@ if (!empty($data['res'])) {
         <button type="button" class="buttons" id="aboutdel" >Удалить записи</button>
         </div>
 
-        <form action="<?php echo URLROOT.DS.'redaktor_about'.DS.'change'; ?>" method="post" name="about_edit" id="about_edit" class="display_none" enctype="multipart/form-data">
+        <form action="<?php echo URLROOT.DS.'redaktor_about'.DS.'change'.DS; ?>" method="post" name="about_edit" id="about_edit" class="display_none" enctype="multipart/form-data">
         <div class="zapis_usluga" >
             <div class="" id="inputs">
             <div class="about_form back shad rad pad mar display_inline_block" id="inp0" style="width:25rem;">

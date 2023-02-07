@@ -257,7 +257,8 @@ class Upload
             //chmod($this->dest_dir.DIRECTORY_SEPARATOR.$this->new_file_name , $this->file_permissions);
             chmod($this->dest_dir.DIRECTORY_SEPARATOR.$this->name.'.jpg', $this->file_permissions);
             
-            $this->message .= 'SUCCESS!<br />File has been processed and copied to <br />"'.$this->dest_dir.DIRECTORY_SEPARATOR.$this->new_file_name.'".<br />';
+            //$this->message .= 'SUCCESS!<br />File has been processed and copied to <br />"'.$this->dest_dir.DIRECTORY_SEPARATOR.$this->new_file_name.'".<br />';
+            $this->message .= 'SUCCESS!<br />File has been processed and copied to <br />"'.$this->dest_dir.DIRECTORY_SEPARATOR.$this->name.'.jpg".<br />';
             return true;
         } catch (\App\Lib\Imageresizeexception $e) {
             $this->error = "ERROR!<br />Something went wrong.<br />" . $e->getMessage();
