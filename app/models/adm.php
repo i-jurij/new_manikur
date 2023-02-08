@@ -3,7 +3,7 @@ namespace App\Models;
 
 class Adm extends Home
 {
-      use \App\Lib\Traits\Clear_logs;
+      use \App\Lib\Traits\Clear_file;
 
 	protected function db_query() 
 	{
@@ -18,10 +18,10 @@ class Adm extends Home
 	}
       public function clear() {
             $this->data['name'] = "Чистка логов";
-            if (self::clear_logs(ROOT.DS.'log', 40)) {
-                  $this->data['res'] = "Логи очищены";
+            if (self::clearfile(ROOT.DS.'log', 40)) {
+                  $this->data['res'] = "Логи очищены.";
             } else {
-                  $this->data['res'] = "Ошибка! Логи не очищены";
+                  $this->data['res'] = "Логи не очищены или не созданы.";
             }
             return $this->data;
       }
