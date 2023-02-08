@@ -3,7 +3,7 @@ namespace App\Models;
 use \App\Lib\Registry;
 class Recall_yes extends Home
 {
-    protected function db_query() 
+    protected function db_query()
 	{
 		//add data for head in template
 		if ($this->db->db->has($this->table, ["page_alias" => $this->page])) {
@@ -13,7 +13,7 @@ class Recall_yes extends Home
 			Registry::set('page_db_data', $this->data['page_db_data']);
 		}
 
-        $this->data['res'] = '';
+        $this->data['res'] = [];
 
         $table = "client_phone_numbers";
         try
@@ -25,23 +25,27 @@ class Recall_yes extends Home
         //vybor otvetov na zapros perezvonit
         $sql = "SELECT * FROM $table WHERE recall = 1 ORDER BY date_time DESC";
         $result = $this->db->db->pdo->query($sql);
-            while($row = $result->fetch()){
-            $this->data['res'] .= '<article class="adm_recall_article ">
-                                        <div class="">' . $row["date_time"] . '</div>
-                                        <div class="">
-                                            <p>' . $row["phone_number"] . '</p>
-                                            <p>' . $row["name"] . '</p>
-                                            <p>' . $row["send"]  . '</p>
-                                        </div>
-                                    </article>'
-                                    . PHP_EOL;
-            }
-        $npdo = null;
+        if (!empty($result)) {
+            $this->data['res'] = $result->fetchAll(\PDO::FETCH_ASSOC);
+        } else {
+            $this->data['res'] = "Журнал звонков пуст.";
+        }
+        $result = null;
         }
         catch (\PDOException $e)
         {
             $this->data['res'] .= '<article class="adm_recall_article ">Connection failed: ' . $e->getMessage() . '</article><br />';
         }
-
 	}
+
+    function clear() {
+        $this->data['name'] = "Очистить журнал";
+        $result = $this->db->db->delete('client_phone_numbers', ["recall" => 1]);
+        if ($result->rowCount() > 0) {
+            $this->data['res'] = "Журнал очищен.";
+        } else {
+            $this->data['res'] = "Журнал не очищен или пуст.";
+        }
+        return $this->data;
+    }
 }
