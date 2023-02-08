@@ -26,7 +26,7 @@ $ps = 'Your_password_in_mail_server';
 $smtpsec = 'tls';
 $port = 465;
 $to       = "Your@yandex.ru";
-$site = 'new_manikur.ru';
+$site = 'https://new_manikur.ru';
 $spam     = $_POST["last_name"]; // принимаем данные из скрытого спам-поля
 $ipAddr   = $_SERVER['REMOTE_ADDR']; // определяем IP-адрес пользователя
 $today    = date('d-m-Y_H-i');
@@ -40,13 +40,11 @@ $message .= '<ul>
               <li>Имя: <strong>' . $name . '</strong></li>
               <li>Номер телефона: <strong>'. $phone_number .'</strong></li>
               <li>Сообщение: '. $send .'</li>
-            </ul>
-            <hr>
-            <p>
-              <br><a href="new_manikur.ru">new_manikur.ru</a>
-            </p>';
+            </ul>';
 $subject  = "=?utf-8?B?".base64_encode($subject)."?=";
 $headers  = "From: $from\r\nReply-to: $from\r\nContent-type: text/html; charset=utf-8\r\n";
+// logs folder
+$folderName = server_doc_root().DIRECTORY_SEPARATOR.'log'.DIRECTORY_SEPARATOR;
 
 // если не заполнено скрытое поле и если IP-адрес не находится в нашем чёрном списке
 if(!in_array($ipAddr, $badIP) && empty($spam))
@@ -82,24 +80,24 @@ if(!in_array($ipAddr, $badIP) && empty($spam))
 
         // Проверяем отравленность сообщения
         if ($mail->send()) {
-          $result = "<p>Письмо отправлено</p>";
+          $result = "Письмо отправлено.\n";
           $status = true;
           // записываем логи в файл (если файла нет, то он будет создан автоматически)
           //file_put_contents("tmp/recall_email.log", "\n{$today}\n{$logText}\n", FILE_APPEND); chmod("tmp/recall_email.log", 0600);
-          file_put_contents(ROOT.DS.'log'.DS.'recall_email.log', "\n{$today}\n{$logText}\n", FILE_APPEND); 
+          file_put_contents($folderName."recall_email.log", "\n{$today}\n{$logText}\n", FILE_APPEND); 
           //chmod(ROOT.DS.'log'.DS.'recall_email.log', 0600);
         } else {
-          $result = "<h2>Ошибка</h2>";
-          $status = '<p>Письмо не отправлено</p><p>Проверьте входные данные: логин, пароль, почту в mail_send.php</p>';
-          file_put_contents(server_doc_root().DIRECTORY_SEPARATOR.'log'.DIRECTORY_SEPARATOR."recall_email.log", "\n{$today}\n{$result}\n{$status}\n", FILE_APPEND);
+          $result = "Ошибка!";
+          $status = "Письмо не отправлено. Проверьте входные данные: логин, пароль, почту в mail_send.php.";
+          file_put_contents($folderName."recall_email.log", "\n{$today}\n{$result}\n{$status}\n", FILE_APPEND);
           //chmod(ROOT.DS.'log'.DS."recall_email.log", 0600);
         }
     }
     catch (Exception $e)
     {
-        $result = "<h2>Ошибка</h2>";
-        $status = "<p>Письмо не было отправлено. Причина ошибки: {$mail->ErrorInfo}</p>";
-        file_put_contents(server_doc_root().DIRECTORY_SEPARATOR.'log'.DIRECTORY_SEPARATOR."recall_email.log", "\n{$today}\n{$result}\n{$status}\n", FILE_APPEND); 
+        $result = "Ошибка!";
+        $status = "Письмо не было отправлено. Причина ошибки: {$mail->ErrorInfo}";
+        file_put_contents($folderName."recall_email.log", "\n{$today}\n{$result}\n{$status}\n", FILE_APPEND); 
         //chmod(ROOT.DS.'log'.DS."recall_email.log", 0600);
     }
     // Отображение результата

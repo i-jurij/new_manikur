@@ -109,7 +109,7 @@ if (!empty($data['res'])) {
       });
 
       $("form#recall_one").on("submit", function(event){
-        event.preventDefault();
+        //event.preventDefault();
         var dataar = $("form#recall_one").serialize();
         $.ajax({
           url: '<?php echo URLROOT.DS.'app'.DS.'lib'.DS.'mail_send.php'; ?>',
