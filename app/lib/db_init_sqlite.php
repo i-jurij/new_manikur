@@ -71,12 +71,12 @@ class Db_init_sqlite
                 "NOT NULL"
             ],
             "username" => [
-                "VARCHAR(25)", 
+                "VARCHAR(25)",
                 "NOT NULL",
                 "UNIQUE"
             ],
             "password" => [
-                "VARCHAR(255)", 
+                "VARCHAR(255)",
                 "NOT NULL"
             ],
             "email" => [
@@ -158,7 +158,7 @@ class Db_init_sqlite
             ],
             "recall" => [
                 "INTEGER"
-            ]      
+            ]
         ]);
         $this->db->create("about", [
             "id" => [
@@ -195,8 +195,55 @@ class Db_init_sqlite
             ]
         ]);
 
+        $this->db->create("serv_categories", [
+            "id" => [
+                "INTEGER PRIMARY KEY",
+                "AUTOINCREMENT",
+                "NOT NULL"
+            ],
+            "page_id" => [
+                "INTEGER"
+            ],
+            "category_img" => [
+                "TEXT"
+            ],
+            "category_name" => [
+                "TEXT"
+            ],
+            "category_descr" => [
+                "TEXT"
+            ]
+        ]);
+
+        $this->db->create("services", [
+            "id" => [
+                "INTEGER PRIMARY KEY",
+                "AUTOINCREMENT",
+                "NOT NULL"
+            ],
+            "page_id" => [
+                "INTEGER"
+            ],
+            "category_id" => [
+                "INTEGER"
+            ],
+            "service_img" => [
+                "TEXT"
+            ],
+            "service_name" => [
+                "TEXT"
+            ],
+            "service_descr" => [
+                "TEXT"
+            ],
+            "price" => [
+                "REAL"
+            ]
+        ]);
+
+
         $contacts = $this->db->select("contacts", "*");
-        if(!$contacts){ // SELECT failed 
+        if(!$contacts){ // SELECT failed
             $this->db->insert("contacts", [
                 [
                     "contacts_type" => "telegram",
@@ -228,7 +275,7 @@ class Db_init_sqlite
         $admin = $this->db->select("users", "username", [
                 "status" =>  ["admin"]
             ]);
-        if(!$admin){ // SELECT failed 
+        if(!$admin){ // SELECT failed
             $this->db->insert("users", [
                 [
                 "username" => "admin",
@@ -242,7 +289,7 @@ class Db_init_sqlite
         $moder = $this->db->select("users", "username", [
             "status" =>  ["moder"]
         ]);
-        if(!$moder){ // SELECT failed 
+        if(!$moder){ // SELECT failed
             $this->db->insert("users", [
                 [
                 "username" => "moder",
@@ -256,7 +303,7 @@ class Db_init_sqlite
         $user = $this->db->select("users", "username", [
             "status" =>  ["user"]
         ]);
-        if(!$user){ // SELECT failed 
+        if(!$user){ // SELECT failed
             $this->db->insert("users", [
                 [
                 "username" => "user",
