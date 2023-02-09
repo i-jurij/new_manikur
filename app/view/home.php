@@ -1,7 +1,16 @@
 <?php
 	if (!empty($data['page_list']) && is_array($data['page_list'])) {
-		foreach ($data['page_list'] as $page) {
-			if ($page['page_alias'] !== "home" && empty($page['page_admin'])) {
+		$r = ['recall', 'appoint', 'gallery', 'manikur', 'parikmaher', 'visage', 'about', 'map', 'price', 'persinfo'];
+		foreach ($r as $key => $value) {
+			$k = array_search($value, array_column($data['page_list'], 'page_alias'));
+			if ($k === false) {
+				continue;
+			} else {
+				$re[$key] = $data['page_list'][$k];
+			}
+		}
+		foreach ($re as $page) {
+			if (!empty($page) && $page['page_alias'] !== "home" && empty($page['page_admin'])) {
 				$tit = (!empty($page['page_title'])) ? $page['page_title'] : 'Title';
 				$desc = (!empty($page['page_meta_description'])) ? $page['page_meta_description'] : 'Description';
 
@@ -22,10 +31,10 @@
 			. PHP_EOL;
 			}
 		}
-	} 
+	}
 ?>
 
-<div class="content" style="text-align: left;"> 
+<div class="content" style="text-align: left;">
 <?php
 	if (!empty($data['page_db_data'][0]['page_content'])) {
 		if (is_array($data['page_db_data'][0]['page_content'])) {
@@ -58,10 +67,10 @@ print '</pre>';
 </div>
 
 <script type="text/javascript">
-	document.addEventListener("DOMContentLoaded", function(event) { 
+	document.addEventListener("DOMContentLoaded", function(event) {
 		let body = document.querySelector ( 'body' );
 		body.innerHTML = body.innerHTML + '<p id="enter">FirstFramework</p>';
-		
+
 		document.querySelector("#enter").addEventListener('click', function(){
 			let text = '<div class="content">\
 						<div class="mar">\

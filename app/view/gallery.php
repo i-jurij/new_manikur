@@ -1,3 +1,4 @@
+<div class="gallery">
 <?php
 $photo_link = "https://disk.yandex.ru/d/PldT5ChpcRCVRg";
 //var for gallery.php
@@ -8,7 +9,7 @@ $pattern = '#z*.(jpg|png|jpeg|webm*)#';
 
 echo simpleGallery_fancybox($directory, $pattern, $width = '', $height = '');
 
-if (!empty($photo_link)): $photo_link_name = explode('.', parse_url($photo_link, PHP_URL_HOST)); 
+if (!empty($photo_link)): $photo_link_name = explode('.', parse_url($photo_link, PHP_URL_HOST));
 ?>
 <p class="zapis_usluga back shad rad pad mar">
     Больше снимков можно посмотреть в
@@ -20,3 +21,4 @@ if (!empty($photo_link)): $photo_link_name = explode('.', parse_url($photo_link,
 endif;
 include_once APPROOT.DS."view".DS."back_home.html";
 ?>
+</div>

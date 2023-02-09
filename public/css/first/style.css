@@ -1609,7 +1609,7 @@ overflow: hidden;
 		font-size: var(--middle-fontsize);
 	}
 	.gallery_a img {
-		height: 11rem;
+		height: 9rem;
 		/* width: 15rem; */
 	}
 
@@ -1635,7 +1635,7 @@ overflow: hidden;
 	}
 
 	.gallery_a img {
-		height: 9rem;
+		height: 8rem;
 		/* width: 12rem; */
 	}
 
