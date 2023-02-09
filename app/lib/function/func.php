@@ -11,7 +11,7 @@ function getOutput ($file) {
  * @param string $ext - extension of files eg 'png' or 'png, webp, jpg'
  * @return array path to files
  */
-function files_in_dir($path, $ext = '') 
+function files_in_dir($path, $ext = '')
 {
   $files = array();
   if (file_exists($path)) {
@@ -19,11 +19,11 @@ function files_in_dir($path, $ext = '')
     foreach ($f as $file){
       if (is_dir($file)) continue;
       if (empty($ext)) {
-        $files[] = $file; 
+        $files[] = $file;
       } else {
         $arr = explode(',', $ext);
         foreach ($arr as $value) {
-          $extt = mb_strtolower(trim($value)); 
+          $extt = mb_strtolower(trim($value));
           /*
           if(preg_match("/\.($extt)/", $file)) {
             $files[] = $file;
@@ -35,11 +35,11 @@ function files_in_dir($path, $ext = '')
         }
       }
     }
-  } 
+  }
   return $files;
 }
 
-function menu($data) 
+function menu($data)
 {
   //page list from db
   if (!empty($data['page_list'])) {
@@ -53,8 +53,8 @@ function menu($data)
       foreach ($data['nav'] as $value) {
         $ress[$value] = array_search($value, $res);//get array 'nav = page_alias' => 'page_h1'
       }
-    } 		
-  }	
+    }
+  }
   //set empty value for main pages 'home' and 'admin'
   if(!empty($data['page_db_data'][0])){
     $ress[$data['page_db_data'][0]['page_alias']] = $data['page_db_data'][0]['page_h1'];
@@ -150,7 +150,7 @@ function phone_number_to_db($sPhone){
   function phone_number_view($sPhone){
     $sPhone = preg_replace('![^0-9]+!','',$sPhone);
     //if(strlen($sPhone) != 11) return(False);
-    if ( strlen($sPhone) > 10 && strlen($sPhone) < 12 ) {    
+    if ( strlen($sPhone) > 10 && strlen($sPhone) < 12 ) {
       $sArea = mb_substr($sPhone, 0,1);
       $sPrefix = mb_substr($sPhone,1,3);
       $sNumber1 = mb_substr($sPhone,4,3);
@@ -230,37 +230,11 @@ function phone_number_to_db($sPhone){
       return $img;
   }
 
-  /**
-   * @param string $directory = 'gallery_img';    // Папка с изображениями
-   * @param string $pattern = '#z*.(jpg|png|jpeg|webm*)#'; // паттерн отбора изображений
-   * @param string $width = 100; //ширина в пикселях
-   * @param string $height = 100; //высота в пикселях
-   * @return string or null
-   */
-  function simpleGallery_fancybox ($directory, $pattern, $width = '', $height = '') {
-    $x = explode('/', URLROOT);
-    $x = array_pop($x);
-    $iterator = new FilesystemIterator($directory);
-    $filter = new RegexIterator($iterator, $pattern);
-    $gallery = '';
-    foreach ($filter as $name) {
-      $nameww = explode($x, str_replace(' ', '%20', $name));
-      $nameww = array_pop($nameww); 
-      $nameww = URLROOT.$nameww;
-      $namefn = pathinfo($name,PATHINFO_FILENAME);
-      $w = (!empty($width)) ? 'width="' . $width . '"' : '';
-      $h = (!empty($height)) ? 'height="' . $height . '"' : '';
-      $gallery .= '<a class="gallery_a" href="' . $nameww . '" title="'.$namefn.'">
-                    <img class="rounded" src="' . $nameww .'" alt="'.$namefn.'" '.$w.' '.$h.'  />
-                  </a>';
-    }
-    return (!empty($gallery)) ? $gallery : null;
-  }
 /**
  * @param string $file - - path to txt file
  * @param string $new_string
  * @param int $num_string - number of string for replace
- * 
+ *
  */
   function replace_string($file, $new_string, int $num_string = 0)
   {
@@ -298,7 +272,7 @@ function phone_number_to_db($sPhone){
         $header = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     }
     curl_close($ch);
-    
+
     if ($header > 0 && $header < 400) {
         return true;
     } else {

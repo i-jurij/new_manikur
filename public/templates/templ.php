@@ -7,7 +7,7 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   <title>
-    <?php 
+    <?php
       echo $c = (isset($db['page_title']) and !empty($db['page_title'])) ? htmlspecialchars($db['page_title']) : 'Title of page';
     ?>
   </title>
@@ -16,19 +16,22 @@
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
   <META NAME="Robots" CONTENT="<?php echo $f = (isset($db['robots']) and !empty($db['robots'])) ? htmlspecialchars($db['robots']) : 'INDEX, FOLLOW'; ?>">
   <meta name="author" content="I-Jurij">
-  <?php 
+  <?php
   if (!empty($data['css'])) {
     if (is_array($data['css'])) {
       foreach ($data['css'] as $css) {
-        echo '<link rel="stylesheet" type="text/css" href="'.$css.'" />'; 
+        echo '<link rel="stylesheet" type="text/css" href="'.$css.'" />';
       }
     } elseif (is_string($data['css'])) {
-      echo '<link rel="stylesheet" type="text/css" href="'.$data['css'].'" />'; 
+      echo '<link rel="stylesheet" type="text/css" href="'.$data['css'].'" />';
     }
   }
   ?>
+  <!-- css for js files -->
+  <link rel="stylesheet" href="<?php echo URLROOT.DS; ?>public/js/other/fancybox.css" />
+  <link rel="stylesheet" href="<?php echo URLROOT.DS; ?>public/js/other/panzoom.css" />
   <link rel="icon" href="<?php echo URLROOT.DS; ?>public/imgs/favicon.png" />
-  <?php 
+  <?php
     foreach (files_in_dir(PUBLICROOT.DS.'js'.DS.'core', 'js') as $value) {
       print '<script type="text/javascript" src="'.URLROOT.DS.'public'.DS.'js'.DS.'core'.DS.$value.'"></script>';
     }
@@ -46,12 +49,12 @@
           <div class="content title">
             <h2><?php echo $c = (isset($db['page_h1']) and !empty($db['page_h1'])) ? htmlspecialchars($db['page_h1']) : 'Page title';?></h2>
           </div>
-          <?php 
+          <?php
             if (!empty($data[0]['page_content'])) {
               print htmlspecialchars($data[0]['page_content']);
             }
             if ( (new SplFileInfo($content_view))->isReadable() ) {
-              include $content_view; 
+              include $content_view;
             } elseif (is_string($content_view)) {
               print $content_view;
             }
@@ -70,10 +73,15 @@
     </footer>
   </div>
 
-  <?php 
+  <script type="text/javascript" src="<?php echo URLROOT.DS.'public'.DS.'js'.DS.'other'.DS; ?>fancybox.umd.js"></script>
+  <script type="text/javascript" src="<?php echo URLROOT.DS.'public'.DS.'js'.DS.'other'.DS; ?>form-recall-mask.js"></script>
+  <script type="text/javascript" src="<?php echo URLROOT.DS.'public'.DS.'js'.DS.'other'.DS; ?>jquery.maskedinput.min.js"></script>
+  <?php
+    /*
     foreach (files_in_dir(PUBLICROOT.DS.'js'.DS.'other', 'js') as $value) {
-      print '<script type="text/javascript" defer src="'.URLROOT.DS.'public'.DS.'js'.DS.'other'.DS.$value.'"></script>';
+      print '<script type="text/javascript" src="'.URLROOT.DS.'public'.DS.'js'.DS.'other'.DS.$value.'"></script>';
     }
+    */
   ?>
   <!-- <script type="text/jsx" src="public/js/fancybox.umd.js"></script> -->
   </body>
