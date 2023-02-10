@@ -17,11 +17,12 @@ if (!empty($data['res'])) {
         <form action="<?php echo URLROOT.DS.'redaktor_about'.DS.'change'.DS; ?>" method="post" name="about_edit" id="about_edit" class="display_none" enctype="multipart/form-data">
         <div class="zapis_usluga" >
             <div class="" id="inputs">
-            <div class="about_form back shad rad pad mar display_inline_block" id="inp0" style="width:25rem;">
+            <p class="back shad rad pad mar">Выберите изображение, название и текст для новой карточки страницы</p>
+            <div class="about_form back shad rad pad mar display_inline_block" id="inp0">
                 <label class="input-file">
-                    <input type="hidden" name="MAX_FILE_SIZE" value="1024000" />
+                    <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
                     <input type="file" id="f0" name="about_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />
-                    <span >Выберите фото весом до 1Мб</span>
+                    <span >Выберите фото весом до 3Мб</span>
                     <p id="fileSize" ></p>
                 </label>
                 <label ><p>Введите название (до 50 символов)</p>
@@ -46,8 +47,10 @@ if (!empty($data['res'])) {
             <?php
                 foreach ($data['about'] as $art)
                 {
-                    $iddel = $art['id'].'iiiii'.preg_replace('~[\\\\/]~', 'slashslash', preg_replace('~[\\\\.]~', 'punktpunkt', $art['article_image']));
-                   
+                    $imgname = pathinfo($art['article_image'], PATHINFO_FILENAME);
+                    $imgext = pathinfo($art['article_image'], PATHINFO_EXTENSION);
+                    $iddel = $art['id'].'_'.$imgname.'_'.$imgext;
+
                     echo '<article class="main_section_article" id="'.$iddel.'">
                             <div class="main_section_article_imgdiv">
                             <img src="'.$art['article_image'].'" alt="Фото '.$art['article_title'].'" class="main_section_article_imgdiv_img" />
@@ -132,10 +135,10 @@ $(function(){
         let file = this.files[0];
         let size = 3*1024*1024; //3MB
         $(this).next().html(file.name);
-        if (file.size > size) { 
+        if (file.size > size) {
             $('#fileSize').css("color","red").html('ERROR! Image size > 3MB');
         } else {
-            
+
         }
         //$('#fileSize').html(file.name+' - '+file.size/1024+' KB');
     });

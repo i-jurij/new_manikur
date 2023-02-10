@@ -18,7 +18,7 @@ class Redaktor_uslug extends Home
             "page_alias",
             "page_title",
         ], [
-            "page_publish[!]" => [null, "", 0, "0", false, "false"]
+            "page_publish[!]" => null
         ]);
 	}
 }

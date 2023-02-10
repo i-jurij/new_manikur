@@ -6,7 +6,7 @@ class Redaktor_about extends Home
 {
     use \App\Lib\Traits\Delete_files;
     use \App\Lib\Traits\File_find;
-    protected function db_query() 
+    protected function db_query()
 	{
 		//add data for head in template
 		if ($this->db->db->has($this->table, ["page_alias" => $this->page])) {
@@ -39,7 +39,7 @@ class Redaktor_about extends Home
                   $content[] = mb_ucfirst(htmlspecialchars($value), 'UTF-8');
                 }
             }
-          
+
             $load = new Upload;
             if ($load->isset_data()) {
                 $path_to_img = IMGDIR.DS.'about';
@@ -94,18 +94,17 @@ class Redaktor_about extends Home
         } elseif (!empty($_POST['about_del'])) {
             foreach ($_POST['about_del'] as $value)
             {
-                list($id, $pathbefore) = explode('iiiii', $value);
-                $path = str_replace('slashslash', '/', str_replace('punktpunkt', '.', $pathbefore));
+                list($id, $filename, $ext) = explode('_', $value);
                 //print $path.'<br />';
                 // del image
-                if ( self::del_file(IMGDIR.DS.'about'.DS.pathinfo($path, PATHINFO_BASENAME)) === true ) {
-                    $this->data['res'] .= 'Фото '.pathinfo($path, PATHINFO_BASENAME).' удалено.<br />';
+                if ( self::del_file(IMGDIR.DS.'about'.DS.$filename.'.'.$ext) === true ) {
+                    $this->data['res'] .= 'Фото '.$filename.'.'.$ext.' удалено.<br />';
                 }
                 else {
-                    if ( self::del_file(find_by_filename(IMGDIR.DS.'about'.DS, pathinfo($path, PATHINFO_FILENAME))) === true ) {
-                        $this->data['res'] .= 'Фото '.pathinfo($path, PATHINFO_BASENAME).' удалено.<br />';
+                    if ( self::del_file(find_by_filename(IMGDIR.DS.'about'.DS, $filename)) === true ) {
+                        $this->data['res'] .= 'Фото '.$filename.'.'.$ext.' удалено.<br />';
                     } else {
-                        $this->data['res'] .= self::del_file(find_by_filename(IMGDIR.DS.'about'.DS, pathinfo($path, PATHINFO_FILENAME))).'<br />';
+                        $this->data['res'] .= self::del_file(find_by_filename(IMGDIR.DS.'about'.DS, $filename)).'<br />';
                     }
                 }
                 $ids[] = $id;
@@ -117,7 +116,7 @@ class Redaktor_about extends Home
             } else {
                 if (!empty($del->error)) { $this->data['res'] .= $del->error.'<br />'; }
             }
-            
+
         } else {
             $this->data['res'] = 'Data is empty. Submit the form again.';
         }
