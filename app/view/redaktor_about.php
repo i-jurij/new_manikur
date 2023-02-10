@@ -17,28 +17,28 @@ if (!empty($data['res'])) {
         <form action="<?php echo URLROOT.DS.'redaktor_about'.DS.'change'.DS; ?>" method="post" name="about_edit" id="about_edit" class="display_none" enctype="multipart/form-data">
         <div class="zapis_usluga" >
             <div class="" id="inputs">
-            <p class="back shad rad pad mar">Выберите изображение, название и текст для новой карточки страницы</p>
-            <div class="about_form back shad rad pad mar display_inline_block" id="inp0">
-                <label class="input-file">
-                    <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
-                    <input type="file" id="f0" name="about_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />
-                    <span >Выберите фото весом до 3Мб</span>
-                    <p id="fileSize" ></p>
-                </label>
-                <label ><p>Введите название (до 50 символов)</p>
-                    <p>
-                    <input type="text" name="about_title[]" placeholder="Название" maxlength="50" />
-                    </p>
-                </label>
-                <label ><p>Введите текст (до 500 символов)</p>
-                    <p>
-                    <textarea name="about_text[]" placeholder="Текст" maxlength="500" ></textarea>
-                    </p>
-                </label>
-            </div>
+              <p class="back shad rad pad mar">Выберите изображение, название и текст для новой карточки страницы</p>
+              <div class="about_form back shad rad pad mar display_inline_block" id="inp0">
+                  <label class="input-file">
+                      <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
+                      <input type="file" id="f0" name="about_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />
+                      <span >Выберите фото весом до 3Мб</span>
+                      <p id="fileSizef0" ></p>
+                  </label>
+                  <label ><p>Введите название (до 50 символов)</p>
+                      <p>
+                      <input type="text" name="about_title[]" placeholder="Название" maxlength="50" />
+                      </p>
+                  </label>
+                  <label ><p>Введите текст (до 500 символов)</p>
+                      <p>
+                      <textarea name="about_text[]" placeholder="Текст" maxlength="500" ></textarea>
+                      </p>
+                  </label>
+              </div>
             </div>
             <div class="mar" id="aaf">
-            <button class="buttons" type="button" >Добавить еще</button>
+              <button class="buttons" type="button" >Добавить еще</button>
             </div>
         </div>
 
@@ -67,7 +67,7 @@ if (!empty($data['res'])) {
 
         <div class="">
             <div class="zapis_usluga margin_bottom_1rem" >
-            <a href="<?php echo URLROOT.DS.'redaktor_about'; ?>" class="buttons">Назад</a>
+            <a href="<?php echo URLROOT.DS.'redaktor_about/'; ?>" class="buttons">Назад</a>
             <button class="buttons" form="about_edit" type="reset" >Очистить</button>
             <button class="buttons" type="submit" form="about_edit">Готово</button>
             </div>
@@ -101,7 +101,7 @@ $(function(){
               <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />\
               <input type="file" id="f'+id+'" name="about_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" required />\
               <span>Выберите фото весом до 3Мб</span>\
-              <p id="fileSize" ></p>\
+              <p id="fileSizef'+id+'" ></p>\
             </label>\
             <label ><p>Введите название (до 50 символов)</p>\
               <p>\
@@ -136,19 +136,22 @@ $(function(){
         let size = 3*1024*1024; //3MB
         $(this).next().html(file.name);
         if (file.size > size) {
-            $('#fileSize').css("color","red").html('ERROR! Image size > 3MB');
+            $('#fileSize'+this.id).css("color","red").html('ERROR! Image size > 3MB');
         } else {
-
+            //$('#fileSize').html(file.name+' - '+file.size/1024+' KB');
         }
-        //$('#fileSize').html(file.name+' - '+file.size/1024+' KB');
     });
   });
 
   $('form#about_edit').on('reset', function(){
     //$('form#about_edit').get(0).reset();
+    $('.about_form').each(function (i) {
+        $('.about_form').slice(1).remove();
+    });
     $("[type='file']").each(function(){
-      let file = 'Выберите фото весом до 1Мб';
+        let file = 'Выберите фото весом до 3Мб';
     	$(this).next().html(file);
+        $('#fileSize'+this.id).html('');
     });
   });
 

@@ -1444,6 +1444,11 @@ overflow: hidden;
 	display: inline-block;
 	width: 100%;
 }
+.input-file p {
+	padding: 0;
+	margin: 1rem 0 0 0;
+}
+
 .input-file span {
 	position: relative;
 	display: inline-block;
@@ -1457,7 +1462,7 @@ overflow: hidden;
 	background-color: var(--bgcolor-content);
 	/* height: 3rem; */
 	width: 100%;
-	padding: 0.5rem 1rem;
+	padding: 0.5rem 1rem ;
 	box-sizing: border-box;
 	border: none;
 	margin: 0;
