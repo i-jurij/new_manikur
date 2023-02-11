@@ -15,70 +15,58 @@ elseif ( !empty($data['category']) ) {
             <div class="form_radio_btn" style="width:85%;" id="page_choice">
                 <p class="">Выберите страницу для редактирования:</p>
                 <?php
-                foreach ($data['service_page'] as $value)
-                {
-                    echo '<label class="" for="' . $value ['page_id'] . '">
-                            <input type="radio" name="page_for_edit" value="' . $value['page_id'] . '" />
-                            <span>' . $value['page_title'] . '</span>
-                        </label>
-                        ';
+                if (!empty($data['service_page'])) {
+                    foreach ($data['service_page'] as $value)
+                    {
+                        echo '<label>
+                                <input type="radio" name="page_for_edit" value="' . $value['page_id'] . '" />
+                                <span>' . $value['page_title'] . '</span>
+                            </label>
+                            ';
+                    }
+                } else {
+                    print 'Список страниц пуст.<br />';
                 }
                 ?>
             </div>
 
-            <div class="form_radio_btn" style="width:85%;" id="action_choice">
-                <p class="">Выберите действие:</p>
-                <label for="add_cat">
-                    <input type="radio" name="action_choice" value="add_usl" />
-                    <span>Добавить категории</span>
-                </label>
-                <label for="del_cat">
-                    <input type="radio" name="action_choice" value="del_usl" />
-                    <span>Удалить категории</span>
-                </label>
-                <label for="add_usl">
-                    <input type="radio" name="action_choice" value="add_usl" />
-                    <span>Добавить услуги</span>
-                </label>
-                <label for="del_usl">
-                    <input type="radio" name="action_choice" id="del_usl" value="del_usl" />
-                    <span>Удалить услуги</span>
-                </label>
+            <div class="margin_bottom_1rem" id="action_choice">
+                <p>Выберите действие:</p>
+                <button type="button" class="buttons" id="cats_ad" />Добавить категории</button>
+                <button type="button" class="buttons" id="cats_de" />Удалить категории</button>
+                <button type="button" class="buttons" id="serv_ad" />Добавить услуги</button>
+                <button type="button" class="buttons" id="serv_de" />Удалить услуги</button>
             </div>
 
-            <br />js show form after shoose<br />
-
-            <div class="zapis_usluga" >
-                <div class="" id="cats_add">
-                    <p class=" back shad rad pad mar">Выберите изображение, название и описание категории, нажмите Далее</p>
-                    <div class="about_form back shad rad pad mar display_inline_block" id="cats0">
-                        <label class="input-file">
-                            <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
-                            <input type="file" id="fcats0" name="cats_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />
-                            <span >Изображение категории весом до 3Мб</span>
-                            <p id="fileSizefcats0" ></p>
-                        </label>
-                        <label ><p>Введите название категории (до 100 символов)</p>
-                            <p>
-                            <input type="text" name="cats_name[]" placeholder="Название категории" maxlength="100" required />
-                            </p>
-                        </label>
-                        <label ><p>Описание категории (до 500 символов)</p>
-                            <p>
-                            <textarea name="cats_desc[]" placeholder="Описание категории" maxlength="500"></textarea>
-                            </p>
-                        </label>
-                    </div>
+            <div class="zapis_usluga display_none" id="cats_add">
+                <p class="">Выберите изображение, название и описание категории, нажмите Далее</p>
+                <div class="about_form back shad rad pad mar display_inline_block" id="cats0">
+                    <label class="input-file">
+                        <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
+                        <input type="file" id="fcats0" name="cats_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />
+                        <span >Изображение категории весом до 3Мб</span>
+                        <p id="fileSizefcats0" ></p>
+                    </label>
+                    <label ><p>Введите название категории (до 100 символов)</p>
+                        <p>
+                        <input type="text" name="cats_name[]" placeholder="Название категории" maxlength="100" required />
+                        </p>
+                    </label>
+                    <label ><p>Описание категории (до 500 символов)</p>
+                        <p>
+                        <textarea name="cats_desc[]" placeholder="Описание категории" maxlength="500" required></textarea>
+                        </p>
+                    </label>
                 </div>
                 <div class="mar " id="">
-                    <button class="buttons add" type="button" value="cats">Добавить еще</button>
+                    <button class="buttons add" type="button" value="cats" onclick="add(this);">Добавить еще</button>
                 </div>
             </div>
 
-            del cat: list of cats for choosed page<br />
-            <div class="zapis_usluga" id="cats_del">
-                <p class=" back shad rad pad mar">Выберите категории для удаления, нажмите Далее</p>
+            <div class="zapis_usluga display_none" id="cats_ded">
+                <p class="">Выберите категории для удаления, нажмите Далее</p>
                 <?php
+                if (!empty($data['page_cats'])) {
                     foreach ($data['page_cats'] as $cat) //foreach cat ids from table
                     {
                         echo '  <label class="">
@@ -86,40 +74,41 @@ elseif ( !empty($data['category']) ) {
                                     <span>'.$cat['category_name'].'</span>
                                 </label>';
                     }
+                } else {
+                    print 'Список категорий пуст.<br />';
+                }
                 ?>
             </div>
 
-            add serv: list of cats for choosed page and form for serv add (cat can be or not added in form)<br />
-            <div class="zapis_usluga" >
-                <div class="" id="serv_add">
-                    <p class=" back shad rad pad mar">Выберите изображение, название и описание услуги, нажмите Далее</p>
-                    <div class="about_form back shad rad pad mar display_inline_block" id="serv0">
-                        <label class="input-file">
-                            <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
-                            <input type="file" id="fserv0" name="serv_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />
-                            <span >Изображение услуги весом до 3Мб</span>
-                            <p id="fileSizefserv0" ></p>
-                        </label>
-                        <label ><p>Введите название услуги (до 100 символов)</p>
-                            <p>
-                            <input type="text" name="serv[]" placeholder="Название категории" maxlength="100" required />
-                            </p>
-                        </label>
-                        <label ><p>Описание услуги (до 500 символов)</p>
-                            <p>
-                            <textarea name="serv_desc[]" placeholder="Описание категории" maxlength="500"></textarea>
-                            </p>
-                        </label>
-                    </div>
+            <div class="zapis_usluga display_none" id="serv_add">
+                <p class="">Выберите изображение, название и описание услуги, нажмите Далее</p>
+                <div class="about_form back shad rad pad mar display_inline_block" id="serv0">
+                    <label class="input-file">
+                        <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
+                        <input type="file" id="fserv0" name="serv_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />
+                        <span >Изображение услуги весом до 3Мб</span>
+                        <p id="fileSizefserv0" ></p>
+                    </label>
+                    <label ><p>Введите название услуги (до 100 символов)</p>
+                        <p>
+                        <input type="text" name="serv[]" placeholder="Название категории" maxlength="100" required />
+                        </p>
+                    </label>
+                    <label ><p>Описание услуги (до 500 символов)</p>
+                        <p>
+                        <textarea name="serv_desc[]" placeholder="Описание категории" maxlength="500" required></textarea>
+                        </p>
+                    </label>
                 </div>
                 <div class="mar " id="">
-                    <button class="buttons add" type="button" value="serv">Добавить еще</button>
+                    <button class="buttons add" type="button" value="serv" onclick="add(this);">Добавить еще</button>
                 </div>
             </div>
-            del serv: list of serv into cat and list other serv<br />
-            <div class="zapis_usluga" id="serv_del">
-                <p class=" back shad rad pad mar">Выберите услуги для удаления, нажмите Далее</p>
+
+            <div class="zapis_usluga display_none" id="serv_ded">
+                <p class="">Выберите услуги для удаления, нажмите Далее</p>
                 <?php
+                if (!empty($data['page_cats_serv'])) {
                     foreach ($data['page_cats_serv'] as $cat_name => $cat_serv) //foreach cat ids from table
                     {
                         print $cat_name;
@@ -131,6 +120,10 @@ elseif ( !empty($data['category']) ) {
                                     </label>';
                         }
                     }
+                } else {
+                    print 'Список услуг в категориях пуст.<br />';
+                }
+                if (!empty($data['page_serv'])) {
                     foreach ($data['page_serv'] as $serv) //foreach cat ids from table
                     {
                         echo '  <label class="">
@@ -138,10 +131,13 @@ elseif ( !empty($data['category']) ) {
                                     <span>'.$serv['serv_name'].'</span>
                                 </label>';
                     }
+                } else {
+                    print 'Список услуг вне категорий пуст.<br />';
+                }
                 ?>
             </div>
 
-            <div class="margintb1">
+            <div class="margintb1 display_none" id="form_buttons" >
                 <a href="" class="buttons" onclick="document.referrer ? window.location = document.referrer : history.back();">Назад</a>
                 <button type="submit" name="submit" class="buttons" form="change_page_form" value="change" />Далее</button>
                 <input type="reset" class="buttons" form="change_page_form" value="Сбросить" />
@@ -157,29 +153,10 @@ include_once APPROOT.DS."view".DS."js_back.html";
 ?>
 
 <script>
-$(function(){
-/*
-  $('.choice > .buttons').on('click', function(){
-    $('.choice').hide();
-    $('form#about_edit').show();
-    if (this.id == 'aboutadd') {
-      $("#f0, [type='text'], textarea").prop('required', true);
-    }
-    else if (this.id == 'aboutdel') {
-      $('div#aaf').remove();
-      $('div.about_form').remove();
-      $('#about_art_del').show();
-    }
-  });
-*/
-    $('div#page_choice > input[type="radio"]').on('click', function(){
-        let choice = $(this).prop("value");
-        console.log(choice);
-    });
 
-
-    $('.add').on('click', function(){
-        let shoose = $(this).prop("value");
+function add(el) {
+        let shoose = $(el).prop("value");
+        console.log(shoose);
 
         if (shoose == "cats") {
             name = "категории";
@@ -205,6 +182,20 @@ $(function(){
                         </p>\
                     </label>\
             </div>');
+    };
+$(function(){
+
+    $('div#page_choice > label > input').on('click', function(){
+        let choice = $(this).prop("value");
+    });
+
+    $('div#action_choice > button').on('click', function(){
+        $('div#action_choice').hide();
+        $('div#form_buttons').show();
+        const object = $('div#'+this.id+'d');
+        $('div.zapis_usluga').remove();
+        object.insertBefore('div#form_buttons');
+        $('div#'+this.id+'d').removeClass('display_none');
     });
 
     $('form#change_page_form').on('change', function(){

@@ -1579,7 +1579,7 @@ overflow: hidden;
 
 	.zapis_usluga_spisok {
 		-webkit-column-count: 2;
-    column-count: 2;
+    	column-count: 2;
 	}
 
 }
@@ -1617,6 +1617,10 @@ overflow: hidden;
 	body a {
 		font-size: var(--middle-fontsize);
 	}
+	.buttons {
+		font-size: var(--small-fontsize);
+  	}
+
 	.gallery_a img {
 		height: 9rem;
 		/* width: 15rem; */
