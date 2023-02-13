@@ -1,7 +1,7 @@
 <?php
 namespace App\Lib\Traits;
 
-trait Delete_files 
+trait Delete_files
 {
   public static function del_files_in_dir(string $dir, bool $recursive = true) {
     $mes = '';
@@ -25,7 +25,7 @@ trait Delete_files
   }
   /**
   * delete a file or files
-  * 
+  *
   * @param string $path2file
   * @return true or string (check if $this === true)
   */
@@ -54,12 +54,22 @@ trait Delete_files
       return $mes;
     }
   }
-  
+
+  function del_empty_dir($dir) {
+    if ( [] === ( array_diff(scandir($dir), array('.', '..')) ) ) {
+      if (rmdir($dir)) {
+          return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
   /**
   * delete a file or directory
   * automatically traversing directories if needed.
   * PS: has not been tested with self-referencing symlink shenanigans, that might cause a infinite recursion, i don't know.
-  * 
+  *
   * @param string $cmd
   * @throws \RuntimeException if unlink fails
   * @throws \RuntimeException if rmdir fails

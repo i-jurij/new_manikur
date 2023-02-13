@@ -17,13 +17,13 @@ class Redaktor_gallery extends Home
                 foreach ($load->files as $input => $input_array) {
                     //print_r($input_array); print '<br />';
                     $this->data['res'] .= 'Input "'.$input.'":<br />';
-                    
+
                     foreach ($input_array as $key => $file) {
                         if (!empty($file['name'])) {
                             if (mb_strlen($file['name'], 'UTF-8') < 101) {
                                 $name = $file['name'];
                             } else {
-                                $name = mb_strimwidth($file['name'], 0, 48, "...") . mb_substr($file['name'], -48, null, 'UTF-8'); 
+                                $name = mb_strimwidth($file['name'], 0, 48, "...") . mb_substr($file['name'], -48, null, 'UTF-8');
                             }
                             $this->data['res'] .= '<br />Name "'.$name.'":<br />';
                         }
@@ -34,22 +34,22 @@ class Redaktor_gallery extends Home
                             $load->dest_dir = PUBLICROOT.DS.'imgs/gallery';
                             $load->tmp_dir = PUBLICROOT.DS.'tmp';
                             $load->file_size = 3*1024*1024; //3MB
-                            $load->file_mimetype = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/webp'];
-                            $load->file_ext = ['.jpg', '.jpeg', '.png', '.webp'];
+                            $load->file_mimetype = ['image/jpeg', 'image/pjpeg', 'image/png'];
+                            $load->file_ext = ['.jpg', '.jpeg', '.png'];
                             $load->new_file_name = '';
                             $load->processing = ['resizeToBestFit' => ['1240', '1024']];
                             $load->replace_old_file = true;
                         }
                         // PROCESSING DATA
-                        if ($load->execute($input_array, $key, $file)) { 
+                        if ($load->execute($input_array, $key, $file)) {
                             if (!empty($load->message)) { $this->data['res'] .= $load->message; }
-                        } else { 
-                            if (!empty($load->error)) { $this->data['res'] .= $load->error; } 
-                            continue; 
+                        } else {
+                            if (!empty($load->error)) { $this->data['res'] .= $load->error; }
+                            continue;
                         }
                         //CLEAR TMP FOLDER
-                        if (!$load->del_files_in_dir($load->tmp_dir)) { 
-                            if (!empty($load->error)) { $this->data['res'] .= $load->error; } 
+                        if (!$load->del_files_in_dir($load->tmp_dir)) {
+                            if (!empty($load->error)) { $this->data['res'] .= $load->error; }
                         }
                     }
                 }

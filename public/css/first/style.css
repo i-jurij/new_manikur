@@ -149,6 +149,13 @@ a:visited, a:focus, a:hover,  a:active { text-decoration: underline; }
 	margin: 0 auto 1rem auto;
 }
 
+.mb2 {
+	margin: 0 auto 2rem auto;
+}
+.mt1b2 {
+	margin: 1rem auto 2rem auto;
+}
+
 .margin_top_1rem {
 	margin: 1rem auto 0 auto;
 }

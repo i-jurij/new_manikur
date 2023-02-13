@@ -9,9 +9,9 @@ class Create_delete_page extends Adm
     use \App\Lib\Traits\Delete_files;
     use \App\Lib\Traits\File_find;
 
-	protected function db_query() 
+	protected function db_query()
 	{
-		$this->data['page_db_data'] = array(array("page_alias" => "create_delete_page", 
+		$this->data['page_db_data'] = array(array("page_alias" => "create_delete_page",
                                                 "page_title" => "Страницы",
                                                 "page_meta_description" => "Создать или удалить страницу",
                                                 "page_robots" => "NOINDEX, NOFOLLOW",
@@ -20,7 +20,7 @@ class Create_delete_page extends Adm
 	}
 
     public function create()
-	{	
+	{
         //VALIDATE PAGE DATA for SQL DB
         $this->data['name'] = 'Создать';
         if (filter_has_var(INPUT_POST, 'page_alias') && !empty($_POST['page_alias'])) {
@@ -36,24 +36,24 @@ class Create_delete_page extends Adm
                     if (in_array($value, $aliases)) {
                         $this->data['res'] .= 'ERROR!<br />Page_alias "'.$value.'" уже существует. Придумайте другой.<br />';
                         $end = true;
-                    } 
+                    }
                 }
 
-                if (($key === 'page_templates' || $key === 'page_title' || $key === 'page_robots' || $key === 'page_h1' ) 
-                    && strlen($value) > 100 ) 
+                if (($key === 'page_templates' || $key === 'page_title' || $key === 'page_robots' || $key === 'page_h1' )
+                    && strlen($value) > 100 )
                 {
                     $this->data['res'] .= 'ERROR!<br />'.$key.' "'.mb_substr($value, 0, 30).'..." слишком длинный.<br />';
                     $end = true;
                 }
                 if ($key !== 'MAX_FILE_SIZE') {
-                    $post[$key] = (!empty($value)) ? $value: null;  
+                    $post[$key] = (!empty($value)) ? $value: null;
                 }
             }
 
             if ( isset($end) && $end === true ) {
                 goto end;
             }
-            
+
             if ( isset($post) ) {
                 //INSERT DATA INTO SQL TABLE
                 $res = $this->db->db->insert($this->table, $post);
@@ -95,7 +95,7 @@ class Create_delete_page extends Adm
                         $name = mb_ucfirst($value, 'UTF-8');
                         if ( substr($name, -1) === 's' ) {
                             $name = substr($name, 0, -1);
-                        }     
+                        }
                     }
                     if (file_exists(APPROOT.DS.$value.DS.$filename)) {
                         $this->data['res'] .= 'ERROR! <br />Dir or file "'.APPROOT.DS.$value.DS.$filename.'" exists.<br />';
@@ -125,13 +125,13 @@ class Create_delete_page extends Adm
                     foreach ($load->files as $input => $input_array) {
                         //print_r($input_array); print '<br />';
                         $this->data['res'] .= 'Input "'.$input.'":<br />';
-                        
+
                         foreach ($input_array as $key => $file) {
                             if (!empty($file['name'])) {
                                 if (mb_strlen($file['name'], 'UTF-8') < 101) {
                                     $name = $file['name'];
                                 } else {
-                                    $name = mb_strimwidth($file['name'], 0, 48, "...") . mb_substr($file['name'], -48, null, 'UTF-8'); 
+                                    $name = mb_strimwidth($file['name'], 0, 48, "...") . mb_substr($file['name'], -48, null, 'UTF-8');
                                 }
                                 $this->data['res'] .= 'Name "'.$name.'":<br />';
                             }
@@ -151,22 +151,22 @@ class Create_delete_page extends Adm
                                 $load->dest_dir = PUBLICROOT.DS.'imgs/pages';
                                 $load->tmp_dir = PUBLICROOT.DS.'tmp';
                                 $load->file_size = 3*1024*1024; //3MB
-                                $load->file_mimetype = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/webp'];
-                                $load->file_ext = ['.jpg', '.jpeg', '.png', '.webp'];
+                                $load->file_mimetype = ['image/jpeg', 'image/pjpeg', 'image/png'];
+                                $load->file_ext = ['.jpg', '.jpeg', '.png'];
                                 $load->new_file_name = $post['page_alias'];
                                 $load->processing = ['resizeToBestFit' => ['1024', '640']];
                                 $load->replace_old_file = false;
                             }
                             // PROCESSING DATA
-                            if ($load->execute($input_array, $key, $file)) { 
+                            if ($load->execute($input_array, $key, $file)) {
                                 if (!empty($load->message)) { $this->data['res'] .= $load->message; }
-                            } else { 
-                                if (!empty($load->error)) { $this->data['res'] .= $load->error; } 
-                                continue; 
+                            } else {
+                                if (!empty($load->error)) { $this->data['res'] .= $load->error; }
+                                continue;
                             }
                             //CLEAR TMP FOLDER
-                            if (!$load->del_files_in_dir($load->tmp_dir)) { 
-                                if (!empty($load->error)) { $this->data['res'] .= $load->error; } 
+                            if (!$load->del_files_in_dir($load->tmp_dir)) {
+                                if (!empty($load->error)) { $this->data['res'] .= $load->error; }
                             }
                         }
                     }
@@ -176,7 +176,7 @@ class Create_delete_page extends Adm
             //OUTPUT MESSAGE if isset error
             if (strpos($this->data['res'], 'RROR') or strpos($this->data['res'], 'rror')) {
                 $this->data['res'] .= 'ATTENTION!<br /> If there are errors, delete page and enter all page data again<br />';
-            } 
+            }
             unset($post, $aliases, $value, $key, $end, $res, $filename, $model, $controller, $view );
         } else {
             $colnames = (new Sql_col_names($this->db, $this->table))->res;
@@ -187,7 +187,7 @@ class Create_delete_page extends Adm
 	}
 
     public function delete()
-	{	
+	{
         $this->data['name'] = 'Удалить';
         $this->data['res'] = null;
         if (filter_has_var(INPUT_POST, 'delete_page')) {
@@ -204,7 +204,7 @@ class Create_delete_page extends Adm
                         $this->data['res'] .= 'Pages data has been deleted from db table.<br />';
                     } else {
                         $this->data['res'] .= 'ERROR!<br /> The data has NOT been DELETED from database.<br />'.$this->db->db->error;
-                    }                
+                    }
                     foreach ($postdel as $val) {
                         //delete controller, model, view (except adm, home)
                         $file_array = ['controllers', 'models', 'view'];
@@ -214,7 +214,7 @@ class Create_delete_page extends Adm
                                 $name = mb_ucfirst($va, 'UTF-8');
                                 if ( substr($name, -1) === 's' ) {
                                     $name = substr($name, 0, -1);
-                                }     
+                                }
                             }
                             if (self::del_file($path) === true) {
                                 $this->data['res'] .= $name.' "'.$value.'" has been deleted.<br />';
@@ -224,7 +224,7 @@ class Create_delete_page extends Adm
                         }
                         unset($path);
                         //delete page img
-                        $path = PUBLICROOT.DS.'imgs'.DS.'pages'; 
+                        $path = PUBLICROOT.DS.'imgs'.DS.'pages';
                         if ( self::find_by_filename($path, $val) === false ) {
                             $this->data['res'] .= 'WARNING! Image named "'.$val.'" was not found for deletion.<br />';
                         } else {
@@ -238,7 +238,7 @@ class Create_delete_page extends Adm
                         //delete template (except adm_templ.php and templ.php if is the only one)
                         unset($path);
                         //delete page img
-                        $path = PUBLICROOT.DS.'templates'; 
+                        $path = PUBLICROOT.DS.'templates';
                         if ($val != 'adm_templ' || $val != 'templ') {
                             if ( self::find_by_filename($path, $val) === false ) {
                                 $this->data['res'] .= 'WARNING! Template named "'.$val.'" was not found for deletion.<br />';
@@ -257,11 +257,11 @@ class Create_delete_page extends Adm
                 } else {
                     $this->data['res'] .= 'ERROR!<br /> Empty array of pages for delete.<br />';
                 }
-            } else { 
+            } else {
                 $this->data['res'] .= 'ERROR! Data is not array.<br />';
             }
             unset($value, $val, $va, $res, $path, $files, $k, $v);
-        } 
+        }
         //step 1 - list of pages and templates
         else {
             $pagename = $this->db->db->select($this->table, ["page_alias", "page_title", "page_admin"]);

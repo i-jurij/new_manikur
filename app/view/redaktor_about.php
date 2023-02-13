@@ -21,7 +21,7 @@ if (!empty($data['res'])) {
               <div class="about_form back shad rad pad mar display_inline_block" id="inp0">
                   <label class="input-file">
                       <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
-                      <input type="file" id="f0" name="about_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />
+                      <input type="file" id="f0" name="about_img[]" accept=".jpg,.jpeg,.png, image/jpeg, image/pjpeg, image/png" />
                       <span >Выберите фото весом до 3Мб</span>
                       <p id="fileSizef0" ></p>
                   </label>

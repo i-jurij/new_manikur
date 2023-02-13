@@ -52,8 +52,8 @@ class Redaktor_about extends Home
                             $load->create_dir = true;
                             $load->tmp_dir = PUBLICROOT.DS.'tmp';
                             $load->file_size = 3*1024*1024; //3MB
-                            $load->file_mimetype = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/webp'];
-                            $load->file_ext = ['.jpg', '.jpeg', '.png', '.webp'];
+                            $load->file_mimetype = ['image/jpeg', 'image/pjpeg', 'image/png'];
+                            $load->file_ext = ['.jpg', '.jpeg', '.png'];
                             $load->new_file_name = [ $title[$key], 'noindex']; // name will be transformed as sanitize(translit_ostslav_to_lat($title[$key]))
                             $load->processing = ['resizeToBestFit' => ['640', '480']];
                             $load->replace_old_file = true;

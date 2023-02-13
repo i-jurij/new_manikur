@@ -16,7 +16,7 @@ if (!empty($data['res'])) {
       <label ><p>Выберите фото весом до 3Мб</p>
         <p>
         <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
-        <input type="file" multiple="multiple" name="gallery_add[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />
+        <input type="file" multiple="multiple" name="gallery_add[]" accept=".jpg,.jpeg,.png, image/jpeg, image/pjpeg, image/png" />
         </p>
       </label>
     </div>
@@ -32,7 +32,7 @@ if (!empty($data['res'])) {
         $files = array();
         foreach(files_in_dir($dir, 'jpg, jpeg, png, webp') as $file) {
           if (is_file($dir.DS.$file)) {
-            $files[] = basename($file); 
+            $files[] = basename($file);
             //$id = pathinfo($file, PATHINFO_FILENAME);
             echo '<div class="photo_del margin05 shad rad" id="'.$file.'">
                     <img src="'.URLROOT.DS.'public'.DS.'imgs'.DS.'gallery'.DS.$file.'" alt="photo" class=" rad" width="' . $width . '" height="' . $height . '" />
@@ -82,7 +82,7 @@ $(function() {
         $('#div_'+id).show();
         $('#form-buttons').show();
         $('#mas_form').hide();
-    });   
+    });
 
     $('.photo_del').on('click',function(){
         let file = this.id;

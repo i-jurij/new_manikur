@@ -279,4 +279,14 @@ function phone_number_to_db($sPhone){
         return false;
     }
   }
+
+function del_empty_dir($dir) {
+  if ( [] === ( array_diff(scandir($dir), array('.', '..')) ) ) {
+    if (rmdir($dir)) {
+        return true;
+    } else {
+      return false;
+    }
+  }
+}
 ?>

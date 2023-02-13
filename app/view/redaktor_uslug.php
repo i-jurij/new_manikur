@@ -5,33 +5,87 @@ if (!empty($data['res'])) {
     print '<p>'; print_r($data['res']); print '</p>';
     $dn = 'display_none';
 } elseif (!empty($data['page_id'])) {
+        print '<p class=""><b>Страница "'.$data['page_title'].'":</b></p>';
     if ($data['action'] === 'cats_add') {
-        print ' <div class="zapis_usluga" id="cats_add">
-                    <input type="hidden" name="page_id" value="'.$data['page_id'].'" />
-                    <p class="">Выберите изображение, название и описание категории, нажмите Далее</p>
-                    <div class="about_form back shad rad pad mar display_inline_block" id="cats0">
-                        <label class="input-file">
-                            <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
-                            <input type="file" id="fcats0" name="cats_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />
-                            <span >Изображение категории весом до 3Мб</span>
-                            <p id="fileSizefcats0" ></p>
-                        </label>
-                        <label ><p>Введите название категории (до 100 символов)</p>
-                            <p>
-                            <input type="text" name="cats_name[]" placeholder="Название категории" maxlength="100" required />
-                            </p>
-                        </label>
+        print ' <div class="">
+                    <div class="" id="cats_add">
+                        <input type="hidden" name="page_id" value="'.$data['page_id'].'#'.$data['page_title'].'" />
+                        <p class="">Выберите изображение, название и описание категории, нажмите Далее</p>
+                        <div class="about_form back shad rad pad mar display_inline_block" id="cats0">
+                            <label class="input-file">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
+                                <input type="file" id="fcats0" name="cats_img[]" accept=".jpg,.jpeg,.png, image/jpeg, image/pjpeg, image/png" />
+                                <span >Изображение категории весом до 3Мб</span>
+                                <p id="fileSizefcats0" ></p>
+                            </label>
+                            <label ><p>Введите название категории (до 100 символов)</p>
+                                <p>
+                                <input type="text" name="cats_name[]" placeholder="Название категории" maxlength="100" required />
+                                </p>
+                            </label>
+                        </div>
                     </div>
                     <div class="mar " id="">
                         <button class="buttons add" type="button" value="cats" onclick="add(this);">Добавить еще</button>
                     </div>
-                </div>
-            ';
+                </div>';
     } elseif ($data['action'] === 'serv_add') {
-
+        print ' <p><small> За один раз можно добавить услуги только для одной категории или услуги вне категорий для страницы.<br />
+                        Для добавления услуг в категории - нажмите "Показать категории", выберите категорию, далее добавляйте услуги.<br />
+                        Для добавления услуг вне категорий - сразу вводите данные для услуг.<br />
+                </small></p>';
+        print '<div class=""><p class="buttons" id="cats_view">Показать категории</p>
+                    <p class="display_none" id="cats_list">';
+                        if (!empty($data['page_cats'])) {
+                            foreach ($data['page_cats'] as $cat) //foreach cat ids from table
+                            {
+                                echo '  <label class="display_inline_block buttons ">
+                                            <input type="radio" name="cat_id" value="'.$cat['id'].'#'.$cat['category_name'].'">
+                                            <span>'.$cat['category_name'].'</span>
+                                        </label>';
+                            }
+                        } else {
+                            print 'Список категорий пуст.<br />';
+                        }
+        print '     </p>
+                </div>';
+        print ' <div class="">
+                    <div class="" id="serv_add">
+                        <input type="hidden" name="page_id" value="'.$data['page_id'].'#'.$data['page_title'].'" />
+                        <p class="">Выберите изображение, название и описание услуги, нажмите Далее</p>
+                        <div class="about_form back shad rad pad mar display_inline_block" id="serv0">
+                            <label class="input-file">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
+                                <input type="file" id="fserv0" name="serv_img[]" accept=".jpg,.jpeg,.png, image/jpeg, image/pjpeg, image/png" />
+                                <span >Изображение услуги весом до 3Мб</span>
+                                <p id="fileSizefserv0" ></p>
+                            </label>
+                            <label ><p>Введите название услуги (до 100 символов)</p>
+                                <p>
+                                <input type="text" name="serv_name[]" placeholder="Название услуги" maxlength="100" required />
+                                </p>
+                            </label>
+                            <label class="textarea"><p>Описание услуги (до 500 символов)</p>
+                                <p>
+                                <textarea name="serv_desc[]" placeholder="Описание услуги" maxlength="500"></textarea>
+                                </p>
+                            </label>
+                            <label ><p>Прайс (цифры, до 10 символов)</p>
+                                <p>
+                                <input type="number" name="price[]" placeholder="10000" min="0" max="1000000000" step="0.1" title="Только цифры" required />
+                                </p>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mar " id="">
+                            <button class="buttons add" type="button" value="serv" onclick="add(this);">Добавить еще</button>
+                    </div>
+                </div>    ';
     } elseif ($data['action'] === 'cats_del') {
-        print '<div class="zapis_usluga">
-                <p class="">Выберите категории для удаления, нажмите Далее</p>';
+        print '<div class="">
+                <p class="">Выберите категории для удаления, нажмите Далее</p>
+                <input type="hidden" name="page_id" value="'.$data['page_id'].'" />';
+
                 if (!empty($data['page_cats'])) {
                     foreach ($data['page_cats'] as $cat) //foreach cat ids from table
                     {
@@ -46,6 +100,51 @@ if (!empty($data['res'])) {
         print '</div>';
 
     } elseif ($data['action'] === 'serv_del') {
+        print ' <div class="pad">
+                    <p class=""><b>Услуги в категориях:</b></p>
+                    <div class="" id="cat_serv_del_p">';
+                    if (!empty($data['page_cats'])) {
+                        foreach ($data['page_cats'] as $value) {
+                            print '<p>Категория <b>"'.$value['category_name'].'"</b>:</p>';
+                            if (!empty($data['page_cats_serv'])) {
+                                $cs = '';
+                                foreach ($data['page_cats_serv'] as $serv) {
+                                    if ($serv['category_id'] === $value['id']) {
+                                        $cs .= '  <label class="checkbox-btn">
+                                                    <input type="checkbox" name="serv_del[]" value="'.$serv['id'].'#'.$serv['service_name'].'#'.$serv['page_id'].'#'.$serv['category_id'].'">
+                                                    <span>'.$serv['service_name'].'</span>
+                                                </label>';
+                                    }
+                                }
+                                if (!empty($cs)) {
+                                    print $cs;
+                                } else {
+                                    print 'Список услуг пуст.<br />';
+                                }
+                            } else {
+                                print 'Список услуг пуст.<br />';
+                            }
+                        }
+                    } else {
+                        print 'Список категорий пуст.<br />';
+                    }
+        print '     </div>
+                </div>
+                <div class="pad">
+                    <p class=""><b>Услуги вне категорий:</b></p>
+                    <div class="" id="page_serv_del_p">';
+                    if (!empty($data['page_serv'])) {
+                        foreach ($data['page_serv'] as $pserv) {
+                            echo '  <label class="checkbox-btn">
+                                        <input type="checkbox" name="serv_del[]" value="'.$pserv['id'].'#'.$pserv['service_name'].'#'.$pserv['page_id'].'#'.$pserv['service_img'].'">
+                                        <span>'.$pserv['service_name'].'</span>
+                                    </label>';
+                        }
+                    } else {
+                        print 'Список услуг пуст.<br />';
+                    }
+        print '     </div>
+                </div>';
 
     }
 } else {
@@ -56,7 +155,7 @@ if (!empty($data['res'])) {
         foreach ($data['service_page'] as $value)
         {
             echo '<label>
-                    <input type="radio" name="page_for_edit" value="' . $value['page_id'] . '" required />
+                    <input type="radio" name="page_for_edit" value="' . $value['page_id'] . '#'. $value['page_title'] . '" required />
                         <span>' . $value['page_title'] . '</span>
                     </label>
             ';
@@ -103,59 +202,70 @@ if (!empty($data['res'])) {
 <script>
 
 function add(el) {
+    let shoose = $(el).prop("value");
+    var id = parseInt($("div#"+shoose+"_add").find(".about_form:last").attr("id").slice(4))+1;
+
+    let file = '';
     let name = '';
     let desc = '';
-        let shoose = $(el).prop("value");
+    let price = '';
 
-        if (shoose == "cats") {
-            name = "категории";
-        } else if (shoose == "serv") {
-            name = "услуги";
-            desc ='<label ><p>Описание '+name+' (до 500 символов)</p>\
-                        <p>\
+    if (shoose == "cats") {
+        name = "категории";
+        file = '<label class="input-file">\
+                    <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />\
+                    <input type="file" id="f'+shoose+id+'" name="'+shoose+'_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />\
+                    <span >Изображение '+name+' весом до 3Мб</span>\
+                    <p id="fileSizef'+shoose+id+'"></p>\
+                </label>';
+    } else if (shoose == "serv") {
+        file = '<label class="input-file">\
+                    <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />\
+                    <input type="file" id="f'+shoose+id+'" name="'+shoose+'_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />\
+                    <span >Изображение '+name+' весом до 3Мб</span>\
+                    <p id="fileSizef'+shoose+id+'"></p>\
+                </label>';
+        name = "услуги";
+        desc = '<label class="textarea"><p>Описание '+name+' (до 500 символов)</p>\
+                    <p>\
                         <textarea name="'+shoose+'_desc[]" placeholder="Описание '+name+'" maxlength="500"></textarea>\
-                        </p>\
-                    </label>' ;
-        }
-        var id = parseInt($("div#"+shoose+"_add").find(".about_form:last").attr("id").slice(4))+1;
-        $("div#"+shoose+'_add').append('<div class="about_form back shad rad pad mar display_inline_block display_none" id="'+shoose+id+'">\
-                <label class="input-file">\
-                <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />\
-                <input type="file" id="f'+shoose+id+'" name="'+shoose+'_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />\
-                <span >Изображение '+name+' весом до 3Мб</span>\
-                <p id="fileSizef'+shoose+id+'" ></p>\
-                </label>\
-                <label ><p>Введите название '+name+' (до 100 символов)</p>\
+                    </p>\
+                </label>' ;
+        price = '   <label ><p>Прайс (цифры, до 10 символов)</p>\
                         <p>\
-                        <input type="text" name="'+shoose+'_name[]" placeholder="Название '+name+'" maxlength="100" required />\
+                            <input type="number" name="price[]" placeholder="10000" min="0" max="1000000" step="0.1" title="Только цифры" required />\
                         </p>\
-                    </label>\
-                    '+desc+'\
-            </div>');
-    };
+                    </label>';
+        if ($('#cats_view').text() == 'Скрыть категории') {
+            file = ''; desc = '';
+        }
+    }
+    // add fields for input
+    $("div#"+shoose+'_add').append('<div class="about_form back shad rad pad mar display_inline_block display_none" id="'+shoose+id+'">\
+        '+file+'\
+        <label ><p>Введите название '+name+' (до 100 символов)</p>\
+            <p>\
+                <input type="text" name="'+shoose+'_name[]" placeholder="Название '+name+'" maxlength="100" required />\
+            </p>\
+        </label>\
+        '+desc+'\
+        '+price+'\
+    </div>');
+ };
+
 $(function(){
-
-    $('div#page_choice > label > input').on('click', function(){
-        let choice = $(this).prop("value");
-    });
-
-    $('div#action_choice > button').on('click', function(){
-        $('div#action_choice').hide();
-        //$('div#form_buttons').show();
-        const object = $('div#'+this.id+'d');
-        $('div.zapis_usluga').remove();
-        object.insertBefore('div#form_buttons');
-        $('div#'+this.id+'d').removeClass('display_none');
-    });
-
-    const TDEL = $('#cat_view');
+    const TDEL = $('#cats_view');
     if (TDEL) {
         TDEL.on('click', function(e) {
-            $('#cat_list').toggle();
-            if (TDEL.textContent.includes('Показать') ) {
-                TDEL.innerText = 'Выбрать категорию';
+            $('#cats_list').toggle();
+            if (TDEL.text() == 'Показать категории' ) {
+                TDEL.text('Скрыть категории');
+                $('.input-file').hide();
+                $('.textarea').hide();
             } else {
-                TDEL.innerText = 'Показать категории';
+                TDEL.text('Показать категории');
+                $('.input-file').show();
+                $('.textarea').show();
             }
         });
     }
@@ -170,7 +280,8 @@ $(function(){
                 if (file.size > size) {
                     $('#fileSize'+this.id).css("color","red").html('ERROR! Image size > 3MB');
                 } else {
-                    //$('#fileSize').html(file.name+' - '+file.size/1024+' KB');
+                    //$('#fileSize'+this.id).css("color","").html(file.name+' - '+Math.round(file.size/1000)+' KB');
+                    $('#fileSize'+this.id).html('');
                 }
             }
         });
@@ -186,6 +297,19 @@ $(function(){
             $(this).next().html(file);
             $('#fileSize'+this.id).html('');
         });
+    });
+
+    $('button[type="submit"]').on('click', function(e){
+        //$('form#about_edit').get(0).reset();
+        let inp = $('input[name="serv_del[]"]:checkbox').length;
+        if (inp > 0 ) {
+            var count = $('input[name="serv_del[]"]:checkbox:checked').length;
+            if ( count > 0 ) {
+                $('#change_page_form').submit();
+            } else {
+                e.preventDefault();
+            }
+        }
     });
 
 });

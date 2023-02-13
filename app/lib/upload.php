@@ -541,7 +541,7 @@ class Upload
                     return false;
                 }
             } else {
-                $this->error = 'ERROR!<br />'.$this->errors[11].'" '.$ext.'", because mimetype of uploaded file is: "'.$mt.'".<br />';
+                $this->error = 'ERROR!<br />'.$this->errors[11].': "'.$ext.'", because mimetype of uploaded file is: "'.$mt.'".<br />';
                 return false;
             }
         }
@@ -725,6 +725,7 @@ class Upload
             'audio/wav'                                                                 => 'wav',
             'application/wbxml'                                                         => 'wbxml',
             'video/webm'                                                                => 'webm',
+            'image/webp'                                                                => 'webp',
             'audio/x-ms-wma'                                                            => 'wma',
             'application/wmlc'                                                          => 'wmlc',
             'video/x-ms-wmv'                                                            => 'wmv',
