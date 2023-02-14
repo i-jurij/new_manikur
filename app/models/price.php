@@ -28,6 +28,7 @@ class Price extends Home
         //get page of services list from db
 		$data['service_page'] = $this->db->db->select($this->table, [
             "page_id",
+            "page_alias",
             "page_title"
         ], [
             "page_publish[!]" => null
@@ -63,7 +64,7 @@ class Price extends Home
                 if ($cat['page_id'] === $page['page_id']) {
                     foreach ($data['page_cats_serv'] as $cat_serv) {
                         if ($cat_serv['category_id'] === $cat['id']) {
-                            $this->data['serv'][$page['page_title']][$cat['category_name']][$cat_serv['service_name']] = $cat_serv['price'];
+                            $this->data['serv'][$page['page_alias'].'#'.$page['page_title']][$cat['category_name']][$cat_serv['service_name']] = $cat_serv['price'];
                         }
                     }
                 }

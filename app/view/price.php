@@ -3,11 +3,14 @@
 <div class=" margin_rlb1">
 <?php
 foreach ($data['serv'] as $page => $cat_arr) {
+    $arr = explode('#', $page);
+    $page_alias = $arr[0];
+    $page_name = $arr[1];
     $i = 1;
     ?>
-    <div class="back shad rad pad margin_rlb1 price" id="<?php echo $page; ?>">
+    <div class="back shad rad pad margin_rlb1 price" id="<?php echo $page_name; ?>">
         <table class="table">
-            <caption class=""><h2><?php echo $page; ?></h2></caption>
+            <caption class=""><?php echo '<a href="'.URLROOT.'/'.$page_alias.'/" ><h2>'.$page_name.'</h2></a>'; ?></caption>
             <colgroup>
             <col width="10%">
             <col width="65%">
@@ -60,5 +63,6 @@ foreach ($data['serv'] as $page => $cat_arr) {
     </div>
 <?php
 }
+include_once APPROOT.DS."view".DS."back_home.html";
 ?>
 </div>
