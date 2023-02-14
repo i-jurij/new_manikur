@@ -159,7 +159,7 @@ class Create_delete_page extends Adm
                             }
                             // PROCESSING DATA
                             if ($load->execute($input_array, $key, $file)) {
-                                if (!empty($load->message)) { $this->data['res'] .= $load->message; }
+                                //if (!empty($load->message)) { $this->data['res'] .= $load->message; }
                             } else {
                                 if (!empty($load->error)) { $this->data['res'] .= $load->error; }
                                 continue;
@@ -190,6 +190,14 @@ class Create_delete_page extends Adm
 	{
         $this->data['name'] = 'Удалить';
         $this->data['res'] = null;
+
+        $pages_serv = $this->db->db->select("pages", [
+            "page_alias" => [
+                "page_id"
+            ]], [
+                "page_publish[!]" => null
+            ]);
+
         if (filter_has_var(INPUT_POST, 'delete_page')) {
             if (is_array($_POST['delete_page'])) {
                 foreach ($_POST['delete_page'] as $value) {
@@ -198,14 +206,24 @@ class Create_delete_page extends Adm
                     }
                 }
                 if (!empty($postdel)) {
-                    //delete data from db
-                    $res = $this->db->db->delete($this->table, ["page_alias" => $postdel]);
-                    if ($res->rowCount() > 0) {
-                        $this->data['res'] .= 'Pages data has been deleted from db table.<br />';
-                    } else {
-                        $this->data['res'] .= 'ERROR!<br /> The data has NOT been DELETED from database.<br />'.$this->db->db->error;
-                    }
                     foreach ($postdel as $val) {
+                        // sql del categories and services for page if page_publish != null
+                        if (array_key_exists($val, $pages_serv)) {
+                            $page_id = $pages_serv[$val]['page_id'];
+                            $res1 = $this->db->db->delete("serv_categories", ["page_id" => $page_id]);
+                            if ($res1->rowCount() > 0) {
+                                $this->data['res'] .= 'Данные категорий страницы удалены из базы.<br />';
+                            } else {
+                                $this->data['res'] .= 'ERROR! Данные категорий страницы НЕ удалены из базы.<br />'.$this->db->db->error;
+                            }
+                            $res2 = $this->db->db->delete("services", ["page_id" => $page_id]);
+                            if ($res2->rowCount() > 0) {
+                                $this->data['res'] .= 'Данные услуг страницы удалены из базы.<br />';
+                            } else {
+                                $this->data['res'] .= 'ERROR! Данные услуг страницы НЕ удалены из базы.<br />'.$this->db->db->error;
+                            }
+                        }
+
                         //delete controller, model, view (except adm, home)
                         $file_array = ['controllers', 'models', 'view'];
                         foreach ($file_array as $va) {
@@ -253,6 +271,13 @@ class Create_delete_page extends Adm
                         } else {
                             $this->data['res'] .= 'WARNING! We need to replace "adm_teml.php" or "templ.php", otherwise everything will break.<br />';
                         }
+                    }
+                    //delete page data from db
+                    $res = $this->db->db->delete($this->table, ["page_alias" => $postdel]);
+                    if ($res->rowCount() > 0) {
+                        $this->data['res'] .= 'Pages data has been deleted from db table.<br />';
+                    } else {
+                        $this->data['res'] .= 'ERROR!<br /> The data has NOT been DELETED from database.<br />'.$this->db->db->error;
                     }
                 } else {
                     $this->data['res'] .= 'ERROR!<br /> Empty array of pages for delete.<br />';

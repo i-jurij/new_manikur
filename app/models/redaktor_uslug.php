@@ -236,7 +236,7 @@ class Redaktor_uslug extends Home
                                             "page_id" => $page_id,
                                             "service_name" => $serv_name[$key],
                                             "service_img" => 'services'.DS.$page_id.DS.$load->name.'.jpg',
-                                            "service_descr" => $serv_desc,
+                                            "service_descr" => $serv_desc[$key],
                                             "price" => $price_end
                                         ]);
                                         if ($sql->rowCount() > 0) {

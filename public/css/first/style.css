@@ -651,7 +651,7 @@ float: right;
   	font-size: var(--base-fontsize);
 	font-family: "Liberation Sans", sans-serif;
 	border: 0px solid black;
-    padding: 0.5rem 1rem;
+    padding: 1rem;
     margin: 0.5rem auto;
     text-align: center;
 	text-decoration: none;

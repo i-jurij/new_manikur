@@ -14,7 +14,7 @@ if (!empty($data['res'])) {
                         <div class="about_form back shad rad pad mar display_inline_block" id="cats0">
                             <label class="input-file">
                                 <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />
-                                <input type="file" id="fcats0" name="cats_img[]" accept=".jpg,.jpeg,.png, image/jpeg, image/pjpeg, image/png" />
+                                <input type="file" id="fcats0" name="cats_img[]" accept=".jpg,.jpeg,.png, image/jpeg, image/pjpeg, image/png" required />
                                 <span >Изображение категории весом до 3Мб</span>
                                 <p id="fileSizefcats0" ></p>
                             </label>
@@ -100,17 +100,18 @@ if (!empty($data['res'])) {
         print '</div>';
 
     } elseif ($data['action'] === 'serv_del') {
-        print ' <div class="pad">
-                    <p class=""><b>Услуги в категориях:</b></p>
-                    <div class="" id="cat_serv_del_p">';
+        print ' <div class="">
+                    <p class="mb2"><b>Услуги в категориях:</b></p>
+                    <div class="" style="align-items:stretch;" id="cat_serv_del_p">';
                     if (!empty($data['page_cats'])) {
                         foreach ($data['page_cats'] as $value) {
-                            print '<p>Категория <b>"'.$value['category_name'].'"</b>:</p>';
+                            print '<div class="mb2">
+                                    <p class="">Категория <b>"'.$value['category_name'].'"</b>:</p>';
                             if (!empty($data['page_cats_serv'])) {
                                 $cs = '';
                                 foreach ($data['page_cats_serv'] as $serv) {
                                     if ($serv['category_id'] === $value['id']) {
-                                        $cs .= '  <label class="checkbox-btn">
+                                        $cs .= '  <label class="display_inline_block margin_bottom_1rem shad rad pad">
                                                     <input type="checkbox" name="serv_del[]" value="'.$serv['id'].'#'.$serv['service_name'].'#'.$serv['page_id'].'#'.$serv['category_id'].'">
                                                     <span>'.$serv['service_name'].'</span>
                                                 </label>';
@@ -124,18 +125,19 @@ if (!empty($data['res'])) {
                             } else {
                                 print 'Список услуг пуст.<br />';
                             }
+                            print '</div>';
                         }
                     } else {
                         print 'Список категорий пуст.<br />';
                     }
         print '     </div>
                 </div>
-                <div class="pad">
+                <div class="mb2">
                     <p class=""><b>Услуги вне категорий:</b></p>
                     <div class="" id="page_serv_del_p">';
                     if (!empty($data['page_serv'])) {
                         foreach ($data['page_serv'] as $pserv) {
-                            echo '  <label class="checkbox-btn">
+                            echo '  <label class="display_inline_block margin_bottom_1rem shad rad pad">
                                         <input type="checkbox" name="serv_del[]" value="'.$pserv['id'].'#'.$pserv['service_name'].'#'.$pserv['page_id'].'#'.$pserv['service_img'].'">
                                         <span>'.$pserv['service_name'].'</span>
                                     </label>';
@@ -154,12 +156,12 @@ if (!empty($data['res'])) {
                     <p class="">Выберите страницу для редактирования:</p>';
         foreach ($data['service_page'] as $value)
         {
-            echo '<label>
-                    <input type="radio" name="page_for_edit" value="' . $value['page_id'] . '#'. $value['page_title'] . '" required />
+            echo '  <label>
+                        <input type="radio" name="page_for_edit" value="' . $value['page_id'] . '#'. $value['page_title'] . '" required />
                         <span>' . $value['page_title'] . '</span>
-                    </label>
-            ';
+                    </label>';
         }
+        print '</div>';
     }
     print ' <div class="form_radio_btn margin_bottom_1rem">
                 <p>Выберите действие:</p>
@@ -214,14 +216,14 @@ function add(el) {
         name = "категории";
         file = '<label class="input-file">\
                     <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />\
-                    <input type="file" id="f'+shoose+id+'" name="'+shoose+'_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />\
+                    <input type="file" id="f'+shoose+id+'" name="'+shoose+'_img[]" accept=".jpg,.jpeg,.png, image/jpeg, image/pjpeg, image/png" required/>\
                     <span >Изображение '+name+' весом до 3Мб</span>\
                     <p id="fileSizef'+shoose+id+'"></p>\
                 </label>';
     } else if (shoose == "serv") {
         file = '<label class="input-file">\
                     <input type="hidden" name="MAX_FILE_SIZE" value="3145728" />\
-                    <input type="file" id="f'+shoose+id+'" name="'+shoose+'_img[]" accept=".jpg,.jpeg,.png, .webp, image/jpeg, image/pjpeg, image/png, image/webp" />\
+                    <input type="file" id="f'+shoose+id+'" name="'+shoose+'_img[]" accept=".jpg,.jpeg,.png, image/jpeg, image/pjpeg, image/png" required/>\
                     <span >Изображение '+name+' весом до 3Мб</span>\
                     <p id="fileSizef'+shoose+id+'"></p>\
                 </label>';
