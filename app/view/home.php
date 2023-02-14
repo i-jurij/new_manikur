@@ -1,5 +1,9 @@
 <?php
 	if (!empty($data['page_list']) && is_array($data['page_list'])) {
+		/*
+		$re = $data['page_list'];
+		*/
+
 		$r = ['recall', 'appoint', 'gallery', 'manikur', 'parikmaher', 'visage', 'about', 'map', 'price', 'persinfo'];
 		foreach ($r as $key => $value) {
 			$k = array_search($value, array_column($data['page_list'], 'page_alias'));
@@ -9,6 +13,7 @@
 				$re[$key] = $data['page_list'][$k];
 			}
 		}
+
 		foreach ($re as $page) {
 			if (!empty($page) && $page['page_alias'] !== "home" && empty($page['page_admin'])) {
 				$tit = (!empty($page['page_title'])) ? $page['page_title'] : 'Title';

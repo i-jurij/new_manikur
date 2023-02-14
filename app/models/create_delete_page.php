@@ -70,18 +70,130 @@ class Create_delete_page extends Adm
                     $classname = mb_ucfirst($post['page_alias'], 'UTF-8');
                 }
 
-                $models = [ '<?php'.PHP_EOL, 'namespace App\Models;'.PHP_EOL, 'class '.$classname.' extends Home'.PHP_EOL, '{'.PHP_EOL, '}'.PHP_EOL ];
+                if (!empty($post['page_publish'])) {
+                    $models = ['<?php'.PHP_EOL,
+                                'namespace App\Models;'.PHP_EOL,
+                                'use \App\Lib\Registry;'.PHP_EOL,
+                                'class '.$classname.' extends Home'.PHP_EOL,
+                                '{'.PHP_EOL,
+                                    'protected function db_query()'.PHP_EOL,
+                                    '{'.PHP_EOL,
+                                        '//add data for head in template'.PHP_EOL,
+                                        'if ($this->db->db->has($this->table, ["page_alias" => $this->page])) {'.PHP_EOL,
+                                        '$this->data[\'page_db_data\'] = $this->db->db->select($this->table, "*", ["page_alias" => $this->page]);'.PHP_EOL,
+                                        '}'.PHP_EOL,
+                                        'if (!empty($this->data[\'page_db_data\'])) {'.PHP_EOL,
+                                            'Registry::set(\'page_db_data\', $this->data[\'page_db_data\']);'.PHP_EOL,
+                                        '}'.PHP_EOL,
+                                        '$page_id = $this->data[\'page_db_data\'][\'0\'][\'page_id\'];'.PHP_EOL,
+                                        '// get cat and serv data from db'.PHP_EOL,
+                                        'if ($this->db->db->has("serv_categories", ["page_id" => $page_id])) {'.PHP_EOL,
+                                            '$this->data[\'cat\'] = $this->db->db->select("serv_categories", "*", ["page_id" => $page_id]);'.PHP_EOL,
+                                        '} else {'.PHP_EOL,
+                                            '$this->data[\'cat\'] = [];'.PHP_EOL,
+                                        '}'.PHP_EOL,
+                                        'if ($this->db->db->has("services", ["page_id" => $page_id])) {'.PHP_EOL,
+                                            '$this->data[\'serv\'] = $this->db->db->select("services", "*", ["page_id" => $page_id]);'.PHP_EOL,
+                                            '// min price for common categories'.PHP_EOL,
+                                            '$min_price = [];'.PHP_EOL,
+                                            'foreach ($this->data[\'cat\'] as $cat) {'.PHP_EOL,
+                                                '$sql = "SELECT * FROM `services`'.PHP_EOL,
+                                                'WHERE price = ( SELECT MIN(price) FROM `services` WHERE (category_id = :cdp AND page_id = :pid))";'.PHP_EOL,
+                                                '$ccf = $this->db->db->pdo->prepare($sql);'.PHP_EOL,
+                                                '$ccf->bindParam(\':cdp\', $cat[\'id\']);'.PHP_EOL,
+                                                '$ccf->bindParam(\':pid\', $page_id);'.PHP_EOL,
+                                                '$ccf->execute();'.PHP_EOL,
+                                                'if ($rccf = $ccf->fetch(\PDO::FETCH_LAZY))'.PHP_EOL,
+                                                '{'.PHP_EOL,
+                                                    '$min_price[$cat[\'category_name\']] = $rccf->price;'.PHP_EOL,
+                                                '}'.PHP_EOL,
+                                            '}'.PHP_EOL,
+                                            'asort($min_price, SORT_NATURAL);'.PHP_EOL,
+                                            '$this->data[\'min_price\'] = $min_price;'.PHP_EOL,
+                                        '} else {'.PHP_EOL,
+                                            '$this->data[\'serv\'] = [];'.PHP_EOL,
+                                            '$this->data[\'min_price\'] = [];'.PHP_EOL,
+                                        '}'.PHP_EOL,
+                                    '}'.PHP_EOL,
+                                '}'.PHP_EOL,
+                    ];
+                    $view_user = [' <?php'.PHP_EOL,
+                                    'if (!empty($data[\'res\'])) {'.PHP_EOL,
+                                    'print $data[\'res\'];'.PHP_EOL,
+                                    'include_once APPROOT.DS."view".DS."js_back.html";'.PHP_EOL,
+                                    '} else {'.PHP_EOL,
+                                        'echo \'<article class="main_section_article">'.PHP_EOL,
+                                                '<div class="main_section_article_imgdiv" style="background-color: var(--bgcolor-content);">'.PHP_EOL,
+                                                '<h3>Расценки</h3>'.PHP_EOL,
+                                                '</div>'.PHP_EOL,
+                                                '<div class="main_section_article_content"><br />'.PHP_EOL,
+                                                    '<h3>\'.$data[\'page_db_data\'][0][\'page_title\'].\'</h3>\';'.PHP_EOL,
+                                                    'if (!empty($data[\'min_price\'])) {'.PHP_EOL,
+                                                        'foreach ($data[\'min_price\'] as $k => $v) {'.PHP_EOL,
+                                                           'echo \'<span>\'.$k.\' - от \' . $v . \' руб.</span><br />\' . PHP_EOL; '.PHP_EOL,
+                                                        '}'.PHP_EOL,
+                                                    '}'.PHP_EOL,
+                                        'echo \'      <br />'.PHP_EOL,
+                                                    '<a href=\"\'.URLROOT.\'/price#\'.$data[\'page_db_data\'][0][\'page_title\'].\'\" style="text-decoration: underline;">Прайс</a>'.PHP_EOL,
+                                                '</div>'.PHP_EOL,
+                                            '</article>\';'.PHP_EOL,
+                                       ' if (!empty($data[\'cat\'])) {'.PHP_EOL,
+                                            'foreach ($data[\'cat\'] as $cat) {'.PHP_EOL,
+                                                '$img = URLROOT.DS.\'public\'.DS.\'imgs\'.DS.$cat[\'category_img\'];'.PHP_EOL,
+                                                'print \' <article class="main_section_article ">'.PHP_EOL,
+                                                            '<div class="main_section_article_imgdiv">'.PHP_EOL,
+                                                                '<img src="\'.$img.\'" alt="Фото \'.$cat[\'category_name\'].\'" class="main_section_article_imgdiv_img" />'.PHP_EOL,
+                                                            '</div>'.PHP_EOL,
+                                                            '<div class="main_section_article_content">'.PHP_EOL,
+                                                                '<h3>\'.$cat[\'category_name\'].\'</h3>\';'.PHP_EOL,
+                                                                'if (!empty($data[\'serv\'])) {'.PHP_EOL,
+                                                                    'foreach ($data[\'serv\'] as $serv) {'.PHP_EOL,
+                                                                        'if ($serv[\'category_id\'] == $cat[\'id\']) {'.PHP_EOL,
+                                                                            'print \'<span>\'.$serv[\'service_name\'].\' от \'.$serv[\'price\'].\' руб.</span><br />\';'.PHP_EOL,
+                                                                        '}'.PHP_EOL,
+                                                                    '}'.PHP_EOL,
+                                                                '}'.PHP_EOL,
+                                                'print \'     </div>'.PHP_EOL,
+                                                       ' </article>\';'.PHP_EOL,
+                                            '}'.PHP_EOL,
+                                       ' }'.PHP_EOL,
+                                           ' // services articles'.PHP_EOL,
+                                            'if (!empty($data[\'serv\'])) {'.PHP_EOL,
+                                                'foreach ($data[\'serv\'] as $serv) {'.PHP_EOL,
+                                                    '$img = URLROOT.DS.\'public\'.DS.\'imgs\'.DS.$serv[\'service_img\'];'.PHP_EOL,
+                                                    'if (empty($serv[\'category_id\']) || $serv[\'category_id\'] === \'\') {'.PHP_EOL,
+                                                        'print \' <article class="main_section_article ">'.PHP_EOL,
+                                                                    '<div class="main_section_article_imgdiv">'.PHP_EOL,
+                                                                        '<img src="\'.$img.\'" alt="Фото \'.$serv[\'service_name\'].\'" class="main_section_article_imgdiv_img" />'.PHP_EOL,
+                                                                    '</div>'.PHP_EOL,
+                                                                    '<div class="main_section_article_content">'.PHP_EOL,
+                                                                        '<h3>\'.$serv[\'service_name\'].\'</h3>'.PHP_EOL,
+                                                                        '<span>\'.$serv[\'service_descr\'].\'</span><br />'.PHP_EOL,
+                                                                        '<span>от \'.$serv[\'price\'].\' руб.</span>'.PHP_EOL,
+                                                                    '</div>'.PHP_EOL,
+                                                                '</article>\';'.PHP_EOL,
+                                                    '}'.PHP_EOL,
+                                                '}'.PHP_EOL,
+                                            '}'.PHP_EOL,
+                                    'include_once APPROOT.DS."view".DS."back_home.html";'.PHP_EOL,
+                                    '}?>'.PHP_EOL
+                    ];
+                } else {
+                    $models = [ '<?php'.PHP_EOL, 'namespace App\Models;'.PHP_EOL, 'class '.$classname.' extends Home'.PHP_EOL, '{'.PHP_EOL, '}'.PHP_EOL ];
+                    $view_user = ['<div class="content">'.PHP_EOL
+                                    .'<?php'.PHP_EOL
+                                    .'if (!empty($data[\'res\'])) {'.PHP_EOL
+                                        .'print $data[\'res\'];'.PHP_EOL
+                                        .'include_once APPROOT.DS."view".DS."js_back.html";'.PHP_EOL
+                                    .'} else {'.PHP_EOL
+                                        .'print \'start\';'.PHP_EOL
+                                        .'include_once APPROOT.DS."view".DS."back_home.html";'.PHP_EOL
+                                    .'}?>'.PHP_EOL
+                                .'</div>'.PHP_EOL];
+                }
+
                 $view_adm = [ '<div class="content">'.PHP_EOL, $filename.PHP_EOL, '</div>'.PHP_EOL ];
-                $view_user = ['<div class="content">'.PHP_EOL
-                                .'<?php'.PHP_EOL
-                                .'if (!empty($data[\'res\'])) {'.PHP_EOL
-                                    .'print $data[\'res\'];'.PHP_EOL
-                                    .'include_once APPROOT.DS."view".DS."js_back.html";'.PHP_EOL
-                                .'} else {'.PHP_EOL
-                                    .'print \'start\';'.PHP_EOL
-                                    .'include_once APPROOT.DS."view".DS."back_home.html";'.PHP_EOL
-                                .'}?>'.PHP_EOL
-                            .'</div>'.PHP_EOL];
+
                 if (!empty($post['page_admin']) && $post['page_admin'] == 1 ) {
                     $controllers = [ '<?php'.PHP_EOL, 'namespace App\Controllers;'.PHP_EOL, 'class '.$classname.' extends Adm'.PHP_EOL, '{'.PHP_EOL, '}'.PHP_EOL ];
                     $view = $view_adm;
@@ -214,13 +326,13 @@ class Create_delete_page extends Adm
                             if ($res1->rowCount() > 0) {
                                 $this->data['res'] .= 'Данные категорий страницы удалены из базы.<br />';
                             } else {
-                                $this->data['res'] .= 'ERROR! Данные категорий страницы НЕ удалены из базы.<br />'.$this->db->db->error;
+                                $this->data['res'] .= 'WARNING! Данные категорий страницы НЕ удалены из базы или НЕ существуют.<br />'.$this->db->db->error;
                             }
                             $res2 = $this->db->db->delete("services", ["page_id" => $page_id]);
                             if ($res2->rowCount() > 0) {
                                 $this->data['res'] .= 'Данные услуг страницы удалены из базы.<br />';
                             } else {
-                                $this->data['res'] .= 'ERROR! Данные услуг страницы НЕ удалены из базы.<br />'.$this->db->db->error;
+                                $this->data['res'] .= 'WARNING! Данные услуг страницы НЕ удалены из базы или НЕ существуют.<br />'.$this->db->db->error;
                             }
                         }
 
