@@ -92,9 +92,15 @@ class Price_edit extends Home
         if (!empty($_POST['serv_id'])) {
             $i = 0;
             foreach ($_POST['serv_id'] as $id => $price) {
-                $this->data['res'] .= $id.' - '.$price.'<br />';
+                $re = "/^-?(?:\d+|\d*\.\d+|\d*\,\d+)$/";
+                if (preg_match($re, $price)) {
+                    $price_end = $price;
+                } else {
+                    $price_end = '';
+                }
+                //$this->data['res'] .= $id.' - '.$price.'<br />';
                 $res = $this->db->db->update("services", [
-                    "price" => test_input($price)
+                    "price" => $price_end
                 ], [
                     "id" => test_input($id)
                 ]);
