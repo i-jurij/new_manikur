@@ -63,7 +63,7 @@ if (!empty($data['res'])) {
       {
         $zvonki_zapisi[] = $page['page_alias'] . '#' . $page['page_title'];
       }
-      elseif ( $page['page_alias'] == 'contacts' or $page['page_alias'] == 'grafik' or $page['page_alias'] == 'price' or $page['page_alias'] == 'masters' )
+      elseif ( $page['page_alias'] == 'contacts' or $page['page_alias'] == 'grafik' or $page['page_alias'] == 'price_edit' or $page['page_alias'] == 'masters' )
       {
         $redaktors[] = $page['page_alias'] . '#' . $page['page_title'];
       }
