@@ -156,12 +156,13 @@ class Redaktor_uslug extends Home
                     $cat_title = $cat_ar[1];
                     $this->data['res'] .= 'Категория "'.$cat_title.'".<br />';
                 }
-
+                // POST processing
                 $serv_name = array_map('test_input', $_POST['serv_name']);
                 $serv_desc = array_map('test_input', $_POST['serv_desc']);
                 $price = array_map('test_input', $_POST['price']);
-
-                if (!empty($cat_id)) { //service for category
+                $duration = array_map('test_input', $_POST['duration']);
+                //services for category
+                if (!empty($cat_id)) {
                     foreach ($serv_name as $k => $serv ) {
                         $re = "/^-?(?:\d+|\d*\.\d+|\d*\,\d+)$/";
                         if (preg_match($re, $price[$k])) {
@@ -183,7 +184,8 @@ class Redaktor_uslug extends Home
                                 "page_id" => $page_id,
                                 "category_id" => $cat_id,
                                 "service_name" => $serv,
-                                "price" => $price_end
+                                "price" => $price_end,
+                                "duration" => $duration[$k]
                             ]);
                             if ($sql->rowCount() > 0) {
                                 $this->data['res'] .= 'Данные услуги "'.$serv.'" внесены в базу.<br />';
@@ -237,7 +239,8 @@ class Redaktor_uslug extends Home
                                             "service_name" => $serv_name[$key],
                                             "service_img" => 'services'.DS.$page_id.DS.$load->name.'.jpg',
                                             "service_descr" => $serv_desc[$key],
-                                            "price" => $price_end
+                                            "price" => $price_end,
+                                            "duration" => $duration[$key]
                                         ]);
                                         if ($sql->rowCount() > 0) {
                                             $this->data['res'] .= 'Данные услуги "'.$serv_name[$key].'" внесены в базу.<br />';

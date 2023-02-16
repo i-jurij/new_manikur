@@ -238,7 +238,10 @@ class Db_init_sqlite
             ],
             "price" => [
                 "REAL"
-            ]
+            ],
+            "duration" => [
+                "INTEGER"
+            ],
         ]);
 
 

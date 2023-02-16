@@ -127,6 +127,9 @@ class Masters extends Home
 						"dt" => [
 							"TEXT"
 						],
+						"serv_duration" => [
+							"INTEGER"
+						]
 					]);
 					$this->data['res'] .= '<p class="centr">Таблица для формирования графика мастера добавлена.</p>
 											<p class="centr">ОБЯЗАТЕЛЬНО ДОБАВЬТЕ ФОТО мастера в "Изменить данные".</p>';

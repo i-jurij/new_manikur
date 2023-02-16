@@ -75,6 +75,11 @@ if (!empty($data['res'])) {
                                 <input type="number" name="price[]" placeholder="10000" min="0" max="1000000000" step="0.1" title="Только цифры" required />
                                 </p>
                             </label>
+                            <label ><p>Длительность в минутах (2-3 цифры)</p>
+                                <p>
+                                    <input type="number" name="duration[]" placeholder="60" min="10" max="480" step="5" title="Только цифры" required />
+                                </p>
+                            </label>
                         </div>
                     </div>
                     <div class="mar " id="">
@@ -211,6 +216,7 @@ function add(el) {
     let name = '';
     let desc = '';
     let price = '';
+    let duration = '';
 
     if (shoose == "cats") {
         name = "категории";
@@ -238,6 +244,11 @@ function add(el) {
                             <input type="number" name="price[]" placeholder="10000" min="0" max="1000000" step="0.1" title="Только цифры" required />\
                         </p>\
                     </label>';
+        duration = '   <label ><p>Длительность в минутах (2-3 цифры)</p>\
+                        <p>\
+                            <input type="number" name="duration[]" placeholder="60" min="10" max="480" step="5" title="Только цифры" required />\
+                        </p>\
+                    </label>';
         if ($('#cats_view').text() == 'Скрыть категории') {
             file = ''; desc = '';
         }
@@ -252,6 +263,7 @@ function add(el) {
         </label>\
         '+desc+'\
         '+price+'\
+        '+duration+'\
     </div>');
  };
 
