@@ -1,4 +1,3 @@
-<div class="flex">
 <?php
 if (!empty($data['res'])) {
         foreach ($data['res'] as $value) {
@@ -11,7 +10,7 @@ if (!empty($data['res'])) {
                     <span>'.$value['article_content'].'</span>
                     </div>
                 </article>';
-        } 
+        }
 } else {
    print '...';
 }
@@ -24,7 +23,7 @@ if (!empty($data['masters'])) {
                     <div class="main_section_article_imgdiv" style="background-color: var(--bgcolor-content);">
                     <img src="' . $img . '" alt="Фото ' . $master['master_fam'] . '" class="main_section_article_imgdiv_img" />
                     </div>
-                
+
                     <div class="main_section_article_content">
                         <h3>' . $master['master_name'] . ' ' . $master['master_fam'] . '</h3>
                         <span>
@@ -32,12 +31,10 @@ if (!empty($data['masters'])) {
                         </span>
                     </div>
                 </article>';
-    } 
+    }
 } else {
 print '...';
 }
 
 include_once APPROOT.DS."view".DS."back_home.html";
 ?>
-</div>
-
