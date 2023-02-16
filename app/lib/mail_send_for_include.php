@@ -77,12 +77,12 @@ if(!in_array($ipAddr, $badIP) && empty($spam))
           $status = true;
           // записываем логи в файл (если файла нет, то он будет создан автоматически)
           //file_put_contents("tmp/recall_email.log", "\n{$today}\n{$logText}\n", FILE_APPEND); chmod("tmp/recall_email.log", 0600);
-          file_put_contents(ROOT.DS.'log'.DS.'recall_email.log', "\n{$today}\n{$logText}\n", FILE_APPEND); 
+          file_put_contents(ROOT.DS.'log'.DS.'recall_email.log', "\n{$today}\n{$logText}\n", FILE_APPEND);
           //chmod(ROOT.DS.'log'.DS.'recall_email.log', 0600);
         } else {
           $result = "<h2>Ошибка</h2>";
           $status = '<p>Письмо не отправлено</p><p>Проверьте входные данные: логин, пароль, почту в mail_send.php</p>';
-          file_put_contents(ROOT.DS.'log'.DS."recall_email.log", "\n{$today}\n{$result}\n{$status}\n", FILE_APPEND);
+          file_put_contents(ROOT.DS.'log'.DS."recall_email.log", "\n{$today}.'&nbsp'.{$result}.'&nbsp'.{$status}\n", FILE_APPEND);
           //chmod(ROOT.DS.'log'.DS."recall_email.log", 0600);
         }
     }
@@ -90,7 +90,7 @@ if(!in_array($ipAddr, $badIP) && empty($spam))
     {
         $result = "<h2>Ошибка</h2>";
         $status = "<p>Письмо не было отправлено. Причина ошибки: {$mail->ErrorInfo}</p>";
-        file_put_contents(ROOT.DS.'log'.DS."recall_email.log", "\n{$today}\n{$result}\n{$status}\n", FILE_APPEND); 
+        file_put_contents(ROOT.DS.'log'.DS."recall_email.log", "\n{$today}\n{$result}\n{$status}\n", FILE_APPEND);
         //chmod(ROOT.DS.'log'.DS."recall_email.log", 0600);
     }
     // Отображение результата

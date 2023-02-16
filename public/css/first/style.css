@@ -210,9 +210,9 @@ a:visited, a:focus, a:hover,  a:active { text-decoration: underline; }
 .pad_tb05_rl1{padding: 0.5rem 1rem;}
 
 
-	.justify {
-		text-align: justify;
-	}
+.justify {
+	text-align: justify;
+}
 
 .text_right {
 	text-align: right;

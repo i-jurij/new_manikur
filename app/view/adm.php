@@ -21,6 +21,7 @@ if (!empty($data['res'])) {
     echo '<p class="margin_bottom_1rem">
             <a href="' . URLROOT . '/create_delete_page/" class="buttons">Страницы</a>
             <a href="' . URLROOT . '/change_pass/" class="buttons">Пользователи</a>
+            <a href="' . URLROOT . '/logs_view/" class="buttons">Просмотр логов</a>
             <a href="' . URLROOT . '/adm/clear/" class="buttons">Чистка логов</a>
           </p>';
   }
@@ -63,7 +64,7 @@ if (!empty($data['res'])) {
       {
         $zvonki_zapisi[] = $page['page_alias'] . '#' . $page['page_title'];
       }
-      elseif ( $page['page_alias'] == 'contacts' or $page['page_alias'] == 'grafik' or $page['page_alias'] == 'price_edit' or $page['page_alias'] == 'masters' )
+      elseif ( $page['page_alias'] == 'contacts' or $page['page_alias'] == 'grafiki' or $page['page_alias'] == 'price_edit' or $page['page_alias'] == 'masters' )
       {
         $redaktors[] = $page['page_alias'] . '#' . $page['page_title'];
       }
