@@ -44,14 +44,14 @@ class Appoint extends Home
                 if ($cat['page_id'] === $page["page_id"]) {
                     foreach ($data['page_cats_serv'] as $cat_serv) {
                         if ($cat_serv['category_id'] === $cat['id']) {
-                            $this->data['serv'][$page["page_title"]][$cat['category_name']][$cat_serv['service_name']] = $cat_serv['duration'];
+                            $this->data['serv'][$page["page_title"]][$cat['category_name']][$cat_serv['service_name']] = $cat_serv['price'] . '-' . $cat_serv['duration'];
                         }
                     }
                 }
             }
             foreach ($data['page_serv'] as $serv) {
                 if ($serv['page_id'] === $page["page_id"]) {
-                    $this->data['serv'][$page["page_title"]]['page_serv'][$serv['service_name']] = $serv['duration'];
+                    $this->data['serv'][$page["page_title"]]['page_serv'][$serv['service_name']] = $serv['price'] . '-' . $serv['duration'];
                 }
             }
         }

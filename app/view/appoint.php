@@ -20,7 +20,8 @@ include_once APPROOT.DS."view".DS."js_back.html";
                         foreach ($data['serv'] as $page => $cat_arr) {
                             print ' <div class="uslugi display_none" id="div'.translit_to_lat(sanitize($page)).'" >';
                                         foreach ($cat_arr as $cat_name => $serv_arr) {
-                                            print '<div class="text_left">';
+                                            print '<div class="text_left ">';
+                                            /*
                                             if ($cat_name !== 'page_serv') {
                                                 foreach ($serv_arr as $serv_name => $serv_duration) {
                                                     $id = translit_to_lat(sanitize($serv_name))."plus".(int)$serv_duration;
@@ -36,6 +37,27 @@ include_once APPROOT.DS."view".DS."js_back.html";
                                                     print '<label class="custom-checkbox back">
                                                                 <input type="checkbox" name="usluga[]" value="'.$page.'-'.$cat_name.'-'.$serv_name.'-'.$serv_duration.'" id="'.$id.'" />
                                                                 <span>'.$serv_name.'</span>
+                                                            </label>';
+                                                }
+                                            }
+                                            */
+                                            if ($cat_name !== 'page_serv') {
+                                                foreach ($serv_arr as $serv_name => $serv_duration) {
+                                                    $id = translit_to_lat(sanitize($serv_name))."plus".$serv_duration;
+                                                    list($price, $duration) = explode('-', $serv_duration);
+                                                    print '<label class="custom-checkbox back">
+                                                                <input type="radio" name="usluga" value="'.$page.'plus'.$cat_name.'plus'.$serv_name.'plus'.$serv_duration.'" id="'.$id.'" />
+                                                                <span>'.$cat_name.': '.$serv_name . ', ' . $price . ' руб.</span>
+                                                            </label>';
+                                                }
+                                            } elseif ($cat_name == 'page_serv')  {
+                                                foreach ($serv_arr as $serv_name => $serv_duration) {
+                                                    $id = translit_to_lat(sanitize($serv_name))."plus".(int)$serv_duration;
+                                                    list($price, $duration) = explode('-', $serv_duration);
+                                                    $cat_name = "page_serv";
+                                                    print '<label class="custom-checkbox back">
+                                                                <input type="radio" name="usluga" value="'.$page.'plus'.$cat_name.'plus'.$serv_name.'plus'.$serv_duration.'" id="'.$id.'" />
+                                                                <span>'.$serv_name . ', ' . $price . ' руб.</span>
                                                             </label>';
                                                 }
                                             }
@@ -114,15 +136,24 @@ $(function() {
   });
 
   //if checked any service
+  /*
   $('#services_choice input[type="checkbox"]').on('change', function(){
       if ( $('#services_choice input[type="checkbox"]:checked').length > 0 )
       {
         $('#button_next').val('master_next').prop('disabled', false);
       }
   });
+*/
+  $('#services_choice input[type="radio"]').on('change', function(){
+      if ( $('#services_choice input[type="radio"]:checked').length > 0 )
+      {
+        $('#button_next').val('master_next').prop('disabled', false);
+      }
+  });
 
   $('#button_next').click(function(){
-    if ( $('#services_choice input:checkbox:checked').length > 0 && $(this).val() == 'master_next')
+    //if ( $('#services_choice input:checkbox:checked').length > 0 && $(this).val() == 'master_next')
+    if ( $('#services_choice input:radio:checked').length > 0 && $(this).val() == 'master_next')
     {
       $('#services_choice').hide();
       $('#master_choice').show();
@@ -196,7 +227,7 @@ $(function() {
       let date = $('#time_choice input[type="radio"][name="date"]:checked').val();
       let time = $('#time_choice input[type="radio"][name="time"]:checked').val();
       $.ajax({
-    		url: '<?php echo URLROOT; ?>/app/models/zapis_phone.php',
+    		url: '<?php echo URLROOT; ?>/app/models/appoint_phone.php',
     		method: 'post',
     		dataType: 'html',
     		data: {'master': master, 'date': date, 'time': time},
@@ -225,8 +256,9 @@ $(function() {
       let client_name = $('form#zapis_usluga_form input[name="zapis_name"]').val();
       $('#zapis_end').show().addClass('back shad rad pad margin_rlb1').html('<h3>'+client_name+' </h3>\
                                   <p id="zap_na">Вы записываетесь на:</p>\
-                                 ');
-
+                                  <div class="table_body" >\
+                                  ');
+      /*
       $('#services_choice input:checkbox:checked').each(function(){
         let serv_arr = $(this).val().split('-');
         if (serv_arr[1] != 'page_serv') {
@@ -238,11 +270,22 @@ $(function() {
                                     '+serv_arr[0]+', '+cn+' '+serv_arr[2]+'\
                                 </div>');
       });
+      */
+      let serv = $('#services_choice input:radio:checked').val().split('plus');
+      if (serv[1] != 'page_serv') {
+        var cn = serv[1]+': ';
+      }else {
+        cn = '';
+      }
+      let price = serv[3].split('-');
+      $('#zapis_end').append('  <div class="table_row">\
+                                    <div class="table_cell" style="text-align:right;">'+serv[0]+', '+cn.toLowerCase()+' '+serv[2].toLowerCase()+'</div>\
+                                    <div class="table_cell">'+price[0]+' руб.</div>\
+                                </div>');
 
       //let master_data = $('#master_choice #master').val().split('#');
       let master_data = $('#master_name').html();
-      $('#zapis_end').append('<div class="table_body" style="border-collapse: collapse;"> \
-                                <div class="table_row">\
+      $('#zapis_end').append('  <div class="table_row">\
                                     <div class="table_cell" style="text-align:right;">Мастер: </div>\
                                     <div class="table_cell">'+master_data+'</div>\
                                 </div>');
