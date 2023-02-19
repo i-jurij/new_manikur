@@ -32,11 +32,8 @@ class Logs_view extends Adm
         if (!empty($_POST['log']) && is_string($_POST['log'])) {
             $lines = file(test_input($_POST['log']));
             $this->data['res'] .= '<p class="text_center">Файл: <b>"'.pathinfo(test_input($_POST['log']), PATHINFO_BASENAME).'"</b></p>';
-            foreach ($lines as $line_num => $line) {
-                $this->data['res'] .= htmlspecialchars($line) . "\n";
-                if ($line_num == 3) {
-                    $this->data['res'] .= "<br />";
-                }
+            foreach ($lines as $line) {
+                $this->data['res'] .= htmlspecialchars($line) . "<br />";
             }
         } else {
             $this->data['res'] .= "Файл не выбран.<br />";

@@ -1,4 +1,3 @@
-<div class="">
 <?php
 if (!empty($data['res'])) {
     print $data['res'];
@@ -12,20 +11,19 @@ if (!empty($data['res'])) {
         };
         return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
     }
-    
+
     $(function() {
       //create form
       $('.flex_top').append('<form action="<?php print URLROOT.DS.'recall'.DS.'rec'; ?>" method="post" class="form-recall" id="recall_one">\
            <div class="form-recall-main">\
              <div class="form-recall-main-section">\
-               <div class=" flex">\
+               <div class="flex">\
                  <input type="text" placeholder="Ваше имя" name="name" id="name" maxlength="50" />\
                  <input name="last_name" type="text" placeholder="Ваша фамилия" id="last_name" maxlength="50">\
                  <input type="tel" name="phone_number"  id="number" class="number"\
                    title="Формат: +7 999 999 99 99" placeholder="+7 ___ ___ __ __"\
                    minlength="6" maxlength="17"\
                    pattern="(\\+?7|8)?\\s?[\(]{0,1}?\\d{3}[\\)]{0,1}\\s?[-]{0,1}?\\d{1}\\s?[-]{0,1}?\\d{1}\\s?[-]{0,1}?\\d{1}\\s?[-]{0,1}?\\d{1}\\s?[-]{0,1}?\\d{1}\\s?[-]{0,1}?\\d{1}\\s?[-]{0,1}?\\d{1}\\s?[-]{0,1}?"\
-                   style=""\
                    required />\
                  <div id="error"><small></small></div>\
                  <textarea placeholder="Что вас интересует?" name="send"  id="send" maxlength="300"></textarea>\
@@ -53,7 +51,7 @@ if (!empty($data['res'])) {
              </p>\
            </div>\
       </form>');
-    
+
       var uniqids = [];
       for (var i = 0; i < 6; i++)
       {
@@ -62,7 +60,7 @@ if (!empty($data['res'])) {
       }
       //choice random id from ids array
       var truee = uniqids[Math.floor(Math.random()*uniqids.length)];
-    
+
       var strings = [];
       var imgs = [];
       for (var i = 0; i < uniqids.length; i++)
@@ -76,34 +74,29 @@ if (!empty($data['res'])) {
         <img src="'+imgpath+ii+'.jpg" id="img_'+uniqids[i]+'"/>\
         </label>';
       }
-    
+
       $('.capcha .imgs').before('<div><p>Выберите, пожалуйста, среди других этот рисунок:</p>\
                         <p>'+imgs[truee]+'</p></div>');
-    
+
       for (var i = 0; i < strings.length; i++)
       {
         $('.capcha .imgs').append(strings[i]);
       }
-    
+
       $("#img_"+truee).addClass('access');
-    
+
       $('.capcha .imgs').after('<p><small>После выбора рисунка нажмите Отправить.</small></p>');
-    
-      $('div.form-recall-submit').click(function(){
+
+      $('button.form-recall-submit').click(function(){
+        event.preventDefault();
         let check = $("#captcha_"+truee).is(':checked');
-        if ($('#number').val())
-        {
-          if ( check == true )
-          {
+        if ($('#number').val()) {
+          if ( check == true ) {
             $('form#recall_one').submit();
-          }
-          else
-          {
+          } else {
             alert('Выберите, пожалуйста, соответствующий рисунок :)');
           }
-        }
-        else
-        {
+        } else {
           alert('Вы забыли ввести номер телефона :)');
         }
       });
@@ -123,10 +116,9 @@ if (!empty($data['res'])) {
         });
       });
     });
-    
+
     </script>
 <?php
 include_once APPROOT.DS."view".DS."back_home.html";
 }
 ?>
-</div>

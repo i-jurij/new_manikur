@@ -29,7 +29,7 @@ $to       = "Your@yandex.ru";
 $site = 'https://new_manikur.ru';
 $spam     = $_POST["last_name"]; // принимаем данные из скрытого спам-поля
 $ipAddr   = $_SERVER['REMOTE_ADDR']; // определяем IP-адрес пользователя
-$today    = date('d-m-Y_H-i');
+$today    = date('Y-m-d H:i:s');
 if (empty($_POST["phone_number"])){$phone_number = "";}else {$phone_number = test_input($_POST["phone_number"]);}
 if (empty($_POST["name"])){$name = "";}else {$name = test_input($_POST["name"]);}
 if (empty($_POST["send"])){$send = "";}else {$send = test_input($_POST["send"]);}
@@ -84,7 +84,7 @@ if(!in_array($ipAddr, $badIP) && empty($spam))
           $status = true;
           // записываем логи в файл (если файла нет, то он будет создан автоматически)
           //file_put_contents("tmp/recall_email.log", "\n{$today}\n{$logText}\n", FILE_APPEND); chmod("tmp/recall_email.log", 0600);
-          file_put_contents($folderName."recall_email.log", "\n{$today}\n{$logText}\n", FILE_APPEND); 
+          file_put_contents($folderName."recall_email.log", "\n{$today}\n{$logText}\n", FILE_APPEND);
           //chmod(ROOT.DS.'log'.DS.'recall_email.log', 0600);
         } else {
           $result = "Ошибка!";
@@ -97,7 +97,7 @@ if(!in_array($ipAddr, $badIP) && empty($spam))
     {
         $result = "Ошибка!";
         $status = "Письмо не было отправлено. Причина ошибки: {$mail->ErrorInfo}";
-        file_put_contents($folderName."recall_email.log", "\n{$today}\n{$result}\n{$status}\n", FILE_APPEND); 
+        file_put_contents($folderName."recall_email.log", "\n{$today}\n{$result}\n{$status}\n", FILE_APPEND);
         //chmod(ROOT.DS.'log'.DS."recall_email.log", 0600);
     }
     // Отображение результата

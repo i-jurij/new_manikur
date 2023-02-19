@@ -5,22 +5,22 @@ use \App\Lib\Registry;
 class Grafiki extends Home
 {
     protected function db_query()
-	{
-		//add data for head in template
-		if ($this->db->db->has($this->table, ["page_alias" => $this->page])) {
-		$this->data['page_db_data'] = $this->db->db->select($this->table, "*", ["page_alias" => $this->page]);
-		}
-		if (!empty($this->data['page_db_data'])) {
-			Registry::set('page_db_data', $this->data['page_db_data']);
-		}
-        $this->data['masters'] = $this->get_data_masters();
-	}
+    {
+      //add data for head in template
+      if ($this->db->db->has($this->table, ["page_alias" => $this->page])) {
+      $this->data['page_db_data'] = $this->db->db->select($this->table, "*", ["page_alias" => $this->page]);
+      }
+      if (!empty($this->data['page_db_data'])) {
+        Registry::set('page_db_data', $this->data['page_db_data']);
+      }
+          $this->data['masters'] = $this->get_data_masters();
+    }
 
     public function get_data_masters()
-	{
-		$masters = $this->db->db->select("masters", "*", [ "OR" => [ "data_uvoln" => "",  "data_uvoln[=]" => null ] ]);
-		return $masters;
-	}
+    {
+      $masters = $this->db->db->select("masters", "*", [ "OR" => [ "data_uvoln" => "",  "data_uvoln[=]" => null ] ]);
+      return $masters;
+    }
 
 	public function set_name($prefix, $id)
 	{
@@ -28,22 +28,22 @@ class Grafiki extends Home
 		return $name;
 	}
 
-    public function graf()
-	{
-        $this->data['name'] = 'График мастера';
-        $this->data['res'] = '';
-        $this->data['from_graf'] = "";
-        if (!empty($_POST['master']) and !isset($_POST['daytime']) and !isset($_POST['date']) and !isset($_POST['deldate']) and !isset($_POST['deltime'])) {
-            try {
-            list($idd, $md) = explode('#', htmlentities($_POST['master']));
-            $this->data['idd'] = $idd;
-            $this->data['md'] = $md;
-            $tablename = $this->set_name('app_to', $idd);
+  public function graf()
+  {
+    $this->data['name'] = 'График мастера';
+    $this->data['res'] = '';
+    $this->data['from_graf'] = "";
+    if (!empty($_POST['master']) and !isset($_POST['daytime']) and !isset($_POST['date']) and !isset($_POST['deldate']) and !isset($_POST['deltime'])) {
+      try {
+        list($idd, $md) = explode('#', htmlentities($_POST['master']));
+        $this->data['idd'] = $idd;
+        $this->data['md'] = $md;
+        $tablename = $this->set_name('app_to', $idd);
 
-            list($fn, $sn, $ln) = explode('$', $md);
-            $this->data['first_name'] = $fn;
-            $this->data['sec_name'] = $sn;
-            $this->data['last_name'] = $ln;
+        list($fn, $sn, $ln) = explode('$', $md);
+        $this->data['first_name'] = $fn;
+        $this->data['sec_name'] = $sn;
+        $this->data['last_name'] = $ln;
 
             $this->data['year'] = date('Y');
             $this->data['num_month'] = date('m');

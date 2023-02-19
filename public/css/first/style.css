@@ -812,9 +812,11 @@ float: right;
 	border-radius: var(--radius);
 	flex-grow: 1;
 }
+/*
 .custom-checkbox:nth-of-type(1) {
 	margin: 0 0.5rem 0.2rem 0.5rem;
 }
+*/
 /* для элемента input c type="checkbox" */
 .custom-checkbox>input {
   position: absolute;
@@ -824,9 +826,10 @@ float: right;
 
 /* для элемента label, связанного с .custom-checkbox */
 .custom-checkbox>span {
-  display: inline-flex;
-  align-items: center;
-  user-select: none;
+	padding: 0.5rem;
+	display: inline-flex;
+	align-items: center;
+	user-select: none;
 }
 
 /* создание в label псевдоэлемента before со следующими стилями */

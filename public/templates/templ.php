@@ -76,6 +76,8 @@
   <script type="text/javascript" src="<?php echo URLROOT.DS.'public'.DS.'js'.DS.'other'.DS; ?>fancybox.umd.js"></script>
   <script type="text/javascript" src="<?php echo URLROOT.DS.'public'.DS.'js'.DS.'other'.DS; ?>form-recall-mask.js"></script>
   <script type="text/javascript" src="<?php echo URLROOT.DS.'public'.DS.'js'.DS.'other'.DS; ?>jquery.maskedinput.min.js"></script>
+  <script type="text/javascript" src="<?php echo URLROOT.DS.'public'.DS.'js'.DS.'other'.DS; ?>base64.js"></script>
+
   <?php
     /*
     foreach (files_in_dir(PUBLICROOT.DS.'js'.DS.'other', 'js') as $value) {

@@ -214,7 +214,12 @@ function phone_number_to_db($sPhone){
       $res = iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", transliterator_transliterate('Any-Latin; Latin-ASCII', $text));
       return $res;
   }
-
+  /**
+   * find file in dir by only filename without extension
+   * @param string $path to dir
+   * @param string $filename only filename without extension
+   * @return string or false
+   */
   function find_by_filename($path, $filename) {
     if (is_readable($path)) {
       $files = scandir($path);
@@ -340,4 +345,24 @@ function en_month_to_rus($month) {
   return $ru_month;
 }
 
+function mb_lcfirst($str) {
+  $fc = mb_strtolower(mb_substr($str, 0, 1));
+  return $fc . mb_substr($str, 1);
+}
+
+function searchLine($filename, $string)
+{
+    $line = false;
+    $fh = fopen($filename, 'rb');
+    for($i = 1; ($t = fgets($fh)) !== false; $i++)
+    {
+        if( strpos($t, $string) !== false )
+        {
+            $line = $i;
+            break;
+        }
+    }
+    fclose($fh);
+    return $line;
+}
 ?>

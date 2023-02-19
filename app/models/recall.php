@@ -20,7 +20,7 @@ class Recall extends Home
             if (empty($_POST["send"])){$send = "";}else {$send = test_input($_POST["send"]);}
             $this->data['res'] = "Заявка на звонок из формы \"Перезвоните мне\"<hr>"."\n";
             $this->data['res'] .= "<b>Имя:</b><br>{$name}<hr>"."\n"."<b>Телефон:</b><br>{$phone_number}<hr>"."\n"."<b>Сообщение:</b><br>{$send}<hr>"."\n";
-            
+
             // если не заполнено скрытое поле и если IP-адрес не находится в нашем чёрном списке
             if(!in_array($ipAddr, $badIP) && empty($spam))
             {
@@ -34,13 +34,13 @@ class Recall extends Home
                     //    $date_time = "STR_TO_DATE(".$date_time.", '%d/%m/%Y %H:%i:%s')"  ;
                     //выборка из бд за последние 2 часа
                     $time = date("Y-m-d H:i:s", strtotime("-2 hour"));
-                    $vib_date_time = $this->db->db->select("client_phone_numbers", "phone_number",  
+                    $vib_date_time = $this->db->db->select("client_phone_numbers", "phone_number",
                                                             [ "date_time[>]" => $time ]);
                     /*
                     $sql2 = "SELECT phone_number FROM $table WHERE date_time > NOW() - INTERVAL 2 HOUR";
                     $vib_date_time = $pdo->query($sql2);
                     */
-                    
+
                     //дальше сравним номер из ПОСТ с полученными номерами из бд, если совпадений нет - записываем
                     if (!empty($vib_date_time)) {
                         foreach( $vib_date_time as $b ){
@@ -82,7 +82,7 @@ class Recall extends Home
                                                                     . $phone_number .
                                                                     '</span>
                                                                 </div>
-                                            
+
                                                                 <div class="table_row">
                                                                     <span class="table_cell" style="text-align:right;">Ваше сообщение:</span>
                                                                     <span class="table_cell">'
@@ -99,11 +99,11 @@ class Recall extends Home
                         }
                         //MAIL SEND
                         //include_once APPROOT.DS."lib".DS."mail_send_for_include.php";
-                    }                    
+                    }
                     // записываем логи в файл (если файла нет, то он будет создан автоматически)
                     //file_put_contents(server_doc_root()."log/recall_sql.log", "\n{$today}\n{$logText}\n", FILE_APPEND);
                     //chmod("log/recall_sql.log", 0600);
-                   
+
                 }
                 else // если в поле с сообщением были признаки сайтов - записываем логи
                 {

@@ -21,41 +21,37 @@ class Rout
 
     public function __construct($siterootpath)
     {
+        $m = 'index'; $p['path'] = [];
+
         $dbinit = '\App\Lib\\'.DBINITNAME;
         $db_create = new $dbinit;
         $db_create->create_tables();
         $url_arr = $this->url_to_arr($siterootpath);
         Registry::remove('nav');
-        //if (empty($url_arr) or !file_exists(APPROOT.DS.'controllers'.DS.$url_arr[0].'.php')) 
-        if (empty($url_arr) or !class_exists("\App\\Controllers\\".$this->my_mb_ucfirst($url_arr[0]))) 
+
+        //if (empty($url_arr) or !file_exists(APPROOT.DS.'controllers'.DS.$url_arr[0].'.php'))
+        if (empty($url_arr) or !class_exists("\App\\Controllers\\".$this->my_mb_ucfirst($url_arr[0])))
         {
             $contr = '\App\Controllers\Home';
             $this->controller = new $contr;
             $nav[] = 'home';
             $url_arr = [];
         }
-        else 
+        else
         {
             $contr = "\App\\Controllers\\".$this->my_mb_ucfirst($url_arr[0]);
             $this->controller = new $contr;
-            //unset($url_arr[0]);
             $nav[] = array_shift($url_arr);
-            
-            if (isset($url_arr[0]) && method_exists($contr, $url_arr[0])) 
+
+            if (isset($url_arr[0]) && method_exists($contr, $url_arr[0]))
             {
                 $this->method = $url_arr[0];
-                //unset($url_arr[1]);
                 $nav[] = array_shift($url_arr);
             }
 
             if (!empty($url_arr) && array_filter($url_arr, 'is_string') === $url_arr)
             {
                 $this->param['path'] = $url_arr;
-            }
-
-            if (isset($params) && !empty($params)) 
-            {
-                $this->param = $params;
             }
         }
         Registry::set('nav', $nav);
@@ -64,7 +60,7 @@ class Rout
 
     public function url_to_arr($siterootpath)
     {
-        if (isset($_SERVER['REQUEST_URI'])) 
+        if (isset($_SERVER['REQUEST_URI']))
         {
             $request_url = rtrim($_SERVER['REQUEST_URI'], '/');
             $request_url = filter_var($_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
