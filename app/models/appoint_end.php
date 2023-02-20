@@ -13,146 +13,126 @@ require_once APPROOT.DS.'lib'.DS.'function'.DS.'func.php';
 //присваиваем переменным значения для записи в бд
 $dt=date("Y-m-d H:i:s");
 
-if ( isset($_POST['usluga']) )
+if ( !empty($_POST['usluga']) )
 {
-  foreach ($_POST['usluga'] as $value) {
-    $usluga[] = htmlentities($value);
-  }
-  $usl = serialize($usluga);
-  //echo $usluga3 .'<br />';
+    $usl = test_input($_POST['usluga']);
+    $serv_arr = explode("plus", $usl);
+    $page = $serv_arr[0];
+    if ($serv_arr[1] != 'page_serv') {
+        $cat = $serv_arr[1].': ';
+    } else {
+        $cat = '';
+    }
+    $serv = $serv_arr[2];
+    $price_duration = explode('-', $serv_arr[3]);
+    $price = $price_duration[0];
+    $duration = $price_duration[1];
 }
 
-if ( isset($_POST['master']) )
+if ( !empty($_POST['master']) )
 {
-  list($m0,$m1,$m2,$m3,$m4) = explode('#', $_POST['master']);
-  //$master2 = htmlentities($_POST['master']);
-  //echo $master2 .'<br />';
+  $master2 = test_input($_POST['master']);
+
 }
 
-if ( isset($_POST['date'])and isset($_POST['time']) )
+if ( !empty($_POST['date'])and !empty($_POST['time']) )
 {
-  $time1 = htmlentities($_POST['time']);
+  $time1 = test_input($_POST['time']);
   list($name_of_day, $dat) = explode('&nbsp;', htmlentities($_POST['date']));
-  //echo $dat .'<br />';echo $name_of_day .'<br />';
   $date = date('d.m.Y', strtotime($dat));
 }
 
-if ( isset($_POST['zapis_phone_number']) )
+if ( !empty($_POST['zapis_phone_number']) )
 {
-  //$phone = str_replace(' ', '&nbsp;', htmlentities($_POST['zapis_phone_number']));
   $phone = htmlentities($_POST['zapis_phone_number']);
-  //echo $phone . '<br />';
 }
 
-if ( isset($_POST['zapis_name']) and $_POST['zapis_name'] != '' )
+if ( !empty($_POST['zapis_name']) )
 {
   $name = htmlentities($_POST['zapis_name']);
-  //echo $name . '<br />';
 }
 else
 {
   $name = '&hellip;';
 }
 
+if (!empty($usl) && !empty($master2) && !empty($time1) && !empty($date) && !empty($phone) && !empty($name) ) {
+    $dbinit = '\App\Lib\\'.DBINITNAME;
+    require_once APPROOT.DS.'lib'.DS.'db_init_sqlite.php';
+    require_once APPROOT.DS.'lib'.DS.'medoo.php';
+    $table = 'app_to_'. $master2;
 
-//create or connect db
-try {
-  $dbh = new PDO("mysql:host=$databaseHost;dbname=$databaseName", $databaseUser, $databasePassword);
-  $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  //найдем таблицу с графиком мастера по его id в таблице masters
-  $query_for_id = "SELECT id FROM `masters` WHERE master_name = :master_name AND master_fam = :master_fam AND master_phone_number = :master_phone_number ";
-  $id = $dbh->prepare($query_for_id);
-  $id->bindParam(':master_name', $m1);
-  $id->bindParam(':master_fam', $m2);
-  $id->bindParam(':master_phone_number', $m3);
-  $id->execute();
-  $result = $id->fetchColumn();
-  $tablec = "`".str_replace("`","``",$result)."`";
-  //ochistka bd ot zapisej
-  //проверим, что таблица не пустая
-  $sql = "SELECT id FROM $tablec LIMIT 1";
-  $np = $dbh->query($sql);
-  if ($np->rowCount() == 0) //если пусто - ничего не делаем
-  {
-    //echo'<span class="back_pad_mar">Таблица пуста</span>';
-  }
-  else { // если строки есть, удалим все старше 3х недель
-    $soeddel = "DELETE FROM $tablec WHERE dt < NOW() - INTERVAL 4 WEEK";
-    $stmt = $dbh->query($soeddel);
-    if ($stmt->rowCount() > 0) {
-      //echo '<span class="back_pad_mar">Таблица очищена от записей старше 4х недель</span>';
-    }
-  }
-  //чтобы при перезагрузке страницы не записывалось снова -
-  //проверим нет ли записей на тот же день и время и, если нет - запишем данные
-  $msql2 = 'SELECT den, vremia FROM' . $tablec;
-  $vib_dnt = $dbh->query($msql2);
-  $mt = false;
-
-  foreach( $vib_dnt as $dnt )
-  {
-    if ($dnt['den'] == $dat and $dnt['vremia'] == $time1 )
-    {
-     $mt = true;
-     echo '<p style="margin: 0 auto;">Вы уже записаны на:</p>
+	$db = new $dbinit;
+    $m = $db->db->get("masters", ["master_name", "master_fam"], ["id" => $master2]);
+    //delete records older then 1 year
+    //$sql = "DELETE FROM `$table` WHERE dt <= date('now','-365 day')";
+    //$soeddel = "DELETE FROM $tablec WHERE dt < NOW() - INTERVAL 1 YEAR";
+    //чтобы при перезагрузке страницы не записывалось снова -
+    //проверим нет ли записей на тот же день и время и, если нет - запишем данные
+    $has_app = $db->db->has($table, [
+        "AND" => [
+            "den" => $dat,
+            "vremia" => $time1
+        ]
+    ]);
+    if ($has_app) {
+        echo '<p style="margin: 0 auto;">Вы уже записаны на:</p>
           <div class="table_body" style="border-collapse: collapse;">
             <div class="table_row">
              <div class="table_cell" style="text-align:right;">Дата,<br /> время:</div>
              <div class="table_cell">'.$date.',&nbsp;'.$name_of_day.'<br />'.$time1.'</div>
             </div>
           </div>';
-     break;
-    }
-  }
+    } else {
+        /*
+        $sql = "INSERT INTO `$result` (den, vremia, denned, usluga, nam_client, tlf_client, dt) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $statement = $dbh->prepare($sql);
+        $statement->execute(array($dat, $time1, $name_of_day, $usl, $name, $phone, $dt));
+        */
+        $statement = $db->db->insert($table, [
+            "den" => $dat,
+            "vremia" => $time1,
+            "denned" => $name_of_day,
+            "usluga" => $page.', '.$cat.' '.$serv.' '.$price,
+            "name_client" => $name,
+            "tlf_client" => $phone,
+            "dt" => $dt,
+            "serv_duration" => $duration
+        ]);
+        if ($statement->rowCount() > 0)
+        {
+          //echo "Данные внесены в таблицу";
+          echo'<h3><?php echo $name; ?></h3>
+                <p><b>Вы записались на:</b></p>
+                <div class="table_body" style="border-collapse: collapse;">';
 
-  if ($mt != true)
-  {
-    $sql = "INSERT INTO `$result` (den, vremia, denned, usluga, nam_client, tlf_client, dt) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $statement = $dbh->prepare($sql);
-    $statement->execute(array($dat, $time1, $name_of_day, $usl, $name, $phone, $dt));
-    if ($statement->rowCount() > 0)
-    {
-      //echo "Данные внесены в таблицу";
-      echo'<h3><?php echo $name; ?></h3>
-            <p><b>Вы записались на:</b></p>
-            <div class="table_body" style="border-collapse: collapse;">';
-      foreach ($_POST['usluga'] as $value)
-      {
-        list($page, $cat, $serv, $price) = explode('-',$value);
-        if ($cat === 'no_cat') {
-          $cat = '';
+            if ($cat === 'page_serv') {
+              $cat = '';
+            }
+                    else {
+                        $cat = $cat.':';
+                    }
+            echo '<div class="table_row">
+                    <div class="table_cell" style="text-align:right;">'.$page.', '.$cat.' '.$serv.'</div>
+                    <div class="table_cell">'.$price.' руб.</div>
+                  </div>';
+          echo '<div class="table_row">
+                  <div class="table_cell" style="text-align:right;">Мастер: </div>
+                  <div class="table_cell">'.$m['master_name'].' '.$m['master_fam'].'</div>
+                </div>
+                <div class="table_row">
+                  <div class="table_cell" style="text-align:right;">Дата,<br /> время:</div>
+                  <div class="table_cell">'.$date.',&nbsp;'.$name_of_day.'<br />'.$time1.'</div>
+                </div>
+                <div class="table_row">
+                  <div class="table_cell" style="text-align:right;">Ваш номер:</div>
+                  <div class="table_cell">'.$phone.' </div>
+                </div>';
+          echo'</div>
+              <h3>Спасибо за ваш выбор!</h3>';
         }
-				else {
-					$cat = $cat.':';
-				}
-        echo '<div class="table_row">
-                <div class="table_cell" style="text-align:right;">'.$page.', '.$cat.' '.$serv.'</div>
-                <div class="table_cell">'.$price.' руб.</div>
-              </div>';
-      }
-      echo '<div class="table_row">
-              <div class="table_cell" style="text-align:right;">Мастер: </div>
-              <div class="table_cell">'.$m1.' '.$m2.'</div>
-            </div>
-            <div class="table_row">
-              <div class="table_cell" style="text-align:right;">Дата,<br /> время:</div>
-              <div class="table_cell">'.$date.',&nbsp;'.$name_of_day.'<br />'.$time1.'</div>
-            </div>
-            <div class="table_row">
-              <div class="table_cell" style="text-align:right;">Ваш номер:</div>
-              <div class="table_cell">'.$phone.' </div>
-            </div>';
-      echo'</div>
-          <h3>Спасибо за ваш выбор!</h3>';
     }
-
-  }
-  unset($dat, $time1, $name_of_day, $usl, $name, $phone, $dt);
-} catch (PDOException $e) {
-  print "Error!: " . $e->getMessage() . '<br /><br />';
-  die();
+} else {
+    echo '<div class="back shad rad pad mar"><p>Недостаточно входных данных.</p></div>';
 }
-
-$dbh = null;
-
 ?>

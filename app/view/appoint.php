@@ -21,6 +21,7 @@ include_once APPROOT.DS."view".DS."js_back.html";
                             print ' <div class="uslugi display_none" id="div'.translit_to_lat(sanitize($page)).'" >';
                                         foreach ($cat_arr as $cat_name => $serv_arr) {
                                             print '<div class="text_left ">';
+                                            ////////////////////////////
                                             /*
                                             if ($cat_name !== 'page_serv') {
                                                 foreach ($serv_arr as $serv_name => $serv_duration) {
@@ -61,6 +62,7 @@ include_once APPROOT.DS."view".DS."js_back.html";
                                                             </label>';
                                                 }
                                             }
+                                            ///////////////////////////////
                                             print '</div>';
                                         }
                             print ' </div>';
@@ -79,7 +81,7 @@ include_once APPROOT.DS."view".DS."js_back.html";
                                     </div>
 
                                     <div class="main_section_article_content">
-                                        <h3 id="master_name">' . $master['master_name'] . ' ' . $master['master_fam'] . '</h3>
+                                        <h3 id="' . $master['id'] . '">' . $master['master_name'] . ' ' . $master['master_fam'] . '</h3>
                                         <span>
                                         ' . $master["spec"].'
                                         </span>
@@ -136,6 +138,7 @@ $(function() {
   });
 
   //if checked any service
+  ////////////////////
   /*
   $('#services_choice input[type="checkbox"]').on('change', function(){
       if ( $('#services_choice input[type="checkbox"]:checked').length > 0 )
@@ -150,7 +153,7 @@ $(function() {
         $('#button_next').val('master_next').prop('disabled', false);
       }
   });
-
+////////////////////////
   $('#button_next').click(function(){
     //if ( $('#services_choice input:checkbox:checked').length > 0 && $(this).val() == 'master_next')
     if ( $('#services_choice input:radio:checked').length > 0 && $(this).val() == 'master_next')
@@ -171,34 +174,9 @@ $(function() {
       let master = $('#master_choice #master').val();
       $.ajax({
     		url: '<?php echo URLROOT; ?>/app/models/appoint_appointment.php',
-            //url: '<?php //echo URLROOT; ?>/appoint/',
     		method: 'post',
     		dataType: 'html',
-    		//data: 'master=' + master,
             data: {master: master},
-/*
-            complete : function(){  alert(this.url) },
-            success: function(data){
-            console.dir(data);
-            },
-            error: function (jqXHR, exception) {
-            if (jqXHR.status === 0) {
-                alert('Not connect. Verify Network.');
-            } else if (jqXHR.status == 404) {
-                alert('Requested page not found (404).');
-            } else if (jqXHR.status == 500) {
-                alert('Internal Server Error (500).');
-            } else if (exception === 'parsererror') {
-                alert('Requested JSON parse failed.');
-            } else if (exception === 'timeout') {
-                alert('Time out error.');
-            } else if (exception === 'abort') {
-                alert('Ajax request aborted.');
-            } else {
-                alert('Uncaught Error. ' + jqXHR.responseText);
-            }
-            }
-*/
             success: function(data){
                 $('#time_choice').html('<h3 class="back shad rad pad margin_rlb1">Выберите дату и время</h3>'+data);
                 //$("#t" + $(".dat:checked").val()).show();
@@ -236,12 +214,6 @@ $(function() {
                 $('body').find('.number').each(function(){
                         $(this).mask("+7 999 999 99 99",{autoclear: false});
                 });
-                /*
-                $('#give_a_phone').append('\<script src\=\"js\/jquery-3\.6\.0\.min\.js\"\>\<\/script\>\
-                                    \<script src\=\"js\/jquery\.maskedinput\.min\.js\"\>\<\/script\>\
-                                    \<script src\=\"js\/form-recall-mask\.js\"\>\<\/script\>');
-                //console.log(data);
-                */
     		}
     	});
     }
@@ -256,8 +228,9 @@ $(function() {
       let client_name = $('form#zapis_usluga_form input[name="zapis_name"]').val();
       $('#zapis_end').show().addClass('back shad rad pad margin_rlb1').html('<h3>'+client_name+' </h3>\
                                   <p id="zap_na">Вы записываетесь на:</p>\
-                                  <div class="table_body" >\
+                                  <div class="table_body text_left" >\
                                   ');
+//////////////////////
       /*
       $('#services_choice input:checkbox:checked').each(function(){
         let serv_arr = $(this).val().split('-');
@@ -279,15 +252,16 @@ $(function() {
       }
       let price = serv[3].split('-');
       $('#zapis_end').append('  <div class="table_row">\
-                                    <div class="table_cell" style="text-align:right;">'+serv[0]+', '+cn.toLowerCase()+' '+serv[2].toLowerCase()+'</div>\
-                                    <div class="table_cell">'+price[0]+' руб.</div>\
+                                    <div class="table_cell text_right">'+serv[0]+', '+cn.toLowerCase()+' '+serv[2].toLowerCase()+'</div>\
+                                    <div class="table_cell text_left">'+price[0]+' руб.</div>\
                                 </div>');
-
+/////////////////
       //let master_data = $('#master_choice #master').val().split('#');
-      let master_data = $('#master_name').html();
+      let master = $('#master_choice #master').val();
+      let master_data = $('#'+master).html();
       $('#zapis_end').append('  <div class="table_row">\
-                                    <div class="table_cell" style="text-align:right;">Мастер: </div>\
-                                    <div class="table_cell">'+master_data+'</div>\
+                                    <div class="table_cell text_right">Мастер: </div>\
+                                    <div class="table_cell text_left">'+master_data+'</div>\
                                 </div>');
 
       let dayweek_date = $('#time_choice input[type="radio"][name="date"]:checked').val();
@@ -296,29 +270,29 @@ $(function() {
       let date = date_0[2]+'.'+date_0[1]+'.'+date_0[0]+', '+day_date_arr[0];
       let time = $('#time_choice input[type="radio"][name="time"]:checked').val();
       $('#zapis_end').append('<div class="table_row">\
-                                <div class="table_cell" style="text-align:right;">Дата,<br /> время:</div>\
-                                <div class="table_cell">'+date+'<br />'+time+'</div>\
+                                <div class="table_cell text_right">Дата,<br /> время:</div>\
+                                <div class="table_cell text_left">'+date+'<br />'+time+'</div>\
                               </div>');
       let phone = $('#give_a_phone input[type="tel"]').val().replace(/ /g, '\u00a0');
       $('#zapis_end').append('<div class="table_row">\
-                                <div class="table_cell" style="text-align:right;">Ваш номер:</div>\
-                                <div class="table_cell">'+phone+' </div>\
+                                <div class="table_cell text_right">Ваш номер:</div>\
+                                <div class="table_cell text_left">'+phone+' </div>\
                               </div>');
 
     }
     else if ( $(this).val() == 'zapis_sql' )
     {
       $.ajax({
-    		url: 'pages/files/zapis_sql.php',
+    		url: '<?php echo URLROOT; ?>/app/models/appoint_end.php',
     		method: 'post',
     		dataType: 'html',
     		data: $('form#zapis_usluga_form').serialize(),
     		success: function(data){
-          $('#zapis_end').html(data);
-          $('#button_back, #button_next').hide();
-          //console.log(data);
-    		}
-    	});
+                $('#zapis_end').html(data);
+                $('#button_back, #button_next').hide();
+                //console.dir(data);
+                }
+            });
     }
     else
     {

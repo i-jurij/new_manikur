@@ -38,7 +38,7 @@ if ( !empty($_POST['master']) and !empty($_POST['date']) and !empty($_POST['time
     require_once APPROOT.DS.'lib'.DS.'db_init_sqlite.php';
     require_once APPROOT.DS.'lib'.DS.'medoo.php';
     $table = 'app_to_'. $master_id;
-	$db = new $dbinit;
+	  $db = new $dbinit;
     $np = $db->db->select($table,
     ['den', 'vremia', 'tlf_client', 'serv_duration'],
     [ 'den[>=]' => date("Y-m-d") ]);
