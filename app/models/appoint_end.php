@@ -106,14 +106,8 @@ if (!empty($usl) && !empty($master2) && !empty($time1) && !empty($date) && !empt
                 <p><b>Вы записались на:</b></p>
                 <div class="table_body" style="border-collapse: collapse;">';
 
-            if ($cat === 'page_serv') {
-              $cat = '';
-            }
-                    else {
-                        $cat = $cat.':';
-                    }
             echo '<div class="table_row">
-                    <div class="table_cell" style="text-align:right;">'.$page.', '.$cat.' '.$serv.'</div>
+                    <div class="table_cell" style="text-align:right;">'.$page.', '.mb_strtolower($cat, 'UTF-8').' '.mb_strtolower($serv, 'UTF-8').'</div>
                     <div class="table_cell">'.$price.' руб.</div>
                   </div>';
           echo '<div class="table_row">
