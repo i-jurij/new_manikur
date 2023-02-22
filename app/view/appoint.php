@@ -213,22 +213,6 @@ $(function() {
         datatype: "json",
         data: {master: master},
         success: function(data){
-          //console.dir(data);
-          /* for html datatype
-          $('#time_choice').html('<h3 class="back shad rad pad margin_rlb1">Выберите дату и время</h3>'+data);
-          //$("#t" + $(".dat:checked").val()).show();
-          $("#t" + $(".dat:checked").prop('id')).show();
-          //for time_choice
-          $(".dat").change(function(){
-            $(".master_times").hide();
-            $("#t" + $(this).prop('id')).show();
-            $('.master_datetime input[name="time"]').each(function(){
-              if ($(this).attr('checked', true)) {
-                $(this).attr('checked', false);
-              }
-            });
-          });
-          */
           $('#time_choice').html('<h3 class="back shad rad pad margin_rlb1">Выберите дату и время</h3>'+data[1]);
           $("#t" + $(".dat:checked").prop('id')).show();
           //for time_choice
@@ -241,8 +225,6 @@ $(function() {
               }
             });
           });
-
-          //console.dir(data[0]);
           //CHECK IF SERV DURATION < time interval between appointment times
           $('#time_choice input[type="radio"][name="time"]').on('change', function (params) {
             const seconds = '00';
@@ -305,9 +287,7 @@ $(function() {
                   }
                 }
             }
-            //console.log( `${key} = ${data[0][key]}` + '\n');
           })
-
     		}
     	});
     }
@@ -435,25 +415,88 @@ $(function() {
           let master = $('#master_choice #master').val();
           $.ajax({
             url: '<?php echo URLROOT; ?>/app/models/appoint_appointment.php',
-    		method: 'post',
-    		dataType: 'html',
+            method: 'post',
+            //dataType: 'html',
+            datatype: "json",
             data: {master: master},
             success: function(data){
-                $('#time_choice').html('<h3 class="back shad rad pad margin_rlb1">Выберите дату и время</h3>'+data);
-                //$("#t" + $(".dat:checked").val()).show();
-                $("#t" + $(".dat:checked").prop('id')).show();
-                //for time_choice
-                $(".dat").change(function(){
-                    $(".master_times").hide();
-                    $("#t" + $(this).prop('id')).show();
-                    $('.master_datetime input[name="time"]').each(function(){
-                        if ($(this).attr('checked', true)) {
-                        $(this).attr('checked', false);
-                        }
-                    });
+              $('#time_choice').html('<h3 class="back shad rad pad margin_rlb1">Выберите дату и время</h3>'+data[1]);
+              $("#t" + $(".dat:checked").prop('id')).show();
+              //for time_choice
+              $(".dat").change(function(){
+                $(".master_times").hide();
+                $("#t" + $(this).prop('id')).show();
+                $('.master_datetime input[name="time"]').each(function(){
+                  if ($(this).attr('checked', true)) {
+                    $(this).attr('checked', false);
+                  }
                 });
-    		}
-    	});
+              });
+              //CHECK IF SERV DURATION < time interval between appointment times
+              $('#time_choice input[type="radio"][name="time"]').on('change', function (params) {
+                const seconds = '00';
+                let serv = $('#services_choice input:radio:checked').val().split('plus');
+                let price = serv[3].split('-');
+                let dur = price[1];
+
+                let time_inp_chek = $('#time_choice input[type="radio"][name="time"]:checked');
+                let ttime = time_inp_chek.prop('id');
+                let date = ttime.slice(0,-4);
+                let hour_min = ttime.substr(ttime.length - 4);
+                const [year, month, day] = date.split('-');
+                const hours = hour_min.slice(0,2);
+                const minutes = hour_min.slice(-2);
+                const serv_dt_start = new Date(+year, +month - 1, +day, +hours, +minutes, +seconds);
+                const serv_dt_end = dateAdd(serv_dt_start, 'minute', dur);
+                //console.log(serv_dt_start+' '+serv_dt_end);
+
+                let end_work_time = data[2][1];
+                let ewh = end_work_time.slice(0,2);
+                let ewm = end_work_time.slice(-2);
+                let end_work_time_dt = new Date(+year, +month - 1, +day, +ewh, +ewm, +seconds);
+
+                if (data[0][date]) {
+                    //find next value with disabled and compare with serv_end
+                    //if less - ok, if more - not ok: shoose other time
+                    for (let index = 0; index < data[0][date].length; index++) {
+                      // укажем нужный элемент массива дат-времен
+                      const elem = data[0][date][index];
+                      if ( elem == (hours+':'+minutes) ) {
+                          // если след элем == последнему элементу массива - проверим,
+                          // что длительность услуги не больше чем конец раб времени
+                          let ind = index + 1;
+                          if ( (ind) == data[0][date].length ) {
+                            if (serv_dt_end > end_work_time_dt) {
+                              alert('Недостаточно времени для оказания услуги до конца рабочего дня.\n Пожалуйста, выберите другое время.');
+                              time_inp_chek.prop('checked', false);
+                              break;
+                            }
+                          } else if ((ind) < data[0][date].length) {
+                            // найдем первый элемент массива после текущего, в котором есть disabled
+                            // и проверим, что длительность услуги укладывается в этот интревал
+                            for (ind; ind < data[0][date].length; ind++) {
+                              let next = data[0][date][ind];
+                              let [next_elem, dis] = next.split('&nbsp;');
+                              if (dis) {
+                                let next_el_hour_min = next_elem.replace(':', '');
+                                let next_el_hour = next_el_hour_min.slice(0,2);
+                                let next_el_min = next_el_hour_min.slice(-2);
+                                let next_time_dt = new Date(+year, +month - 1, +day, +next_el_hour, +next_el_min, +seconds);
+                                if (serv_dt_end > next_time_dt) {
+                                  alert('Недостаточно свободного времени для оказания услуги.\n Пожалуйста, выберите другое время.');
+                                  time_inp_chek.prop('checked', false);
+                                  break;
+                                }
+                              }
+                            }
+                          }
+                          break;
+                      }
+                    }
+                }
+              })
+            }
+    	    });
         }else if ($(this).prop('id') == 'give_a_phone') {
           $('#button_back').val('time_choice');
           $('#button_next').val('end_next').html('Далее');
