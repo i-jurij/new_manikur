@@ -365,4 +365,13 @@ function searchLine($filename, $string)
     fclose($fh);
     return $line;
 }
+
+function in_array_rec($needle, $haystack, $strict = false) {
+  foreach ($haystack as $item) {
+      if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && in_array_rec($needle, $item, $strict))) {
+          return true;
+      }
+  }
+  return false;
+}
 ?>

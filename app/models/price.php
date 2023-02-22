@@ -71,7 +71,7 @@ class Price extends Home
             }
             foreach ($data['page_serv'] as $serv) {
                 if ($serv['page_id'] === $page['page_id']) {
-                    $this->data['serv'][$page['page_title']]['page_serv'][$serv['service_name']] = $serv['price'];
+                    $this->data['serv'][$page['page_alias'].'#'.$page['page_title']]['page_serv'][$serv['service_name']] = $serv['price'];
                 }
             }
         }

@@ -15,15 +15,6 @@ require ROOT.DS.'ppntmt'.DS.'appointment.php';
 if (!empty($_POST['master']))
 {
   $master_id = test_input($_POST['master']);
-  /*
-  $m = unserialize(base64_decode($_POST['master']));
-  $master_id = $m['id'];
-  $master_img = $m['img'];
-  $master_name = $m['master_name'];
-  $master_fam = $m['master_fam'];
-  $master_phone = $m['master_phone_number'];
-  $master_spec = $m['spec'];
-  */
   $rest_dts = [];
   $exist_apps = [];
 
@@ -68,8 +59,12 @@ if (!empty($_POST['master']))
     $bmw->view_date_format = 'd.m';
     $bmw->view_time_format = 'H:i';
     // get date time
-    $bmw->get_app();
+    //$bmw->result();
     // output result
-    print '<div class="back shad rad pad05 mar"><p>'.$bmw->html().'</p></div>';
+    //print '<div class="back shad rad pad05 mar"><p>'.$bmw->html().'</p></div>';
+
+    header('Content-Type: application/json');
+    echo json_encode( array($bmw->result(), '<div class="back shad rad pad05 mar"><p>'.$bmw->html().'</p></div>', $bmw->worktime) );
+    exit;
 }
 ?>

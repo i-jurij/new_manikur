@@ -2,6 +2,11 @@
 //Copyright © 2023 I-Jurij (yjurij@gmail.com)
 //Licensed under the my own license.
 
+//  $this->marked_dates(); foreach this for list of dates
+//  $this->result(); foreach this for list of result
+//  $this->html(); print this for view dates and times
+
+
 namespace Ppntmt;
 
 class Appointment
@@ -44,15 +49,13 @@ class Appointment
     $this->view_time_format = 'H:i';
   }
 
-  public function get_app() {
-    $this->all_dates();
-    $this->marked_dates();
-    $this->round_period();
-    $this->times();
-    $this->weekend_times();
-    $this->rest_times();
-    $this->appointment_times();
-    $this->result();
+  public function in_array_rec($needle, $haystack, $strict = false) {
+    foreach ($haystack as $item) {
+        if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && in_array_rec($needle, $item, $strict))) {
+            return true;
+        }
+    }
+    return false;
   }
 
   public function en_dayweek_to_rus($dayweek)
@@ -110,7 +113,6 @@ class Appointment
       $dates[] = $rudayweek . "&nbsp;". date('Y-m-d', strtotime($startDate));
       $startDate = date('Y-m-d', strtotime($startDate . ' +1 day'));
     }
-
     return $dates;
   }
 
@@ -118,15 +120,14 @@ class Appointment
   {
     $now = new \DateTimeImmutable('now', new \DateTimeZone($this->tz));
     $endnow = new \DateTimeImmutable($this->endtime);
-    if ($now > $endnow)
-    {
-      $this->lehgth_cal++;
-      $res = $this->pre_dates();
+    $res = $this->pre_dates();
+    if ($now > $endnow) {
+      $last_day = end($res); reset($res);
+      $arr = explode("&nbsp;", $last_day);
+      $add_day = date('Y-m-d', strtotime( $arr[1] . ' +1 day'));
+      $add_day_res = $this->en_dayweek_to_rus(date('D',strtotime($add_day))) . "&nbsp;". date('Y-m-d', strtotime($add_day));
+      array_push($res, $add_day_res);
       array_shift($res);
-    }
-    else
-    {
-      $res = $this->pre_dates();
     }
     return $res;
   }
@@ -339,8 +340,13 @@ class Appointment
         //объединим массив времен для записей и массив с началом и концом каждой записи
         foreach ($start_end_array as $val)
         {
-          //допишем в массив времен времена записей, которых там еще нет
-          if (!in_array($val->format('H:i'), $times))
+          //допишем в массив времен времена записей, которых там еще нет,
+          //если время не меньше времени начала или больше времени окончания рабочего дня
+          //$time_of_val = \DateTimeImmutable::createFromFormat('Y-m-d_H:i', $date.'_'.$val);
+          $start = \DateTimeImmutable::createFromFormat('Y-m-d_H:i', $date.'_'.$this->worktime[0]);
+          $end = \DateTimeImmutable::createFromFormat('Y-m-d_H:i', $date.'_'.$this->worktime[1]);
+
+          if (!in_array($val->format('H:i'), $times) && ($val > $start && $val < $end) )
           {
             array_push($dt[$date], $val->format('H:i'));
           }
