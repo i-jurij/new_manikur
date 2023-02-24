@@ -4,11 +4,30 @@ namespace App\Lib\Traits;
 trait Clear_file
 {
     /**
+     * @param string $path_to_file - path to file
+     * @param int $keep_num_lines - the number of lines to save, starting from the end of the file
+     * @return bool
+     */
+    public static function clear_file($path_to_file, $keep_num_lines = 0) {
+        // clear log file if filetime > 1 week, but leave the last seven lines
+        if (file_exists($path_to_file)) {
+            if (is_file($path_to_file)) {
+                $lines = file($path_to_file); // reads the file into an array by line
+                $keep = (!empty($keep_num_lines)) ? array_slice($lines,-$keep_num_lines) : '';
+                if (file_put_contents($path_to_file, $keep) === false) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+    }
+    /**
      * @param string $log_folder - path to logs folder
      * @param int $keep_num_lines - the number of lines to save, starting from the end of the file
      * @return bool
      */
-    public static function clearfile($log_folder, $keep_num_lines = 0) {
+    public static function clear_all_file_in_dir($log_folder, $keep_num_lines = 0) {
         // clear log file if filetime > 1 week, but leave the last seven lines
         if (file_exists($log_folder)) {
             foreach (new \DirectoryIterator($log_folder) as $fileInfo) {

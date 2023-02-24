@@ -2,8 +2,22 @@
 <?php
 if (!empty($data['res'])) {
   print '<p class="back shad rad pad margin_bottom_1rem">'.$data['res'].'</p>';
+} elseif (!empty($data['logs'])) {
+    print '<form action="'.URLROOT.'/adm/clear/" method="post" id="logs_list">';
+    foreach ($data['logs'] as $value) {
+        $ar = explode('#', $value);
+        print ' <label class="display_inline_block back shad rad pad margin_bottom_1rem">
+                    <input type="radio" name="log" class="buttons" value="'.$ar[1].'" />
+                    <span>'.$ar[0].'</span>
+                </label>';
+    }
+    print '     <p>
+                    <button type="submit" class="buttons">Далее</button>
+                    <button type="reset" class="buttons">Сбросить</button>
+                </p>
+            </form>';
 } else {
-  //del adm from page menu
+    //del adm from page menu
     foreach ($data['page_list'] as $key => $file) {
       if ($file['page_alias'] !== "adm" && !empty($file['page_admin'])) {
         $pages[] = $file;

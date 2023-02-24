@@ -434,10 +434,14 @@ a:visited, a:focus, a:hover,  a:active { text-decoration: underline; }
   	width: 100%;
 	padding: 0 1rem 0.5rem 1rem;
 }
+.map img {
+	width: auto;
+	max-height: 1024px;
+}
 
 .mapp{
-  width: 100%;
-  min-height: 480px;
+  	width: 100%;
+  	min-height: 480px;
 	height: 100%;
 	border-radius: var(--radius);
 }
