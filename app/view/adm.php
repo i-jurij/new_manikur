@@ -74,7 +74,7 @@ if (!empty($data['res'])) {
   //or you can rebuild page array again
 	if (!empty($pages) && is_array($pages)) {
 		foreach ($pages as $page) {
-      if ($page['page_alias'] == 'recall_no' or $page['page_alias'] == 'recall_yes' or $page['page_alias'] == 'master_app' or $page['page_alias'] == 'date_app')
+      if ($page['page_alias'] == 'recall_no' or $page['page_alias'] == 'recall_yes' or $page['page_alias'] == 'appoint_by_master' or $page['page_alias'] == 'appoint_by_date')
       {
         $zvonki_zapisi[] = $page['page_alias'] . '#' . $page['page_title'];
       }

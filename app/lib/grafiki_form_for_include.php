@@ -1,7 +1,7 @@
 <?php
 
-$time = array('09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00',) ;
-$lunch = "12:00";
+//$time = array('09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00',) ;
+//$lunch = "12:00";
 
 function date_month($date = null) //$date - YYYY-mm-dd eg 2022-10-26
 {
@@ -83,7 +83,7 @@ foreach ($cal as $value)
 echo "</tr>";
 //output times
 
-foreach ($time as $tim)
+foreach (TIME as $tim)
 {
   echo '<tr>
           <th class="headdate">

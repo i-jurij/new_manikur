@@ -52,8 +52,8 @@ if (!empty($_POST['master']))
                       'Вс' => '', "Sun" => '',);
     $bmw->rest_day_time = $rest_dts;
     $bmw->holiday =  array('1979-09-18', '2005-05-31',);
-    $bmw->period = 60;
-    $bmw->worktime = array('09:00', '19:00');
+    $bmw->period = PERIOD;
+    $bmw->worktime = WORKTIME;
     $bmw->lunch = array("12:00", 40);
     $bmw->exist_app_date_time_arr = $exist_apps;
     $bmw->view_date_format = 'd.m';
