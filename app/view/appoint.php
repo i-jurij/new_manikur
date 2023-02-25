@@ -46,7 +46,7 @@ include_once APPROOT.DS."view".DS."js_back.html";
                                                 foreach ($serv_arr as $serv_name => $serv_duration) {
                                                     $id = translit_to_lat(sanitize($serv_name))."plus".$serv_duration;
                                                     list($price, $duration) = explode('-', $serv_duration);
-                                                    print '<label class="custom-checkbox back">
+                                                    print '<label class="custom-checkbox back" for="'.$id.'">
                                                                 <input type="radio" name="usluga" value="'.$page.'plus'.$cat_name.'plus'.$serv_name.'plus'.$serv_duration.'" id="'.$id.'" />
                                                                 <span>'.$cat_name.': '.$serv_name . ', ' . $price . ' руб.</span>
                                                             </label>';
@@ -56,7 +56,7 @@ include_once APPROOT.DS."view".DS."js_back.html";
                                                     $id = translit_to_lat(sanitize($serv_name))."plus".(int)$serv_duration;
                                                     list($price, $duration) = explode('-', $serv_duration);
                                                     $cat_name = "page_serv";
-                                                    print '<label class="custom-checkbox back">
+                                                    print '<label class="custom-checkbox back" for="'.$id.'">
                                                                 <input type="radio" name="usluga" value="'.$page.'plus'.$cat_name.'plus'.$serv_name.'plus'.$serv_duration.'" id="'.$id.'" />
                                                                 <span>'.$serv_name . ', ' . $price . ' руб.</span>
                                                             </label>';
@@ -100,7 +100,7 @@ include_once APPROOT.DS."view".DS."js_back.html";
         print '</form>';
 
         print ' <div class="choice display_none" id="zapis_end"></div>
-                <div class="zapis_usluga margin_rlb1">
+                <div class="zapis_usluga margin_rlb1" id="buttons_div">
                     <button type="button" class="buttons" id="button_back" value="" disabled >Назад</button>
                     <button type="button" class="buttons" id="button_next" value="" disabled >Далее</button>
                 </div>';
@@ -157,12 +157,13 @@ $(function() {
     let page_id = $(this).prop('id');
     if (page_id == 'div'+button_id) {
       $("#div"+button_id).toggle();
+      //$('#services_choice label').show();
     } else {
       $(this).hide();
     }
     });
   });
-
+  /*
   //for reload page unchecked services_choice
   $('#services_choice input[type="checkbox"]').each(function(){
     if ( $(this).prop('checked') )
@@ -170,7 +171,7 @@ $(function() {
       $(this).prop('checked', false);
     }
   });
-
+  */
   //if checked any service
   ////////////////////
   /*
@@ -182,9 +183,16 @@ $(function() {
   });
 */
   $('#services_choice input[type="radio"]').on('change', function(){
-      if ( $('#services_choice input[type="radio"]:checked').length > 0 )
-      {
+      if ( $('#services_choice input[type="radio"]:checked').length > 0 ) {
         $('#button_next').val('master_next').prop('disabled', false);
+
+        //$('#services_choice label').hide();
+        //let id = $('#services_choice input[type="radio"]:checked').prop('id');
+        //let label = $('label[for='+id+']').show();
+        $('html, body').animate({
+          scrollTop: $("#buttons_div").offset().top
+        }, 500);
+        $('#button_next').focus();
       }
   });
 ////////////////////////
@@ -194,6 +202,10 @@ $(function() {
     {
       $('#services_choice').hide();
       $('#master_choice').show();
+      $('html, body').animate({
+          scrollTop: $("#zapis_usluga_form").offset().top
+      }, 500);
+
       $(this).val('time_next');
       $('#button_back').val('services_choice').prop('disabled', false);
     }
@@ -393,7 +405,7 @@ $(function() {
     }
     else
     {
-      alert('Сделайте выбор, пожалуйста.');
+      alert('Сделайте выбор или введите данные, пожалуйста.');
     }
   });
 
@@ -516,6 +528,11 @@ $(function() {
       $(this).addClass('selected');
       var val = $(this).attr('data-value');
       $(this).parent().find('#master').val(val);
+
+      $('html, body').animate({
+          scrollTop: $("#buttons_div").offset().top
+      }, 500);
+      $('#button_next').focus();
   });
 
   $('form#zapis_usluga_form').on('reset', function(){

@@ -28,16 +28,19 @@ class Appoint_by_date extends Home
 
     protected function get_data_app($master_id){
         $app = $this->db->db->select("app_to_".$master_id, [
-            "den",
-            "vremia",
-            "denned",
-            "usluga",
-            "name_client",
-            "tlf_client"
+                "den",
+                "denned",
+                "vremia",
+                "usluga",
+                "name_client",
+                "tlf_client"
         ], [
             "OR" => [
                 "tlf_client[!]" => "",
                 "tlf_client[!]" => null
+            ],
+            "ORDER" => [
+                "vremia" => "ASC",
             ]
         ]);
         return $app;
