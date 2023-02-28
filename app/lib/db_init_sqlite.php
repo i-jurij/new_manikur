@@ -194,26 +194,6 @@ class Db_init_sqlite
                 "TEXT"
             ]
         ]);
-
-        $this->db->create("serv_categories", [
-            "id" => [
-                "INTEGER PRIMARY KEY",
-                "AUTOINCREMENT",
-                "NOT NULL"
-            ],
-            "page_id" => [
-                "INTEGER"
-            ],
-            "category_img" => [
-                "TEXT"
-            ],
-            "category_name" => [
-                "TEXT"
-            ],
-            "category_descr" => [
-                "TEXT"
-            ]
-        ]);
 /*
         $this->db->create("serv_categories", [
             "id" => [
@@ -232,10 +212,31 @@ class Db_init_sqlite
             ],
             "category_descr" => [
                 "TEXT"
-            ],
-            "FOREIGN KEY (page_id) REFERENCES pages(page_id)"
+            ]
         ]);
 */
+        $this->db->create("serv_categories", [
+            "id" => [
+                "INTEGER PRIMARY KEY",
+                "AUTOINCREMENT",
+                "NOT NULL"
+            ],
+            "page_id" => [
+                "INTEGER",
+                "NOT NULL"
+            ],
+            "category_img" => [
+                "TEXT"
+            ],
+            "category_name" => [
+                "TEXT"
+            ],
+            "category_descr" => [
+                "TEXT"
+            ],
+            "FOREIGN KEY (page_id) REFERENCES pages(page_id) ON DELETE CASCADE ON UPDATE CASCADE"
+        ]);
+
         $this->db->create("services", [
             "id" => [
                 "INTEGER PRIMARY KEY",
@@ -243,7 +244,8 @@ class Db_init_sqlite
                 "NOT NULL"
             ],
             "page_id" => [
-                "INTEGER"
+                "INTEGER",
+                "NOT NULL"
             ],
             "category_id" => [
                 "INTEGER"
@@ -262,7 +264,8 @@ class Db_init_sqlite
             ],
             "duration" => [
                 "INTEGER"
-            ]
+            ],
+            "FOREIGN KEY (page_id) REFERENCES pages(page_id) ON DELETE CASCADE ON UPDATE CASCADE"
         ]);
 
         $contacts = $this->db->select("contacts", "*");
