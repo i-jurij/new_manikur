@@ -214,7 +214,28 @@ class Db_init_sqlite
                 "TEXT"
             ]
         ]);
-
+/*
+        $this->db->create("serv_categories", [
+            "id" => [
+                "INTEGER PRIMARY KEY",
+                "AUTOINCREMENT",
+                "NOT NULL"
+            ],
+            "page_id" => [
+                "INTEGER"
+            ],
+            "category_img" => [
+                "TEXT"
+            ],
+            "category_name" => [
+                "TEXT"
+            ],
+            "category_descr" => [
+                "TEXT"
+            ],
+            "FOREIGN KEY (page_id) REFERENCES pages(page_id)"
+        ]);
+*/
         $this->db->create("services", [
             "id" => [
                 "INTEGER PRIMARY KEY",
@@ -241,9 +262,8 @@ class Db_init_sqlite
             ],
             "duration" => [
                 "INTEGER"
-            ],
+            ]
         ]);
-
 
         $contacts = $this->db->select("contacts", "*");
         if(!$contacts){ // SELECT failed
