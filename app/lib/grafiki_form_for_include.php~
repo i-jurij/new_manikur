@@ -196,7 +196,7 @@ $(function() {
               }
               else
               {
-                $('#grafik').append('<input type="hidden" name="deltime[]" value="'+tt+'" id="deldt'+tt+'" />');
+                $('#grafik').append('<input type="text" name="deltime[]" value="'+tt+'" id="deldt'+tt+'" />');
                 $(this).children('div').removeClass('grafik_ch_div');
               }
           }
