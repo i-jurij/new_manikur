@@ -64,5 +64,7 @@ class Appoint extends Home
             $this->data['masters'][$key]['img'] = (find_by_filename($dir_imgs, $fotoname)) ? URLROOT.DS.'public'.DS.'imgs'.DS.'masters'.DS.find_by_filename($dir_imgs, $fotoname) : $img =  URLROOT.DS.'public'.DS.'imgs'.DS.'ddd.jpg';
         }
         unset($master);
+
+        $this->data['name'] = 'Запись на прием';
 	}
 }
