@@ -1,14 +1,14 @@
-Based on 
+Based on
 Simple php framework with a single entry point
 
 For enter to admin page list home page to end and click on "FistFramework".
 Then "Да" and then login: admin, password: passw.
 Now you can create or delete page.
-Creating a page includes create file in app/controllers, app/models, app/view. 
+Creating a page includes create file in app/controllers, app/models, app/view.
 Controllers for adm_pages extends Adm controller, but model for adm_pages extends Home model.
 and insert data to db.
 After that you can modify these files.
-if you created the data for the pages in the database manually and no created controller, model, view, 
+if you created the data for the pages in the database manually and no created controller, model, view,
 they will be displayed in the list on the main page, but you will not be able to navigate to them.
 
 All users who have access to the administration section in the "users" table of the database
@@ -19,7 +19,7 @@ By default, there are no differences between them, they need to be set in the fi
 an array of pages into parts available for different categories of users. The example is in the file itself.
 Statuses, respectively, can still be added.
 
-This use namespase. 
+This use namespase.
 classes are declared like this:
 namespace App\Lib;
 class Rout...
@@ -62,15 +62,15 @@ and load method from model ($path -> from class Rout),
 and load method generate from view ($content_view, $data, $template_view -> explained below).
 
 app/controllers/adm - extends home:
-protected string $template = TEMPLATEROOT.DS.'first/templ.php'; - the path to the template, 
+protected string $template = TEMPLATEROOT.DS.'first/templ.php'; - the path to the template,
 it is possible to override it in child classes;
 method index override parents method from Home,
 load App\Lib\Let_adm_login which load simple authenticate class App\Lib/Auth,
-which uses the class App\Lib\Session (methods for vars in php session). 
+which uses the class App\Lib\Session (methods for vars in php session).
 Adm controller set $_SESSION vars: 'user_name' for authentication and
 'status' (admin, moder, user - readed from `users` db) for autorisation
-in pages views class. 
-Autorization is simple: for each status formed array of page alias and 
+in pages views class.
+Autorization is simple: for each status formed array of page alias and
 user will to see only this page.
 Or you can check status in method of view class.
 Also, the 'page_access' field for each page in the database table indicates the user who is allowed access.
@@ -150,4 +150,21 @@ page_content - html|php content of page
 
 Create data for home page too. Records are needed for the template (title and other things for main page of site).
 
-
+Screenshots:
+screenshots/01.png
+screenshots/02.png
+screenshots/02.png
+screenshots/04.png
+screenshots/05.png
+screenshots/06.png
+screenshots/07.png
+screenshots/08.png
+screenshots/09.png
+screenshots/10.png
+screenshots/11.png
+screenshots/12.png
+screenshots/13.png
+screenshots/14.png
+screenshots/15.png
+screenshots/16.png
+screenshots/17.png
