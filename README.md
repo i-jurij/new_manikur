@@ -151,20 +151,20 @@ page_content - html|php content of page
 Create data for home page too. Records are needed for the template (title and other things for main page of site).
 
 Screenshots:
-screenshots/01.png
-screenshots/02.png
-screenshots/02.png
-screenshots/04.png
-screenshots/05.png
-screenshots/06.png
-screenshots/07.png
-screenshots/08.png
-screenshots/09.png
-screenshots/10.png
-screenshots/11.png
-screenshots/12.png
-screenshots/13.png
-screenshots/14.png
-screenshots/15.png
-screenshots/16.png
-screenshots/17.png
+![Alt text](screenshots/01.png "Optional title")
+![Alt text](screenshots/02.png "Optional title")
+![Alt text](screenshots/03.png "Optional title")
+![Alt text](screenshots/04.png "Optional title")
+![Alt text](screenshots/05.png "Optional title")
+![Alt text](screenshots/06.png "Optional title")
+![Alt text](screenshots/07.png "Optional title")
+![Alt text](screenshots/08.png "Optional title")
+![Alt text](screenshots/09.png "Optional title")
+![Alt text](screenshots/10.png "Optional title")
+![Alt text](screenshots/11.png "Optional title")
+![Alt text](screenshots/12.png "Optional title")
+![Alt text](screenshots/13.png "Optional title")
+![Alt text](screenshots/14.png "Optional title")
+![Alt text](screenshots/15.png "Optional title")
+![Alt text](screenshots/16.png "Optional title")
+![Alt text](screenshots/17.png "Optional title")
