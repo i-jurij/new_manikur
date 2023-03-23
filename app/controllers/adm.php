@@ -16,13 +16,8 @@ class Adm extends Home
 
 	public function index($path = [])
     {
-		if ($this->auth->check_auth()) 
+		if ($this->auth->check_auth())
 		{
-			$str = '<div style="margin: 0 1rem 1rem 1rem; width: 100%; text-align:right;">
-							<span style="margin: 0 1rem 0 0; color: blanchedalmond;">Здравствуйте, <b>' . $_SESSION['user_name'] . '</b></span>
-							<a class="buttons" href="'.URLROOT.'/adm/exit">Выход</a>
-					</div>';
-			\App\Lib\Registry::set("exit_from_adm", $str);
 			$arr = explode('\\', static::class);
 			$class = array_pop($arr);
 			$full_name_class = '\App\Models\\'.$class;
@@ -38,16 +33,16 @@ class Adm extends Home
 				} else {
 					$data = $this->model->get_data($path);
 				}
-			}	
+			}
 			$this->view->generate(APPROOT.DS.'view/'.mb_strtolower($class).'.php', $data, $this->template);
 		}
-		else 
+		else
 		{
 			$this->auth->login();
 		}
     }
 
-	public function exit() 
+	public function exit()
 	{
 		$this->auth->out();
 		header_remove();
