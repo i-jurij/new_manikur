@@ -9,7 +9,7 @@ if (!empty($data['serv'])) {
         $page_name = $arr[1];
         $i = 1;
         ?>
-        <div class="back shad rad pad margin_rlb1 price" id="<?php echo $page_name; ?>">
+        <div class="back shad rad pad margin_rlb1 price" id="<?php echo $page_alias; ?>">
             <table class="table">
                 <caption class=""><?php echo '<a href="'.URLROOT.'/'.$page_alias.'/" ><h2>'.$page_name.'</h2></a>'; ?></caption>
                 <colgroup>

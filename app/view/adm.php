@@ -29,7 +29,7 @@ if (!empty($data['res'])) {
 
   //check for user status and rebuild data
   //for admin out all page include create delete page
-  // !!! DON`T REMOVE THIS START !!! //////////
+  // !!! START DON`T REMOVE !!! //////////
   if ( password_verify("admin", $session->get("status")) ) {
     //default button for create controller, model, view and insert data of page to db
     echo '<p class="margin_bottom_1rem">
@@ -39,7 +39,7 @@ if (!empty($data['res'])) {
             <a href="' . URLROOT . '/adm/clear/" class="buttons">Чистка логов</a>
           </p>';
   }
-  // !!! DON`T REMOVE THIS END !!! ///////////
+  // !!! END DON`T REMOVE !!! ///////////
 
   //for moder: you can rewrite this
   if ( password_verify("moder", $session->get("status")) ) {
